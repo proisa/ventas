@@ -1,6 +1,8 @@
 <?php
 class Comando{
 
+    public static $data;
+
     public static function noRecordSet($cnn,$tsql){
         if($cnn == NULL){
             return 'Error al conectar';
@@ -21,9 +23,11 @@ class Comando{
         if($cnn == NULL){
             return 'Error al conectar';
         }
+
         $response = $cnn->query($tsql);
         if($response->rowCount() != 0){
-            return $response->fetchAll(PDO::FETCH_ASSOC);
+            
+            return  $response->fetchAll(PDO::FETCH_ASSOC);
         }else{
             return false;
         }
