@@ -46,6 +46,15 @@ if($_SESSION['login'] !== true){
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+  <style>
+  
+  .control-sidebar-bg, .control-sidebar {
+    width:320px !important;
+    right: -320px;
+  }
+  
+  </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -95,7 +104,7 @@ if($_SESSION['login'] !== true){
           </li>
           <!-- Control Sidebar Toggle Button -->
           <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-shopping-cart"></i></a>
           </li>
         </ul>
       </div>
