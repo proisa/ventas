@@ -13,9 +13,10 @@
 
 
   <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-   
-
+  <aside class="control-sidebar control-sidebar-dark" id="carrito" style="padding: 60px 10px 0px;">
+    <table class="table" id="tabla-carrito">
+    
+    </table>
   </aside>
   <!-- /.control-sidebar -->
 
