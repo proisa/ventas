@@ -50,9 +50,28 @@ if($_SESSION['login'] !== true){
   <style>
   
   .control-sidebar-bg, .control-sidebar {
-    width:320px !important;
-    right: -320px;
+    width:50% !important;
+    right: -50%;
   }
+
+#cart-btn {
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  font-size: 20px;
+  padding:10px;
+  cursor: pointer;
+  border-radius:50px;
+}
+
+
+  @media (max-width: 580px) and (min-width:1px){
+      .control-sidebar-bg, .control-sidebar {
+      width:100% !important;
+      right: -100%;
+    }
+  }
+
   
   </style>
 </head>
