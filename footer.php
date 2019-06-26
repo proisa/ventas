@@ -19,18 +19,31 @@
       <th width="30%">Precio</th>
       <th class="text-right"></th>
     </thead>
-    <tbody id="tabla-carrito">
-    
+    <tbody id="tabla-carrito"> 
     </tbody>
-    <tfoot>
-      <tr>
-        <td>Total</td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </tfoot>
+   
     </table>
+  
+
+    <table class="table" style="color:#fff; font-size: 16px;">
+    <tr>
+      <td class="text-right">
+      Sub-total: <br>
+      Itbis:<br>
+      % de Ley:<br>
+      Total a pagar:
+      </td>
+      <td class="text-right">
+        <span id="subtotal"></span><br>
+        <span id="itbis"></span><br>
+        <span id="ley"></span> <br>
+        <span id="total_pagar"></span>
+      </td>
+    </tr>
+
+    </table>
+
+    <a href="#" class="btn btn-success btn-block btn-lg">Hacer pedido</a>
   </aside>
   <!-- /.control-sidebar -->
 
@@ -40,7 +53,7 @@
   <div class="control-sidebar-bg"></div>
 
 
-<a href="#" id="cart-btn" class="btn btn-success">
+<a href="#" id="cart-btn" data-toggle="control-sidebar" class="btn btn-success">
 <i class="fa fa-shopping-cart"></i>
 </a>
 
@@ -84,20 +97,32 @@
 <script src="<?=url_base()?>/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?=url_base()?>/dist/js/demo.js"></script>
-
-
 <script>
   $(document).ready(function(){
-    fillCart();
+    fillCart();   
   });
 
 
 
   function fillCart(){
     $("#tabla-carrito").empty();
+    $('#subtotal').empty();
+    $('#itbis').empty();
+    //$('#ley').empty();
+    $('#total_pagar').empty();
+
     var data = JSON.parse(localStorage.getItem('item'));
+    var subtotal = 0;
+    var itbis = 0;
+    var total_pagar = 0;
+
     $.each(data, function(key,value){
-        lista = '';
+        var lista = '';
+        value.cantidad = parseInt(value.cantidad);
+        value.precio = parseFloat(value.precio);
+
+        subtotal += value.cantidad*value.precio;
+        console.log(subtotal);
         if(value.guarnicion_nombre){
           lista += `<li>CON ${value.guarnicion_nombre}</li>`;
         }
@@ -123,12 +148,43 @@
             </ul>
         </td>
         <td>${value.precio}</td>
-        <td><a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></td>
+        <td><a class="btn btn-danger btn-sm remove-item" data-id="${key}"><i class="fa fa-trash"></i></a></td>
         </tr>`;
         $("#tabla-carrito").append(template);
-        console.log(value.id);
+        console.log(key);
     });
-}
+
+    itbis = subtotal*(parseFloat(sessionStorage.getItem('itbis')) / 100);
+    total_pagar = subtotal+itbis;
+    $('#subtotal').append(subtotal.toFixed(2));
+    $('#itbis').append(itbis.toFixed(2));
+    $('#total_pagar').append(total_pagar.toFixed(2));
+
+
+
+    $('.remove-item').on('click',function(){
+      var confirmacion = confirm('Esta seguro de eliminar este articulo?');
+      if(confirmacion == true){
+          indice = $(this).attr('data-id');
+          removeItem(indice);
+      }
+    });
+
+
+    function removeItem(indice){
+      var data = JSON.parse(localStorage.getItem('item'));
+      data.splice(indice,1);
+      localStorage.setItem('item',JSON.stringify(data));
+      fillCart();
+      //console.log(data[indice]);
+    }
+
+  }
+
+
+
+
+
 </script>
 </body>
 </html>

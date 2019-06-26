@@ -1,5 +1,6 @@
 <?php 
 require '../inc/conexion.php';
+require '../inc/funciones.php';
 require '../clases/Comando.php';
 
 $articulo_id = $_GET['articulo_id'];
@@ -12,6 +13,9 @@ AND ar_activado=' '
 ORDER BY ar_cosfob asc ";
 
 $articulo_data = Comando::recordSet($pdo,$query);
+
+print_pre(getItbis($pdo));
+
 ?>
 
 <div class="row">

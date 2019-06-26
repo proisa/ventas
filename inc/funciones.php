@@ -1,7 +1,7 @@
 <?php
 
 function url_base(){
-    return 'http://10.0.0.232/ventas';
+    return 'http://localhost/ventas';
 }
 
 function print_pre($arr){
@@ -9,7 +9,6 @@ function print_pre($arr){
         print_r($arr);   
     echo '</pre>';   
 }
-
 
 function selected($a,$b){
     if($a == $b){
@@ -20,6 +19,21 @@ function selected($a,$b){
 function dateFormat($fecha){
     $d = new DateTime($fecha);
     return $d->format('d-m-Y');
+}
+
+function getItbis($pdo){
+    $query = "SELECT ITBIS,D_LEY FROM FABDPROC WHERE cod_sucu=1 AND cod_empr=1";
+    $result = Comando::recordSet($pdo,$query);
+
+    echo "
+        <script>
+            sessionStorage.removeItem('itbis');
+            sessionStorage.removeItem('ley');
+            sessionStorage.setItem('itbis','".$result[0]['ITBIS']."');
+            sessionStorage.setItem('ley','".$result[0]['D_LEY']."');
+        </script>
+    ";
+
 }
 
 ?>

@@ -61,7 +61,8 @@ if($_SESSION['login'] !== true){
   font-size: 20px;
   padding:10px;
   cursor: pointer;
-  border-radius:50px;
+  border-radius:5px;
+  margin-bottom:10px;
 }
 
 
