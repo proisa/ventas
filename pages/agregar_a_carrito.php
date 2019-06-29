@@ -116,6 +116,9 @@ print_pre(getItbis($pdo));
         <?php endif;?>
     <?php endif;?>
     <div class="col-md-12">
+    <hr>
+    <label for="nota">Nota</label>
+    <textarea name="nota" class="form-control" id="nota" cols="30" rows="4"></textarea>
         <hr>
         <a href="#" class="btn btn-lg btn-success btn-block" id="agregar">Agregar al carrito <i class="fa fa-shopping-cart"></i></a>
     </div> 
@@ -127,14 +130,15 @@ print_pre(getItbis($pdo));
 
 $('#agregar').click(function(){
     var arr = [];
-    if(localStorage.getItem('item') != null){
-        arr = JSON.parse(localStorage.getItem('item'));
+    if(sessionStorage.getItem('item') != null){
+        arr = JSON.parse(sessionStorage.getItem('item'));
     }
 
     var art_data = {
         'id':$('#id').val(),
         'cantidad':$('#cantidad').val(),
         'descripcion':$('#desc').val(),
+        'nota':$('#nota').val(),
         'precio':parseFloat($('#precio').val()),
         'guarnicion_id':$("input[name='guarnicion']:checked").val(),
         'guarnicion_nombre':$("input[name='guarnicion']:checked").attr('data-nombre'),
@@ -143,8 +147,8 @@ $('#agregar').click(function(){
         'ingrediente':$("input[name='ingrediente[]']:checked").map(function(){return $(this).val().trim();}).get(),
     }
     arr.push(art_data);
-    localStorage.setItem('item',JSON.stringify(arr));
-    console.log(JSON.parse(localStorage.getItem('item')));
+    sessionStorage.setItem('item',JSON.stringify(arr));
+    console.log(JSON.parse(sessionStorage.getItem('item')));
     // var ar_id = $(this).attr('data-id');
     // $.ajax({
     //     url: "pages/agregar_a_carrito.php?articulo_id="+ar_id,

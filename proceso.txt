@@ -1,0 +1,131 @@
+
+
+IF EMPTY(THISFORM.FACTURA.VALUE)  &&INCRE = 0
+
+ 		           UPDATE IVBDPROC SET PEDIDO=PEDIDO+1
+
+  	 	           SELECT PEDIDO FROM IVBDPROC
+		           NUMFAC=RIGHT("0000000000"+ALLTRIM(STR(IVBDPROC.PEDIDO,10,0)),10)
+  
+ENDIF
+
+
+
+          DN_MESA=THISFORM.MESA.Value
+          DN_FECHAENT=thisform.FECHAENT.value
+
+
+	IF Thisform.MESA.value<>"00   "
+		       UPDATE PVBDMESA SET MA_FECENT=?DN_FECHAENT WHERE MA_CODIGO=?DN_MESA
+
+	ENDIF		   
+
+
+		  DN_FACTURA=right("00000000000"+alltrim(numfac),10)
+	      DN_MESA=THISFORM.MESA.Value      
+	      DN_MESADEP=THISFORM.MESADEP.VALUE
+          
+          DN_FECHA=thisform.fecha.value
+          DN_MONTO=thisform.bruto.value
+          DN_PERSONA=0  &&thisform.npersona.value
+
+          DN_NETONCF=0  &&Thisform.Neto2.Value
+          DN_BRUTNCF=0  &&Thisform.Bruto2.Value
+          DN_DESCNCF=0  &&Thisform.Descu2.value
+
+  		  IF THISFORM.CHECK1.Value=1
+		     	 DN_LEY=fabdproc.d_ley
+		  ELSE
+		         DN_LEY=0	 
+		  ENDIF    
+   		  IF THISFORM.CHECK2.Value=1			  
+			     DN_IMP=fabdproc.itbis
+		  ELSE
+			     DN_IMP=0
+	      ENDIF          
+***************************************************************************	  
+
+  		  DN_desc=THISFORM.descU.VALUE
+		  DN_fecent=THISFORM.FECHAENT.Value
+		  DN_FECSAL=CTOT("  -  -    ,  :  :  ")
+		  DN_IM_CODIGO=THISFORM.TIPONCF.Value
+
+	 	  IF !EMPTY(THISFORM.CODIGO.VALUE)
+			    DN_cl_codigo=THISFORM.CODIGO.VALUE
+		  ELSE
+		 	    DN_cl_codigo='CONTADO'
+ 		  ENDIF    
+   		      DN_itbis=THISFORM.ITBIS.Value
+   		      DN_TOTLEY=THISFORM.LEY.Value
+    		  DN_neto=THISFORM.NETO.Value
+      		  DN_neto2=THISFORM.NETO.Value
+      		  DN_netoUS=THISFORM.US.Value
+      		  DN_netoEU=THISFORM.EURO.Value
+      		  DN_TASAUS=FABDPROC.TASA
+      		  DN_TASAEU=FABDPROC.TASAEURO  
+              DN_AL_CODIGO=THISFORM.ALMA.VALUE
+              DN_caja=thisform.caja.value
+		      DN_turno=thisform.turno.value
+      	      DN_valdesc=THISFORM.vdescu.VALUE		
+      	      DN_tipdes=thisform.tipdes.value 
+		      DN_nomcli=THISFORM.NOMBRE.VALUE  
+		      DN_CHECK2=THISFORM.CHECK2.VALUE
+              DN_CHECK1=THISFORM.CHECK1.VALUE 
+              
+ 	 	      SELECT * FROM PVBDMESA WHERE MA_CODIGO=?DN_MESA
+ 		      SELECT PVBDMESA
+		       IF RECCOUNT()>0
+			      IF EMPTY(PVBDMESA.MO_CODIGO)
+	  				    DN_MO_CODIGO=Thisform.mozo.value
+  			      ELSE
+			 		    DN_MO_CODIGO=PVBDMESA.MO_CODIGO 
+			      ENDIF 
+			ELSE
+	 				        DN_MO_CODIGO=Thisform.mozo.value
+			ENDIF			                
+				
+
+	     	  Delete IVBDHETE WHERE Ma_codigo=?DN_MESA and He_tipfac<>'C'
+	     	  Delete IVBDDETE WHERE Ma_codigo=?DN_MESA and De_tipfac<>'C'
+
+*************************************************************************              
+			INSERT IVBDHETE 
+				(he_tipo,ma_codigo,he_factura,he_fecha,he_monto,he_monto2,he_persona,he_netoncf,he_brutncf,he_descncf,
+				 HE_LEY,He_imp,he_desc,he_fecent,HE_FECSAL,IM_CODIGO,cl_codigo,he_itbis,he_TOTLEY,he_neto,he_neto2,he_netoUS,
+	      	     he_netoEU,he_TASAUS,he_TASAEU,AL_CODIGO,he_caja,he_turno,he_valdesc,he_tipdes,MO_CODIGO,HE_NOMBRE,HE_USUARIO,MA_DEPEN)
+	      	VALUES
+	      	    (?TIPO,?DN_MESA,?DN_FACTURA,?DN_FECHA,?DN_MONTO,?DN_MONTO,?DN_PERSONA,?DN_NETONCF,?DN_BRUTNCF,?DN_DESCNCF,
+	      	    ?DN_LEY,?DN_IMP,?DN_DESC,?DN_FECENT,?DN_FECSAL,?DN_IM_CODIGO,?DN_CL_CODIGO,?DN_ITBIS,?DN_TOTLEY,?DN_NETO,?DN_NETO2,?DN_NETOUS,
+	      	    ?DN_NETOEU,?DN_TASAUS,?DN_TASAEU,?DN_AL_CODIGO,?DN_CAJA,?DN_TURNO,?DN_VALDESC,?DN_TIPDES,?DN_MO_CODIGO,?DN_NOMCLI,?USUARIO1,?DN_MESADEP)
+
+  SELECT TEMPORAL
+  GO TOP
+  SCAN
+	          INSERT INTO IVBDDETE 
+	             (DE_TIPO,DE_FACTURA,DE_FECHA,DE_NOMBRE,IM_CODIGO,DE_TBIS,DE_LEY,DE_ITBIS,CL_CODIGO,DE_CAJA,DE_TURNO,MA_CODIGO,MO_CODIGO,
+	              DE_POSICIO,DE_DESCRI,DE_CANTID,AR_CODIGO,DE_PRECIO,DE_PRECIO2,DE_COSTO,
+	              AC_CODIGO,AC_CANTID,DE_DOCUM,AL_CODIGO,DE_USUARIO,DE_FECENT,DE_FECSAL,MA_DEPEN,
+	              DE_PR1,DE_PR2,DE_PR3,AR_codigo2)
+	          VALUES
+	            (?TIPO,?DN_FACTURA,?DN_FECHA,?DN_NOMCLI,?DN_IM_CODIGO,?DN_CHECK2,?DN_CHECK1,?DN_IMP,?DN_CL_CODIGO,?DN_CAJA,?DN_TURNO,?DN_MESA,?DN_MO_CODIGO,
+	             ?temporal.posicion,?temporal.descri,?temporal.cantid,?temporal.codigo,?temporal.precio,?temporal.precio2,?TEMPORAL.COSTO,
+	             ?TEMPORAL.ACOMPANA,?TEMPORAL.ac_cantid,?TEMPORAL.D_DOCUM,?DN_AL_CODIGO,?USUARIO1,?DN_FECENT,?DN_FECSAL,?DN_MESADEP,
+	             ?TEMPORAL.PR1,?TEMPORAL.PR2,?TEMPORAL.PR3,?TEMPORAL.CODIGO2)
+
+
+       SELECT TEMPORAL
+
+ENDSCAN
+
+	  IF TIPO3=1  && SI SE VA A IMPRIMIR EL DOCUMENTO
+    	     DN_PAGO="*"
+
+		          UPDATE PVBDMESA SET MA_FECENT=?DN_FECENT,HE_NOMCLI=?DN_NOMCLI,MA_OCUPA='',MA_PAGO=?DN_PAGO,MO_CODIGO=?DN_MO_CODIGO WHERE MA_CODIGO=?DN_MESA
+
+             THISFORM.IMPIRME.CLICK              
+    	  ELSE
+		          UPDATE PVBDMESA SET MA_FECENT=?DN_FECENT,HE_NOMCLI=?DN_NOMCLI,MA_OCUPA='',MO_CODIGO=?DN_MO_CODIGO WHERE MA_CODIGO=?DN_MESA
+
+    	  ENDIF    
+		 
+		 

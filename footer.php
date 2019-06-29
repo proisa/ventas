@@ -11,7 +11,7 @@
     reserved.
   </footer>
   <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark" id="carrito" style="padding: 60px 10px 0px;">
+  <aside class="control-sidebar control-sidebar-dark" id="carrito">
     <table class="table" style="color:#fff">
     <thead>
       <th width="20%">Cant.</th>
@@ -42,8 +42,7 @@
     </tr>
 
     </table>
-
-    <a href="#" class="btn btn-success btn-block btn-lg">Hacer pedido</a>
+    <button id="crear_pedido" disabled='true' class="btn btn-success btn-block btn-lg">Hacer pedido</button>
   </aside>
   <!-- /.control-sidebar -->
 
@@ -94,15 +93,12 @@
 <!-- AdminLTE App -->
 <script src="<?=url_base()?>/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?=url_base()?>/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?=url_base()?>/dist/js/demo.js"></script>
 <script>
   $(document).ready(function(){
     fillCart();   
   });
-
-
 
   function fillCart(){
     $("#tabla-carrito").empty();
@@ -111,10 +107,13 @@
     //$('#ley').empty();
     $('#total_pagar').empty();
 
-    var data = JSON.parse(localStorage.getItem('item'));
+    var data = JSON.parse(sessionStorage.getItem('item'));
     var subtotal = 0;
     var itbis = 0;
     var total_pagar = 0;
+
+    $("#crear_pedido").attr('disabled',!(data.length > 0));
+    console.log(data.length > 0);
 
     $.each(data, function(key,value){
         var lista = '';
@@ -136,7 +135,6 @@
                 lista += `<li> SIN ${value.ingrediente[i]}</li>`;
             }
         }
-
         var template = `<tr>
         <td>
         <input type="hidden" name="art_id[]" value="${value.id}">
@@ -146,12 +144,13 @@
             <ul>
               ${lista}
             </ul>
+            <i>${value.nota}</i>
         </td>
         <td>${value.precio}</td>
         <td><a class="btn btn-danger btn-sm remove-item" data-id="${key}"><i class="fa fa-trash"></i></a></td>
         </tr>`;
         $("#tabla-carrito").append(template);
-        console.log(key);
+       
     });
 
     itbis = subtotal*(parseFloat(sessionStorage.getItem('itbis')) / 100);
@@ -160,7 +159,13 @@
     $('#itbis').append(itbis.toFixed(2));
     $('#total_pagar').append(total_pagar.toFixed(2));
 
+    header_data = {
+      'subtotal':parseFloat(subtotal.toFixed(2)),
+      'itbis':parseFloat(itbis.toFixed(2)),
+      'total':parseFloat(total_pagar.toFixed(2))
+    }
 
+    sessionStorage.setItem('header',JSON.stringify(header_data));
 
     $('.remove-item').on('click',function(){
       var confirmacion = confirm('Esta seguro de eliminar este articulo?');
@@ -170,20 +175,30 @@
       }
     });
 
-
     function removeItem(indice){
-      var data = JSON.parse(localStorage.getItem('item'));
+      var data = JSON.parse(sessionStorage.getItem('item'));
       data.splice(indice,1);
-      localStorage.setItem('item',JSON.stringify(data));
+      sessionStorage.setItem('item',JSON.stringify(data));
       fillCart();
       //console.log(data[indice]);
     }
-
   }
 
 
-
-
+  $("#crear_pedido").click(function(){
+    $.ajax({
+        url: "pages/guardar_pedido.php",
+        type:'post',
+        data: 'header='+sessionStorage.getItem('header')+'&data='+sessionStorage.getItem('item'),
+        success: function(result){
+            $("#main-content").html(result);
+            //sessionStorage.removeItem('item');
+           // $("#cart-btn").click();
+            //fillCart();
+        }
+    });
+    
+  });
 
 </script>
 </body>

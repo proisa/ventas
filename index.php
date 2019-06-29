@@ -20,7 +20,7 @@ $departamentos = Comando::recordSet($pdo,"SELECT DE_CODIGO,ar_descri FROM IVBDDE
 
 
 <div class="box box-primary">
-    <div class="box-body">
+    <div class="box-body" id="main-content">
         <div class="row">
            <div class="col-md-3">
            <a href="#" id="menu-btn" class="btn btn-lg btn-custom btn-block" style="display:none"> <i class="fa fa-arrow-left"></i> Menu</a> 

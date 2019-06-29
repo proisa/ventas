@@ -52,6 +52,7 @@ if($_SESSION['login'] !== true){
   .control-sidebar-bg, .control-sidebar {
     width:50% !important;
     right: -50%;
+    padding:60px 10px 0px;
   }
 
 #cart-btn {
@@ -70,6 +71,7 @@ if($_SESSION['login'] !== true){
       .control-sidebar-bg, .control-sidebar {
       width:100% !important;
       right: -100%;
+      padding:110px 10px 0px;
     }
   }
 
@@ -117,7 +119,7 @@ if($_SESSION['login'] !== true){
                   <a href="#" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Salir</a>
+                  <a href="process/AuthProcess.php?logout=true" class="btn btn-default btn-flat">Salir</a>
                 </div>
               </li>
             </ul>
@@ -166,9 +168,11 @@ if($_SESSION['login'] !== true){
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="pages/articulos.php"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+              <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Resumen</a></li>
           </ul>
+          <li><a href="index.php"><i class="fa fa-file-text-o"></i>Menu</a></li>
+          <li><a href="#"><i class="fa fa-cutlery"></i>Pedidos</a></li>
+          <li><a href="#"><i class="fa fa-circle-o"></i>Mesas</a></li>
         </li>
       </ul>
     </section>
@@ -180,13 +184,9 @@ if($_SESSION['login'] !== true){
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard
-        <small>Control panel</small>
+       Proisa
+        <!-- <small></small> -->
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
     <!-- Main content -->
     <section class="content">
