@@ -104,7 +104,7 @@
     $("#tabla-carrito").empty();
     $('#subtotal').empty();
     $('#itbis').empty();
-    //$('#ley').empty();
+    $('#ley').empty();
     $('#total_pagar').empty();
 
     var data = JSON.parse(sessionStorage.getItem('item'));
@@ -154,14 +154,17 @@
     });
 
     itbis = subtotal*(parseFloat(sessionStorage.getItem('itbis')) / 100);
-    total_pagar = subtotal+itbis;
+    ley = subtotal*(parseFloat(sessionStorage.getItem('ley')) / 100);
+    total_pagar = subtotal+itbis+ley;
     $('#subtotal').append(subtotal.toFixed(2));
     $('#itbis').append(itbis.toFixed(2));
+    $('#ley').append(ley.toFixed(2));
     $('#total_pagar').append(total_pagar.toFixed(2));
 
     header_data = {
       'subtotal':parseFloat(subtotal.toFixed(2)),
       'itbis':parseFloat(itbis.toFixed(2)),
+      'ley':parseFloat(ley.toFixed(2)),
       'total':parseFloat(total_pagar.toFixed(2))
     }
 

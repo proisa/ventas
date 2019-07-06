@@ -95,7 +95,6 @@ if($_SESSION['login'] !== true){
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
-
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <!-- User Account: style can be found in dropdown.less -->
@@ -170,9 +169,9 @@ if($_SESSION['login'] !== true){
           <ul class="treeview-menu">
               <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Resumen</a></li>
           </ul>
-          <li><a href="index.php"><i class="fa fa-file-text-o"></i>Menu</a></li>
+          <li><a href="<?=url_base()?>/index.php"><i class="fa fa-file-text-o"></i>Menu</a></li>
           <li><a href="#"><i class="fa fa-cutlery"></i>Pedidos</a></li>
-          <li><a href="#"><i class="fa fa-circle-o"></i>Mesas</a></li>
+          <li><a href="<?=url_base()?>/pages/mesas.php"><i class="fa fa-circle-o"></i>Mesas</a></li>
         </li>
       </ul>
     </section>

@@ -5,7 +5,8 @@ require '../clases/Comando.php';
 
 $articulo_id = $_GET['articulo_id'];
 
-$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente FROM ivbdarti 
+$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente 
+FROM ivbdarti 
 WHERE 
 AR_CODIGO='{$articulo_id}' AND
 ar_control='S'
@@ -14,7 +15,6 @@ ORDER BY ar_cosfob asc ";
 
 $articulo_data = Comando::recordSet($pdo,$query);
 
-print_pre(getItbis($pdo));
 
 ?>
 

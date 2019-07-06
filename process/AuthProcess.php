@@ -2,10 +2,12 @@
 require('../inc/conexion.php');
 require('../inc/funciones.php');
 require('../clases/Auth.php');
+require('../clases/Comando.php');
 
 $auth = new Auth($pdo);
 // Login 
 if($auth->login($_POST['usuario'],$_POST['clave'])){
+    getItbis($pdo);
     header('Location: ../index.php');
 }else{
     header('Location: ../login.php?auth=failed');

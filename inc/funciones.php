@@ -22,8 +22,12 @@ function dateFormat($fecha){
 }
 
 function getItbis($pdo){
+
     $query = "SELECT ITBIS,D_LEY FROM FABDPROC WHERE cod_sucu=1 AND cod_empr=1";
     $result = Comando::recordSet($pdo,$query);
+
+    $_SESSION['itbis'] = $result[0]['ITBIS'];
+    $_SESSION['ley'] = $result[0]['D_LEY'];
 
     echo "
         <script>

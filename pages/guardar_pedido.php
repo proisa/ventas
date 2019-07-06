@@ -1,28 +1,75 @@
 <?php 
+date_default_timezone_set('America/Santo_Domingo');
+require '../inc/conexion.php';
+require '../inc/funciones.php';
+require '../clases/Comando.php';
+
 echo '<pre>';
 print_r(json_decode($_POST['header']));
 print_r(json_decode($_POST['data']));
+print_r($_SESSION);
 echo '</pre>';
 
 $header = json_decode($_POST['header']);
 $detalle = json_decode($_POST['data']);
 
-$fecha = date('Y-m-d H:m:s');
+$fecha = Comando::recordSet($pdo,'SELECT getDate() as fecha')[0]['fecha'];
+
+ $header_data = (object) [
+  'tipo'=>'',
+  'mesa'=>'01',
+  'factura'=>2,
+  'fecha'=>$fecha,
+  'monto'=>$header->subtotal,
+  'persona'=>0,
+  'porc_ley'=>$_SESSION['ley'],
+  'porc_itbis'=>$_SESSION['itbis'],
+  'descuento'=>0,
+  'fecha_entrada'=>$fecha,
+  'fecha_salida'=>'',
+  'tipo_comp'=>'02',
+  'codigo_cliente'=>1,
+  'itbis'=>$header->itbis,
+  'total_ley'=>$header->ley,
+  'neto'=>$header->total,
+  'al_codigo'=>'01',
+  'caja'=>'01',
+  'turno'=>'1',
+  'val_desc'=>0,
+  'tipo_desc'=>0,
+  'mo_codigo'=>'01',
+  'nombre_cliente'=>$_SESSION['nombre'],
+  'usuario_id'=>$_SESSION['id'],
+  'dependencia_mesa'=>'',
+]; 
+
+// echo '<pre>';
+// print_r($header_data);
+// echo '</pre>';
 
 $header_query = "INSERT IVBDHETE 
-(he_tipo,ma_codigo,he_factura,he_fecha,he_monto,he_monto2,he_persona,he_netoncf,he_brutncf,he_descncf,
- HE_LEY,He_imp,he_desc,he_fecent,HE_FECSAL,IM_CODIGO,cl_codigo,he_itbis,he_TOTLEY,he_neto,he_neto2,he_netoUS,
-   he_netoEU,he_TASAUS,he_TASAEU,AL_CODIGO,he_caja,he_turno,he_valdesc,he_tipdes,MO_CODIGO,HE_NOMBRE,HE_USUARIO,MA_DEPEN)
+(he_tipo,ma_codigo,he_factura,he_fecha,he_monto,he_persona,
+ HE_LEY,He_imp,he_desc,he_fecent,HE_FECSAL,IM_CODIGO,cl_codigo,he_itbis,he_TOTLEY,he_neto,
+ AL_CODIGO,he_caja,he_turno,he_valdesc,he_tipdes,MO_CODIGO,HE_NOMBRE,HE_USUARIO,MA_DEPEN)
 VALUES
-  (?TIPO,?DN_MESA,?DN_FACTURA,{$fecha},?DN_MONTO,?DN_MONTO,?DN_PERSONA,?DN_NETONCF,?DN_BRUTNCF,?DN_DESCNCF,
-  ?DN_LEY,?DN_IMP,?DN_DESC,?DN_FECENT,?DN_FECSAL,?DN_IM_CODIGO,?DN_CL_CODIGO,{$header->itbis},?DN_TOTLEY,?DN_NETO,?DN_NETO2,?DN_NETOUS,
-  ?DN_NETOEU,?DN_TASAUS,?DN_TASAEU,?DN_AL_CODIGO,?DN_CAJA,?DN_TURNO,?DN_VALDESC,?DN_TIPDES,?DN_MO_CODIGO,?DN_NOMCLI,?USUARIO1,?DN_MESADEP)";
+  ('{$header_data->tipo}',{$header_data->mesa},{$header_data->factura},'$fecha',{$header_data->monto},{$header_data->persona},
+  {$header_data->porc_ley},{$header_data->porc_itbis},{$header_data->descuento},'{$header_data->fecha_entrada}','{$header_data->fecha_salida}','{$header_data->tipo_comp}',{$header_data->codigo_cliente},{$header_data->itbis},{$header_data->total_ley},{$header_data->neto},
+  '{$header_data->al_codigo}','{$header_data->caja}','{$header_data->turno}',{$header_data->val_desc},{$header_data->tipo_desc},'{$header_data->mo_codigo}','{$header_data->nombre_cliente}',{$header_data->usuario_id},'{$header_data->dependencia_mesa}')";
 
+//echo $header_query;
 
+echo Comando::noRecordSet($pdo,$header_query);
+echo '<br>';
 foreach($detalle as $k => $v){
-    echo $v->id.'<br>';
-}
+  $docum = '';
+  $nota = !empty($v->nota) ? $v->nota : '';
+  $guarnicion = isset($v->guarnicion_id) ? $v->guarnicion_id : '';
 
+  if($guarnicion != '' || $nota != ''){
+     Comando::noRecordSet($pdo,"UPDATE IVBDPROC SET CREAUX=CREAUX+1");
+     $data = Comando::recordSet($pdo,"SELECT CREAUX FROM IVBDPROC");
+     $docum = $data[0]['CREAUX'];
+  }
 
   $detalle_query = "INSERT INTO IVBDDETE 
   (DE_TIPO,DE_FACTURA,DE_FECHA,DE_NOMBRE,IM_CODIGO,DE_TBIS,DE_LEY,DE_ITBIS,CL_CODIGO,DE_CAJA,DE_TURNO,MA_CODIGO,MO_CODIGO,
@@ -30,9 +77,64 @@ foreach($detalle as $k => $v){
    AC_CODIGO,AC_CANTID,DE_DOCUM,AL_CODIGO,DE_USUARIO,DE_FECENT,DE_FECSAL,MA_DEPEN,
    DE_PR1,DE_PR2,DE_PR3,AR_codigo2)
     VALUES
-    (?TIPO,?DN_FACTURA,?DN_FECHA,?DN_NOMCLI,?DN_IM_CODIGO,?DN_CHECK2,?DN_CHECK1,?DN_IMP,?DN_CL_CODIGO,?DN_CAJA,?DN_TURNO,?DN_MESA,?DN_MO_CODIGO,
-    ?temporal.posicion,?temporal.descri,?temporal.cantid,?temporal.codigo,?temporal.precio,?temporal.precio2,?TEMPORAL.COSTO,
-    ?TEMPORAL.ACOMPANA,?TEMPORAL.ac_cantid,?TEMPORAL.D_DOCUM,?DN_AL_CODIGO,?USUARIO1,?DN_FECENT,?DN_FECSAL,?DN_MESADEP,
-    ?TEMPORAL.PR1,?TEMPORAL.PR2,?TEMPORAL.PR3,?TEMPORAL.CODIGO2)";
+    ('{$header_data->tipo}','{$header_data->factura}','$fecha','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
+    0,'{$v->descripcion}',{$v->cantidad},'{$v->id}',{$v->precio},0,0,
+    '{$guarnicion}',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
+    0,0,0,'')";
+
+echo Comando::noRecordSet($pdo,$detalle_query);
+echo '<br>';
+
+  if($guarnicion != ''){
+    $guarnicion_query = "INSERT INTO IVBDDETE 
+    (DE_TIPO,DE_FACTURA,DE_FECHA,DE_NOMBRE,IM_CODIGO,DE_TBIS,DE_LEY,DE_ITBIS,CL_CODIGO,DE_CAJA,DE_TURNO,MA_CODIGO,MO_CODIGO,
+    DE_POSICIO,DE_DESCRI,DE_CANTID,AR_CODIGO,DE_PRECIO,DE_PRECIO2,DE_COSTO,
+    AC_CODIGO,AC_CANTID,DE_DOCUM,AL_CODIGO,DE_USUARIO,DE_FECENT,DE_FECSAL,MA_DEPEN,
+    DE_PR1,DE_PR2,DE_PR3,AR_codigo2)
+      VALUES
+      ('{$header_data->tipo}','{$header_data->factura}','$fecha','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
+      0,'{$v->guarnicion_nombre}',0,'',0,0,0,
+      '',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
+      0,0,0,'')";
+
+    echo Comando::noRecordSet($pdo,$guarnicion_query);
+    echo '<br>';
+  }
+
+  if($nota != ''){
+    $guarnicion_query = "INSERT INTO IVBDDETE 
+    (DE_TIPO,DE_FACTURA,DE_FECHA,DE_NOMBRE,IM_CODIGO,DE_TBIS,DE_LEY,DE_ITBIS,CL_CODIGO,DE_CAJA,DE_TURNO,MA_CODIGO,MO_CODIGO,
+    DE_POSICIO,DE_DESCRI,DE_CANTID,AR_CODIGO,DE_PRECIO,DE_PRECIO2,DE_COSTO,
+    AC_CODIGO,AC_CANTID,DE_DOCUM,AL_CODIGO,DE_USUARIO,DE_FECENT,DE_FECSAL,MA_DEPEN,
+    DE_PR1,DE_PR2,DE_PR3,AR_codigo2)
+      VALUES
+      ('{$header_data->tipo}','{$header_data->factura}','$fecha','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
+      0,'{$v->nota}',0,'',0,0,0,
+      '',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
+      0,0,0,'')";
+
+    echo Comando::noRecordSet($pdo,$guarnicion_query);
+    echo '<br>';
+  }
+
+
+
+}
+
+
+
+
+
+// COMANDO("UPDATE IVBDPROC SET CREAUX=CREAUX+1;SELECT CREAUX FROM IVBDPROC","IVBDPROC",M.CA)
+// N_CREA = str(ivbdproc.CREAUX,12)
+
+
+// SELECT TEMPORAL
+// Go 
+// REPLACE TEMPORAL.D_docum WITH right("00000000000"+alltrim(N_CREA),12)
+
+
+
+
 
 ?>
