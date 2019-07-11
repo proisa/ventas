@@ -17,7 +17,7 @@ $fecha = Comando::recordSet($pdo,'SELECT getDate() as fecha')[0]['fecha'];
 
  $header_data = (object) [
   'tipo'=>'',
-  'mesa'=>'01',
+  'mesa'=>$header->mesa,
   'factura'=>2,
   'fecha'=>$fecha,
   'monto'=>$header->subtotal,

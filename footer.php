@@ -161,13 +161,23 @@
     $('#ley').append(ley.toFixed(2));
     $('#total_pagar').append(total_pagar.toFixed(2));
 
-    header_data = {
-      'subtotal':parseFloat(subtotal.toFixed(2)),
-      'itbis':parseFloat(itbis.toFixed(2)),
-      'ley':parseFloat(ley.toFixed(2)),
-      'total':parseFloat(total_pagar.toFixed(2))
+    var header_data = {};
+    if(sessionStorage.getItem('header') != null){
+        header_data = JSON.parse(sessionStorage.getItem('header'));
     }
 
+    // header_data = {
+    //   'subtotal':parseFloat(subtotal.toFixed(2)),
+    //   'itbis':parseFloat(itbis.toFixed(2)),
+    //   'ley':parseFloat(ley.toFixed(2)),
+    //   'total':parseFloat(total_pagar.toFixed(2))
+    // }
+
+    header_data.subtotal = parseFloat(subtotal.toFixed(2)),
+    header_data.itbis = parseFloat(itbis.toFixed(2)),
+    header_data.ley = parseFloat(ley.toFixed(2)),
+    header_data.total = parseFloat(total_pagar.toFixed(2))
+ 
     sessionStorage.setItem('header',JSON.stringify(header_data));
 
     $('.remove-item').on('click',function(){

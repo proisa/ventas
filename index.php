@@ -2,7 +2,7 @@
 require 'inc/conexion.php';
 require 'header.php';
 require 'clases/Comando.php';
-
+getItbis($pdo);
 $departamentos = Comando::recordSet($pdo,"SELECT DE_CODIGO,ar_descri FROM IVBDDEPT WHERE AR_PRESENT=1 ORDER BY ar_ORDEN ASC");
 
 ?>

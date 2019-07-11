@@ -1,0 +1,30 @@
+
+
+.mesa {
+    padding: 15px;
+    border:1px solid #ccc;
+    box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+    cursor: pointer;
+    margin-bottom: 10px;
+    background-image: url('../img/mesa.jpg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.naranja {
+    border-right: 20px rgb(255,174,94) solid;
+}
+
+.rojo {
+    border-right: rgb(255,89,89) 20px solid;
+}
+
+.verde {
+    border-right: rgb(64,128,128) 20px solid;
+}
+
+.dividida {
+    border-right: rgb(146, 6, 104) 20px solid;
+}
+
