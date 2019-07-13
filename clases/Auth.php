@@ -6,13 +6,14 @@ class Auth{
     public $con;
     public $success = '';
     public $error = '';
+    public $nivel;
     
     public function __construct($pdo){
         $this->con = $pdo;
     }
 
     public function login($user,$pass){
-        $query = $this->con->prepare("SELECT ID,COD_EMPR,COD_SUCU,USUARIO,CLAVE,NIVEL FROM CONTASEG WHERE USUARIO = :usuario AND CLAVE = :clave AND COD_EMPR = 1 AND COD_SUCU = 1");
+        $query = $this->con->prepare("SELECT ID,COD_EMPR,COD_SUCU,USUARIO,CLAVE,NIVEL,MO_CODIGO FROM CONTASEG WHERE USUARIO = :usuario AND CLAVE = :clave AND COD_EMPR = 1 AND COD_SUCU = 1");
         $query->bindParam(':usuario',$user);
         $query->bindParam(':clave',$pass);
         $query->execute();
@@ -22,7 +23,7 @@ class Auth{
             $_SESSION['id'] = $data->ID;
             $_SESSION['nombre'] = $data->USUARIO;
             $_SESSION['nivel'] = $data->NIVEL;
-            $this->success = 'Login succesfull';
+            $_SESSION['mo_codigo'] = $data->MO_CODIGO;
             return true;
         }else{
             $this->error = 'Login error';

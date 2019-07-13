@@ -37,8 +37,8 @@ $fecha = Comando::recordSet($pdo,'SELECT getDate() as fecha')[0]['fecha'];
   'turno'=>'1',
   'val_desc'=>0,
   'tipo_desc'=>0,
-  'mo_codigo'=>'01',
-  'nombre_cliente'=>$_SESSION['nombre'],
+  'mo_codigo'=>$_SESSION['mo_codigo'],
+  'nombre_cliente'=>$header->cliente,
   'usuario_id'=>$_SESSION['id'],
   'dependencia_mesa'=>'',
 ]; 
@@ -116,24 +116,27 @@ echo '<br>';
     echo Comando::noRecordSet($pdo,$guarnicion_query);
     echo '<br>';
   }
-
-
-
 }
 
+$updateMesa = "UPDATE PVBDMESA
+SET MA_FECENT='$header_data->fecha_entrada',HE_NOMCLI='$header_data->nombre_cliente',MA_OCUPA='',MO_CODIGO='$header_data->mo_codigo' 
+WHERE MA_CODIGO='$header->mesa'";
 
+Comando::noRecordSet($pdo,$updateMesa);
 
+/*
+IF TIPO3=1  && SI SE VA A IMPRIMIR EL DOCUMENTO
+DN_PAGO="*"
 
+   UPDATE PVBDMESA SET MA_FECENT=?DN_FECENT,HE_NOMCLI=?DN_NOMCLI,MA_OCUPA='',MA_PAGO=?DN_PAGO,MO_CODIGO=?DN_MO_CODIGO WHERE MA_CODIGO=?DN_MESA
 
-// COMANDO("UPDATE IVBDPROC SET CREAUX=CREAUX+1;SELECT CREAUX FROM IVBDPROC","IVBDPROC",M.CA)
-// N_CREA = str(ivbdproc.CREAUX,12)
+  THISFORM.IMPIRME.CLICK              
+ELSE
+   UPDATE PVBDMESA SET MA_FECENT=?DN_FECENT,HE_NOMCLI=?DN_NOMCLI,MA_OCUPA='',MO_CODIGO=?DN_MO_CODIGO WHERE MA_CODIGO=?DN_MESA
 
+ENDIF    
 
-// SELECT TEMPORAL
-// Go 
-// REPLACE TEMPORAL.D_docum WITH right("00000000000"+alltrim(N_CREA),12)
-
-
+*/
 
 
 

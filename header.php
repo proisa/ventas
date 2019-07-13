@@ -108,10 +108,8 @@ if($_SESSION['login'] !== true){
               <!-- User image -->
               <li class="user-header">
                 <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-
                 <p>
                 <?=$_SESSION['nombre']?>
-                
                 </p>
               </li>
               <li class="user-footer">
@@ -119,7 +117,7 @@ if($_SESSION['login'] !== true){
                   <a href="#" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="process/AuthProcess.php?logout=true" class="btn btn-default btn-flat">Salir</a>
+                  <a href="<?=url_base()?>/process/AuthProcess.php?logout=true" class="btn btn-default btn-flat">Salir</a>
                 </div>
               </li>
             </ul>
@@ -170,9 +168,10 @@ if($_SESSION['login'] !== true){
           <ul class="treeview-menu">
               <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Resumen</a></li>
           </ul>
-          <li><a href="<?=url_base()?>/index.php"><i class="fa fa-file-text-o"></i>Menu</a></li>
-          <li><a href="#"><i class="fa fa-cutlery"></i>Pedidos</a></li>
+          <li><a href="<?=url_base()?>/pages/camareros.php"><i class="fa fa-users"></i>Camareros</a></li>
           <li><a href="<?=url_base()?>/pages/mesas.php"><i class="fa fa-circle-o"></i>Mesas</a></li>
+          <!-- <li><a href="<?=url_base()?>/index.php"><i class="fa fa-file-text-o"></i>Menu</a></li> -->
+          <li><a href="#"><i class="fa fa-cutlery"></i>Pedidos</a></li>
         </li>
       </ul>
     </section>

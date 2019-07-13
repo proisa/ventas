@@ -40,8 +40,11 @@
         <span id="total_pagar"></span>
       </td>
     </tr>
-
     </table>
+    <hr>
+    <label for="">Nombre de cliente</label>
+    <input type="text" class="form-control" id="cliente" maxlength="20">
+    <br>
     <button id="crear_pedido" disabled='true' class="btn btn-success btn-block btn-lg">Hacer pedido</button>
   </aside>
   <!-- /.control-sidebar -->
@@ -176,7 +179,8 @@
     header_data.subtotal = parseFloat(subtotal.toFixed(2)),
     header_data.itbis = parseFloat(itbis.toFixed(2)),
     header_data.ley = parseFloat(ley.toFixed(2)),
-    header_data.total = parseFloat(total_pagar.toFixed(2))
+    header_data.total = parseFloat(total_pagar.toFixed(2)),
+    header_data.cliente = $('#cliente').val();
  
     sessionStorage.setItem('header',JSON.stringify(header_data));
 
@@ -199,18 +203,20 @@
 
 
   $("#crear_pedido").click(function(){
+    fillCart();
     $.ajax({
-        url: "pages/guardar_pedido.php",
+        url: "<?=url_base()?>/pages/guardar_pedido.php",
         type:'post',
         data: 'header='+sessionStorage.getItem('header')+'&data='+sessionStorage.getItem('item'),
         success: function(result){
             $("#main-content").html(result);
-            //sessionStorage.removeItem('item');
-           // $("#cart-btn").click();
-            //fillCart();
+            sessionStorage.removeItem('item');
+            $("#cart-btn").click();
+            fillCart();
         }
     });
-    
+    $('#cliente').empty();
+
   });
 
 </script>

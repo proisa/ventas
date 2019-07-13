@@ -38,29 +38,59 @@ $mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID"
     <div class="box-body">
         <div class="row">
             <?php foreach($mesas as $mesa):?>
+            <?php 
+                $color = '';
+                
+                if(!empty(trim($mesa['MA_PAGO']))){
+                    $color = 'verde';
+                }
+                
+                if($mesa['MO_CODIGO'] == $_SESSION['mo_codigo']){
+                    $color = 'naranja';
+                }
+                
+                if(!empty(trim($mesa['MO_CODIGO'])) && $mesa['MO_CODIGO'] != $_SESSION['mo_codigo']){
+                    $color = 'rojo';
+                }
+
+            ?>
             <div class="col-md-3">
-                <div class="mesa verde" data-id="<?=$mesa['MA_CODIGO']?>" >
+                <div class="c_box <?=$color?>">
+                <div class="mesa" data-id="<?=$mesa['MA_CODIGO']?>">
                     <h2><?=$mesa['MA_CODIGO']?></h2>
+                </div>
+                <p class="text-center"><?=$mesa['HE_NOMCLI']?> &nbsp </p>
                 </div>
             </div>
             <?php endforeach;?>
         </div>
     </div>
 </div>
+
+<input type="hidden" id="camarero" value="<?=$_SESSION['mo_codigo']?>">
+
 <?php 
-require '../footer.php';
+    require '../footer.php';
 ?>
-
 <script>
-
 $('.mesa').click(function(){
     header_data = {
       'mesa':$(this).attr('data-id')
     }
     sessionStorage.setItem('header',JSON.stringify(header_data));
-    window.location.href = '../index.php';
+    $.ajax({
+        url: "../process/TableProcess.php",
+        type:'post',
+        data: 'mesa='+$(this).attr('data-id')+'&camarero='+$('#camarero').val(),
+        success: function(result){
+            if(result.resp == 'Error'){
+                alert(result.msj);
+            }else{
+                window.location.href = '../index.php';
+            }
+            //console.log(result.msj);
+           
+        }
+    });
 });
-
-
-
 </script>
