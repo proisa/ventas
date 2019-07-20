@@ -21,7 +21,7 @@ if(Comando::noRecordSet($pdo,$query)){
 }else{
     echo json_enconde(['resp'=>'Error','msj'=>'Ocurrio un error al ocupar la mesa']);
 }
-
+$pdo->commit();
 // IF EMPTY(PVBDMESA.MO_CODIGO)
 // DN_MOZO=MOZOS
 // ELSE

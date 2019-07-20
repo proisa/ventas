@@ -7,7 +7,7 @@ require('../clases/Comando.php');
 $auth = new Auth($pdo);
 // Login 
 if($auth->login($_POST['usuario'],$_POST['clave'])){
-    header('Location: ../pages/camareros.php');
+    header('Location: ../pages/mesas.php');
 
     // if($auth->nivel == 'G'){
     //     header('Location: ../pages/mesas.php');

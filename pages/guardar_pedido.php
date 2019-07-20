@@ -13,35 +13,77 @@ echo '</pre>';
 $header = json_decode($_POST['header']);
 $detalle = json_decode($_POST['data']);
 
-$fecha = Comando::recordSet($pdo,'SELECT getDate() as fecha')[0]['fecha'];
+$mesaConPedidos = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE WHERE ma_codigo='{$header->mesa}' AND He_tipfac <> 'C'")[0];
 
- $header_data = (object) [
-  'tipo'=>'',
-  'mesa'=>$header->mesa,
-  'factura'=>2,
-  'fecha'=>$fecha,
-  'monto'=>$header->subtotal,
-  'persona'=>0,
-  'porc_ley'=>$_SESSION['ley'],
-  'porc_itbis'=>$_SESSION['itbis'],
-  'descuento'=>0,
-  'fecha_entrada'=>$fecha,
-  'fecha_salida'=>'',
-  'tipo_comp'=>'02',
-  'codigo_cliente'=>1,
-  'itbis'=>$header->itbis,
-  'total_ley'=>$header->ley,
-  'neto'=>$header->total,
-  'al_codigo'=>'01',
-  'caja'=>'01',
-  'turno'=>'1',
-  'val_desc'=>0,
-  'tipo_desc'=>0,
-  'mo_codigo'=>$_SESSION['mo_codigo'],
-  'nombre_cliente'=>$header->cliente,
-  'usuario_id'=>$_SESSION['id'],
-  'dependencia_mesa'=>'',
-]; 
+// print_pre($mesaConPedidos);
+
+// exit();
+
+if(count($mesaConPedidos) == 0){
+  $fecha = Comando::recordSet($pdo,'SELECT getDate() as fecha')[0]['fecha'];
+  Comando::noRecordSet($pdo,"UPDATE IVBDPROC SET PEDIDO=PEDIDO+1");
+  $num_factura = Comando::recordSet($pdo,"SELECT PEDIDO FROM IVBDPROC")[0]['PEDIDO'];
+  $num_factura = str_pad($num_factura, 10, "0", STR_PAD_LEFT); 
+
+  $header_data = (object) [
+    'tipo'=>'',
+    'mesa'=>$header->mesa,
+    'factura'=>$num_factura,
+    'fecha'=>$fecha,
+    'monto'=>$header->subtotal,
+    'persona'=>0,
+    'porc_ley'=>$_SESSION['ley'],
+    'porc_itbis'=>$_SESSION['itbis'],
+    'descuento'=>0,
+    'fecha_entrada'=>$fecha,
+    'fecha_salida'=>'',
+    'tipo_comp'=>'02',
+    'codigo_cliente'=>1,
+    'itbis'=>$header->itbis,
+    'total_ley'=>$header->ley,
+    'neto'=>$header->total,
+    'al_codigo'=>'01',
+    'caja'=>'01',
+    'turno'=>'1',
+    'val_desc'=>0,
+    'tipo_desc'=>0,
+    'mo_codigo'=>$_SESSION['mo_codigo'],
+    'nombre_cliente'=>$header->cliente,
+    'usuario_id'=>$_SESSION['id'],
+    'dependencia_mesa'=>'',
+  ]; 
+
+}else{
+
+  $header_data = (object) [
+    'tipo'=>'',
+    'mesa'=>$mesaConPedidos['MO_CODIGO'],
+    'factura'=>$mesaConPedidos['HE_FACTURA'],
+    'fecha'=>$mesaConPedidos['HE_FECHA'],
+    'monto'=>$header->subtotal,
+    'persona'=>0,
+    'porc_ley'=>$_SESSION['ley'],
+    'porc_itbis'=>$_SESSION['itbis'],
+    'descuento'=>0,
+    'fecha_entrada'=>$mesaConPedidos['HE_FECHA'],
+    'fecha_salida'=>'',
+    'tipo_comp'=>'02',
+    'codigo_cliente'=>1,
+    'itbis'=>$header->itbis,
+    'total_ley'=>$header->ley,
+    'neto'=>$header->total,
+    'al_codigo'=>'01',
+    'caja'=>'01',
+    'turno'=>'1',
+    'val_desc'=>0,
+    'tipo_desc'=>0,
+    'mo_codigo'=>$_SESSION['mo_codigo'],
+    'nombre_cliente'=>$mesaConPedidos['HE_NOMBRE'],
+    'usuario_id'=>$_SESSION['id'],
+    'dependencia_mesa'=>'',
+  ]; 
+}
+
 
 // echo '<pre>';
 // print_r($header_data);
@@ -52,9 +94,15 @@ $header_query = "INSERT IVBDHETE
  HE_LEY,He_imp,he_desc,he_fecent,HE_FECSAL,IM_CODIGO,cl_codigo,he_itbis,he_TOTLEY,he_neto,
  AL_CODIGO,he_caja,he_turno,he_valdesc,he_tipdes,MO_CODIGO,HE_NOMBRE,HE_USUARIO,MA_DEPEN)
 VALUES
-  ('{$header_data->tipo}',{$header_data->mesa},{$header_data->factura},'$fecha',{$header_data->monto},{$header_data->persona},
-  {$header_data->porc_ley},{$header_data->porc_itbis},{$header_data->descuento},'{$header_data->fecha_entrada}','{$header_data->fecha_salida}','{$header_data->tipo_comp}',{$header_data->codigo_cliente},{$header_data->itbis},{$header_data->total_ley},{$header_data->neto},
-  '{$header_data->al_codigo}','{$header_data->caja}','{$header_data->turno}',{$header_data->val_desc},{$header_data->tipo_desc},'{$header_data->mo_codigo}','{$header_data->nombre_cliente}',{$header_data->usuario_id},'{$header_data->dependencia_mesa}')";
+  ('{$header_data->tipo}','{$header_data->mesa}','{$header_data->factura}','$fecha',{$header_data->monto},{$header_data->persona},
+  '{$header_data->porc_ley}','{$header_data->porc_itbis}','{$header_data->descuento}','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','{$header_data->tipo_comp}','{$header_data->codigo_cliente}','{$header_data->itbis}','{$header_data->total_ley}','{$header_data->neto}',
+  '{$header_data->al_codigo}','{$header_data->caja}','{$header_data->turno}','{$header_data->val_desc}','{$header_data->tipo_desc}','{$header_data->mo_codigo}','{$header_data->nombre_cliente}','{$header_data->usuario_id}','{$header_data->dependencia_mesa}')";
+
+if(count($mesaConPedidos) > 0){
+    
+  $header_query = "UPDATE IVBDHETE SET he_monto = he_monto + $header_data->monto, he_itbis = he_itbis + $header_data->itbis,he_TOTLEY = he_TOTLEY+$header_data->total_ley ,he_neto = he_neto + $header_data->neto";
+
+}
 
 //echo $header_query;
 
@@ -123,6 +171,8 @@ SET MA_FECENT='$header_data->fecha_entrada',HE_NOMCLI='$header_data->nombre_clie
 WHERE MA_CODIGO='$header->mesa'";
 
 Comando::noRecordSet($pdo,$updateMesa);
+$pdo->commit();
+
 
 /*
 IF TIPO3=1  && SI SE VA A IMPRIMIR EL DOCUMENTO

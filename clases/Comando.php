@@ -26,7 +26,6 @@ class Comando{
 
         $response = $cnn->query($tsql);
         if($response->rowCount() != 0){
-            
             return  $response->fetchAll(PDO::FETCH_ASSOC);
         }else{
             return false;

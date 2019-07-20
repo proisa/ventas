@@ -86,7 +86,7 @@ $('.mesa').click(function(){
             if(result.resp == 'Error'){
                 alert(result.msj);
             }else{
-                window.location.href = '../index.php';
+                window.location.href = '../index.php?ma='+header_data.mesa;
             }
             //console.log(result.msj);
            
