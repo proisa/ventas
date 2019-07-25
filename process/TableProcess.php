@@ -7,7 +7,7 @@ require('../clases/Comando.php');
 $mesa = trim($_POST['mesa']);
 $camarero = trim($_POST['camarero']);
 
-$select = "SELECT MA_OCUPA,MO_CODIGO FROM PVBDMESA WHERE MA_CODIGO='{$mesa}'";
+$select = "SELECT MA_OCUPA,MO_CODIGO,he_nomcli FROM PVBDMESA WHERE MA_CODIGO='{$mesa}'";
 $resSelect = Comando::recordSet($pdo,$select)[0];
 
 if($resSelect['MA_OCUPA'] == '*' && $resSelect['MO_CODIGO'] != $_SESSION['mo_codigo']){
@@ -15,9 +15,12 @@ if($resSelect['MA_OCUPA'] == '*' && $resSelect['MO_CODIGO'] != $_SESSION['mo_cod
     exit();
 }
 
+$data = [];
+
 $query = "UPDATE PVBDMESA SET MO_CODIGO='{$camarero}',MA_OCUPA='*' WHERE MA_CODIGO='{$mesa}'";
 if(Comando::noRecordSet($pdo,$query)){
-    echo json_encode(['resp'=>'OK','msj'=>'La mesa ha sido seleccionada']);
+    $data = ['cliente'=>$resSelect['he_nomcli']];
+    echo json_encode(['resp'=>'OK','msj'=>'La mesa ha sido seleccionada','data'=>$data]);
 }else{
     echo json_enconde(['resp'=>'Error','msj'=>'Ocurrio un error al ocupar la mesa']);
 }

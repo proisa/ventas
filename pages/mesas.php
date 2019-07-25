@@ -62,6 +62,7 @@ $mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID"
                 <p class="text-center"><?=$mesa['HE_NOMCLI']?> &nbsp </p>
                 </div>
             </div>
+            <input type="hidden" id="cliente<?=trim($mesa['MA_CODIGO'])?>" value="<?=$mesa['HE_NOMCLI']?>">
             <?php endforeach;?>
         </div>
     </div>
@@ -69,13 +70,15 @@ $mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID"
 
 <input type="hidden" id="camarero" value="<?=$_SESSION['mo_codigo']?>">
 
+
 <?php 
     require '../footer.php';
 ?>
 <script>
 $('.mesa').click(function(){
     header_data = {
-      'mesa':$(this).attr('data-id')
+      'mesa':$(this).attr('data-id'),
+      'cliente':$('#cliente'+$(this).attr('data-id')).val()
     }
     sessionStorage.setItem('header',JSON.stringify(header_data));
     $.ajax({
@@ -86,11 +89,18 @@ $('.mesa').click(function(){
             if(result.resp == 'Error'){
                 alert(result.msj);
             }else{
-                window.location.href = '../index.php?ma='+header_data.mesa;
+                $('#cliente').val(result.data.nombre);
+                window.location.href = '../index.php?ma='+header_data.mesa+'&cliente='+header_data.cliente;
             }
             //console.log(result.msj);
            
         }
     });
 });
+
+// setTimeout(function() {
+//   location.reload();
+// }, 5000);
+
+
 </script>

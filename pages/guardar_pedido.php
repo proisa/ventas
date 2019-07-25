@@ -5,20 +5,24 @@ require '../inc/funciones.php';
 require '../clases/Comando.php';
 
 echo '<pre>';
-print_r(json_decode($_POST['header']));
-print_r(json_decode($_POST['data']));
-print_r($_SESSION);
+  echo 'Header <br>';
+  print_r(json_decode($_POST['header']));
+  echo '------------------<br>';
+  echo 'Detalle <br>';
+  print_r(json_decode($_POST['data']));
+  echo '------------------<br>';
+  //print_r($_SESSION);
 echo '</pre>';
 
 $header = json_decode($_POST['header']);
 $detalle = json_decode($_POST['data']);
-
 $mesaConPedidos = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE WHERE ma_codigo='{$header->mesa}' AND He_tipfac <> 'C'")[0];
 
-// print_pre($mesaConPedidos);
-
-// exit();
-
+echo 'Count: ' . count($mesaConPedidos);
+echo 'Datos de Mesa <br>';
+print_pre($mesaConPedidos);
+echo '------------------<br>';
+//exit();
 if(count($mesaConPedidos) == 0){
   $fecha = Comando::recordSet($pdo,'SELECT getDate() as fecha')[0]['fecha'];
   Comando::noRecordSet($pdo,"UPDATE IVBDPROC SET PEDIDO=PEDIDO+1");
@@ -57,7 +61,7 @@ if(count($mesaConPedidos) == 0){
 
   $header_data = (object) [
     'tipo'=>'',
-    'mesa'=>$mesaConPedidos['MO_CODIGO'],
+    'mesa'=>$mesaConPedidos['MA_CODIGO'],
     'factura'=>$mesaConPedidos['HE_FACTURA'],
     'fecha'=>$mesaConPedidos['HE_FECHA'],
     'monto'=>$header->subtotal,
@@ -83,18 +87,15 @@ if(count($mesaConPedidos) == 0){
     'dependencia_mesa'=>'',
   ]; 
 }
-
-
 // echo '<pre>';
 // print_r($header_data);
 // echo '</pre>';
-
 $header_query = "INSERT IVBDHETE 
 (he_tipo,ma_codigo,he_factura,he_fecha,he_monto,he_persona,
  HE_LEY,He_imp,he_desc,he_fecent,HE_FECSAL,IM_CODIGO,cl_codigo,he_itbis,he_TOTLEY,he_neto,
  AL_CODIGO,he_caja,he_turno,he_valdesc,he_tipdes,MO_CODIGO,HE_NOMBRE,HE_USUARIO,MA_DEPEN)
 VALUES
-  ('{$header_data->tipo}','{$header_data->mesa}','{$header_data->factura}','$fecha',{$header_data->monto},{$header_data->persona},
+  ('{$header_data->tipo}','{$header_data->mesa}','{$header_data->factura}','{$header_data->fecha}',{$header_data->monto},{$header_data->persona},
   '{$header_data->porc_ley}','{$header_data->porc_itbis}','{$header_data->descuento}','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','{$header_data->tipo_comp}','{$header_data->codigo_cliente}','{$header_data->itbis}','{$header_data->total_ley}','{$header_data->neto}',
   '{$header_data->al_codigo}','{$header_data->caja}','{$header_data->turno}','{$header_data->val_desc}','{$header_data->tipo_desc}','{$header_data->mo_codigo}','{$header_data->nombre_cliente}','{$header_data->usuario_id}','{$header_data->dependencia_mesa}')";
 
@@ -125,7 +126,7 @@ foreach($detalle as $k => $v){
    AC_CODIGO,AC_CANTID,DE_DOCUM,AL_CODIGO,DE_USUARIO,DE_FECENT,DE_FECSAL,MA_DEPEN,
    DE_PR1,DE_PR2,DE_PR3,AR_codigo2)
     VALUES
-    ('{$header_data->tipo}','{$header_data->factura}','$fecha','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
+    ('{$header_data->tipo}','{$header_data->factura}','{$header_data->fecha}','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
     0,'{$v->descripcion}',{$v->cantidad},'{$v->id}',{$v->precio},0,0,
     '{$guarnicion}',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
     0,0,0,'')";
@@ -140,7 +141,7 @@ echo '<br>';
     AC_CODIGO,AC_CANTID,DE_DOCUM,AL_CODIGO,DE_USUARIO,DE_FECENT,DE_FECSAL,MA_DEPEN,
     DE_PR1,DE_PR2,DE_PR3,AR_codigo2)
       VALUES
-      ('{$header_data->tipo}','{$header_data->factura}','$fecha','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
+      ('{$header_data->tipo}','{$header_data->factura}','{$header_data->fecha}','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
       0,'{$v->guarnicion_nombre}',0,'',0,0,0,
       '',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
       0,0,0,'')";
@@ -156,7 +157,7 @@ echo '<br>';
     AC_CODIGO,AC_CANTID,DE_DOCUM,AL_CODIGO,DE_USUARIO,DE_FECENT,DE_FECSAL,MA_DEPEN,
     DE_PR1,DE_PR2,DE_PR3,AR_codigo2)
       VALUES
-      ('{$header_data->tipo}','{$header_data->factura}','$fecha','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
+      ('{$header_data->tipo}','{$header_data->factura}','{$header_data->fecha}','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
       0,'{$v->nota}',0,'',0,0,0,
       '',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
       0,0,0,'')";

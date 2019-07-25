@@ -182,10 +182,10 @@ if($_SESSION['login'] !== true){
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-       Proisa
-        <!-- <small></small> -->
-      </h1>
+      <?php if(isset($_GET['ma']) && isset($_GET['cliente'])): ?>
+      <h2>Mesa: <?=$_GET['ma']?> - <?=$_GET['cliente']?></h2>
+      <?php endif;?>
+
     </section>
     <!-- Main content -->
     <section class="content">

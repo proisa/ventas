@@ -31,66 +31,76 @@ $hide = '';
         <div class="row">
            <div class="col-md-3">
            <a href="#" id="menu-btn" class="btn btn-lg btn-custom btn-block menu-btn" style="display:none"> <i class="fa fa-arrow-left"></i> Menu</a> 
-           <hr>
+          
            </div>
         </div>   
         <div class="row">
-            
+
+       
             <?php if(count($data[0]) > 0): 
                 $hide = "style='display:none'";
                 $data_pedidos = Comando::recordSet($pdo,"SELECT a.*,b.ar_tipo,ISNULL(b.ar_premin,0),ISNULL(b.ar_predet,0),ISNULL(b.ar_premay,0),ISNULL(B.AR_ITBIS,' ') AS DIMPUESTO,B.AR_VALEXI FROM ivbddete a LEFT JOIN ivbdarti b 
                 ON A.AR_CODIGO=B.AR_CODIGO WHERE a.ma_codigo='{$mesa}' AND a.de_tipfac<>'C'");
 
-                //print_pre($data_pedidos);
+               // print_pre($data_pedidos);
             ?>
             <div id="pedidos">
+           
             <div class="col-md-12">
+           
             <table class="table">
                     <thead>
                         <th>Cant</th>
                         <th>Descripcion</th>
-                        <th class="text-right">Precio</th>
+                        <th >Precio</th>
+                        <th class="text-right">Importe</th>
                     </thead>
                     <tbody>
                     <?php foreach($data_pedidos as $item): ?>
-                        <tr>
-                        <?php if(!empty(trim($item['AR_CODIGO']))):?>
-                            <td><?=$item['DE_CANTID']?></td>
-                            <td>
-                                <?=$item['DE_DESCRI']?>
-                            </td>
-                            <td class="text-right" >
-                                <?=$item['DE_PRECIO']?>
-                            </td>
-                            <?php else:?>
-                                <td></td>
+                        <?php if($item['DE_CANTID'] >= 0):?>
+                            <tr>
+                            <?php if(!empty(trim($item['AR_CODIGO']))):?>
+                                <td><?=$item['DE_CANTID']?></td>
                                 <td>
-                                    <i><?=$item['DE_DESCRI']?></i>   
+                                    <?=$item['DE_DESCRI']?>
                                 </td>
-                                <td></td>
-                            <?php endif;?>
-                        </tr>
+                                <td >
+                                    <?=$item['DE_PRECIO']?>
+                                </td>
+                                <td class="text-right" >
+                                    <?=$item['DE_CANTID']*$item['DE_PRECIO']?>
+                                </td>
+                                <?php else:?>
+                                    <td></td>
+                                    <td>
+                                        <i><?=$item['DE_DESCRI']?></i>   
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                <?php endif;?>
+                            </tr>
+                        <?php endif;?>
                     <?php endforeach;?> 
                     </tbody>
                 </table>
-                <table class="table">
+                <table class="table" style="font-size:20px; color:#367fa9;">
                     <tr>
                         <td class="text-right">
-                        Sub-total: <br>
+                        Sub-total:<br>
                         Itbis:<br>
                         % de Ley:<br>
                         Total a pagar:
                         </td>
                         <td class="text-right">
-                            <span><?=$data[0]['HE_MONTO']?></span><br>
-                            <span><?=$data[0]['HE_ITBIS']?></span><br>
-                            <span><?=$data[0]['HE_LEY']?></span><br>
-                            <span><?=$data[0]['HE_NETO']?></span><br>
+                            <span><?=number_format($data[0]['HE_MONTO'],2)?></span><br>
+                            <span><?=number_format($data[0]['HE_ITBIS'],2)?></span><br>
+                            <span><?=number_format($data[0]['HE_LEY'],2)?></span><br>
+                            <span><?=number_format($data[0]['HE_NETO'],2)?></span><br>
                         </td>
                     </tr>
                 </table>
                 <hr>
-            <a href="#" id="menu-btn" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-plus"></i> Agregar orden</a>    
+            <a href="#" id="menu-btn" class="btn btn-lg btn-success btn-block menu-btn"> <i class="fa fa-plus"></i> Agregar orden</a>    
             </div>
             </div>   
            

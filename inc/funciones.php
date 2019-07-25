@@ -5,9 +5,18 @@ function url_base(){
 }
 
 function print_pre($arr){
-    echo '<pre>';
-        print_r($arr);   
-    echo '</pre>';   
+    //if(isset($_GET) && $_GET['debug']){
+        echo '<pre>';
+            print_r($arr);   
+        echo '</pre>';  
+    //}
+     
+}
+
+function echo_ln($content){
+    
+    echo $content;
+
 }
 
 function selected($a,$b){
