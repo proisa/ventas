@@ -149,6 +149,8 @@ $('#agregar').click(function(){
     arr.push(art_data);
     sessionStorage.setItem('item',JSON.stringify(arr));
     console.log(JSON.parse(sessionStorage.getItem('item')));
+
+    $("#cliente").val($("#cliente_nombre").attr('data-nombre'));
     // var ar_id = $(this).attr('data-id');
     // $.ajax({
     //     url: "pages/agregar_a_carrito.php?articulo_id="+ar_id,

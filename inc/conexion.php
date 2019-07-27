@@ -18,7 +18,6 @@ try
         $pdo->rollBack();
   }
   echo $e->getMessage();
-    
     //die();
 } 
 

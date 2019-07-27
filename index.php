@@ -4,9 +4,14 @@ require 'inc/conexion.php';
 require 'header.php';
 require 'clases/Comando.php';
 getItbis($pdo);
-$departamentos = Comando::recordSet($pdo,"SELECT DE_CODIGO,ar_descri FROM IVBDDEPT WHERE AR_PRESENT=1 ORDER BY ar_ORDEN ASC");
+
+$departamentos = Comando::recordSet($pdo,"SELECT DE_CODIGO,ar_descri,are_codigo FROM IVBDDEPT WHERE AR_PRESENT=1 ORDER BY are_codigo ASC");
+$areas = Comando::recordSet($pdo,"SELECT are_codigo,are_descri FROM IVBDAREA ORDER BY are_codigo ASC");
 $mesa = $_GET['ma'];
 $data = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE WHERE ma_codigo='{$mesa}' AND He_tipfac <> 'C'");
+
+//print_pre($areas);
+
 //print_pre($data);
 
 //echo count($data[0]);
@@ -28,16 +33,16 @@ $hide = '';
 
 <div class="box box-primary">
     <div class="box-body" id="main-content">
-        <div class="row">
+        <!-- <div class="row">
            <div class="col-md-3">
            <a href="#" id="menu-btn" class="btn btn-lg btn-custom btn-block menu-btn" style="display:none"> <i class="fa fa-arrow-left"></i> Menu</a> 
           
            </div>
-        </div>   
+        </div>    -->
         <div class="row">
 
        
-            <?php if(count($data[0]) > 0): 
+            <?php if($data): 
                 $hide = "style='display:none'";
                 $data_pedidos = Comando::recordSet($pdo,"SELECT a.*,b.ar_tipo,ISNULL(b.ar_premin,0),ISNULL(b.ar_predet,0),ISNULL(b.ar_premay,0),ISNULL(B.AR_ITBIS,' ') AS DIMPUESTO,B.AR_VALEXI FROM ivbddete a LEFT JOIN ivbdarti b 
                 ON A.AR_CODIGO=B.AR_CODIGO WHERE a.ma_codigo='{$mesa}' AND a.de_tipfac<>'C'");
@@ -100,24 +105,29 @@ $hide = '';
                     </tr>
                 </table>
                 <hr>
-            <a href="#" id="menu-btn" class="btn btn-lg btn-success btn-block menu-btn"> <i class="fa fa-plus"></i> Agregar orden</a>    
+            <a href="#" id="menu-btn" class="btn btn-lg btn-success btn-block menu-btn"><i class="fa fa-plus"></i> Agregar orden</a>    
             </div>
             </div>   
            
             <?php endif;?>
 
-            <div id="menu" <?=$hide;?> > 
-                <?php foreach($departamentos as $departamento):?>
-                
+            <div class="menu" <?=$hide;?> > 
+                <!-- <div class="col-md-3">
+                    <a href="#" id="menu-btn" class="btn btn-lg btn-custom btn-block menu-btn" style="display:block"> <i class="fa fa-arrow-left"></i> Menu</a> 
+                </div> -->
+                <?php foreach($areas as $area):?>
+                    
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-custom departamento btn-block" data-id="<?=trim($departamento['DE_CODIGO'])?>" data-nombre="<?=$departamento['ar_descri']?>" style="margin-bottom:4px !important;"><?=$departamento['ar_descri']?></a>        
+                        <a href="#" class="btn btn-custom area btn-block" data-id="<?=trim($area['are_codigo'])?>" data-nombre="<?=$area['are_descri']?>" style="margin-bottom:4px !important;"><?=$area['are_descri']?></a>        
                     </div>
                 <?php endforeach;?>
+
             </div>
 
-            <div class="col-md-12">
-                <div id="articulos_container">
+            <div class="menu_dep"></div>
 
+            <div class="col-md-12">
+                <div class="articulos_container">
                 </div>
             </div>
         </div>
@@ -132,23 +142,24 @@ require 'footer.php';
 
 <script>
 
-$('.departamento').click(function(){
+$('.area').click(function(){
     var dep_id = $(this).attr('data-id');
     var dep_nombre = $(this).attr('data-nombre');
     $.ajax({
-        url: "pages/articulos.php?dep_id="+dep_id+"&dep_nombre="+dep_nombre,
+        url: "pages/departamentos.php?area_id="+dep_id+"&area_nombre="+dep_nombre,
         success: function(result){
-            $("#articulos_container").html(result);
+            $(".menu_dep").fadeIn();
+            $(".menu_dep").html(result);
         }
     });
-    $("#menu").fadeOut();
-    $('#menu-btn').fadeIn();
+    $(".menu").fadeOut();
+    //$('#menu-btn').fadeIn();
 });
 
 $('.menu-btn').click(function(){
-    $('#menu').fadeIn();
+    $('.menu').fadeIn();
     $(this).fadeOut();
-    $("#articulos_container").empty();
+    $(".articulos_container").empty();
     $("#pedidos").empty();
 });
 

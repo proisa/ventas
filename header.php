@@ -156,6 +156,7 @@ if($_SESSION['login'] !== true){
       </form> -->
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
+      
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU PRINCIPAL</li>
         <li class="active treeview">
@@ -174,6 +175,7 @@ if($_SESSION['login'] !== true){
           <li><a href="#"><i class="fa fa-cutlery"></i>Pedidos</a></li>
         </li>
       </ul>
+
     </section>
     <!-- /.sidebar -->
   </aside>
@@ -183,7 +185,7 @@ if($_SESSION['login'] !== true){
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <?php if(isset($_GET['ma']) && isset($_GET['cliente'])): ?>
-      <h2>Mesa: <?=$_GET['ma']?> - <?=$_GET['cliente']?></h2>
+      <h2>Mesa: <?=$_GET['ma']?> - <span id="cliente_nombre" data-nombre="<?=$_GET['cliente']?>"><?=$_GET['cliente']?></span> </h2>
       <?php endif;?>
 
     </section>

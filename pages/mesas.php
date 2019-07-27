@@ -89,18 +89,16 @@ $('.mesa').click(function(){
             if(result.resp == 'Error'){
                 alert(result.msj);
             }else{
-                $('#cliente').val(result.data.nombre);
                 window.location.href = '../index.php?ma='+header_data.mesa+'&cliente='+header_data.cliente;
             }
             //console.log(result.msj);
-           
         }
     });
 });
 
-// setTimeout(function() {
-//   location.reload();
-// }, 5000);
+setTimeout(function() {
+  location.reload();
+}, 5000);
 
 
 </script>
