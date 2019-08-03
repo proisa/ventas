@@ -13,7 +13,7 @@ class Auth{
     }
 
     public function login($user,$pass){
-        $query = $this->con->prepare("SELECT ID,COD_EMPR,COD_SUCU,USUARIO,CLAVE,NIVEL,MO_CODIGO FROM CONTASEG WHERE USUARIO = :usuario AND CLAVE = :clave AND COD_EMPR = 1 AND COD_SUCU = 1");
+        $query = $this->con->prepare("SELECT ID,COD_EMPR,COD_SUCU,USUARIO,CLAVE,MO_CODIGO FROM CONTASEG WHERE USUARIO = :usuario AND CLAVE = :clave AND COD_EMPR = 1 AND COD_SUCU = 1");
         $query->bindParam(':usuario',$user);
         $query->bindParam(':clave',$pass);
         $query->execute();
@@ -22,7 +22,6 @@ class Auth{
             $_SESSION['login'] = true;
             $_SESSION['id'] = $data->ID;
             $_SESSION['nombre'] = $data->USUARIO;
-            $_SESSION['nivel'] = $data->NIVEL;
             $_SESSION['mo_codigo'] = $data->MO_CODIGO;
             return true;
         }else{

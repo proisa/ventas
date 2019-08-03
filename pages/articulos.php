@@ -55,13 +55,18 @@ $articulos = Comando::recordSet($pdo,$query);
 
 <input type="hidden" id="area_id" value="<?=$_GET['area_id']?>">
 <input type="hidden" id="area_nombre" value="<?=$_GET['area_nombre']?>">
+<input type="hidden" id="dep_nombre" value="<?=$_GET['dep_nombre']?>">
+
 
 <script>
 
 $('.articulo').click(function(){
     var ar_id = $(this).attr('data-id');
+    var dep_nom = $("#dep_nombre").val();
+    var area_id = $("#area_id").val();
+    var area_nom = $("#area_nombre").val();
     $.ajax({
-        url: "pages/agregar_a_carrito.php?articulo_id="+ar_id,
+        url: "pages/agregar_a_carrito.php?articulo_id="+ar_id+"&dep_nombre="+dep_nom+"&area_id="+area_id+"&area_nombre="+area_nom,
         success: function(result){
             $(".articulos_container").html(result);
         }

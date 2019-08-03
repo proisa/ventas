@@ -112,9 +112,17 @@ $hide = '';
             <?php endif;?>
 
             <div class="menu" <?=$hide;?> > 
-                <!-- <div class="col-md-3">
-                    <a href="#" id="menu-btn" class="btn btn-lg btn-custom btn-block menu-btn" style="display:block"> <i class="fa fa-arrow-left"></i> Menu</a> 
-                </div> -->
+                <div class="col-md-3">
+                    <a href="pages/mesas.php?ma=<?=trim($_GET['ma'])?>" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver a mesas</a> 
+                </div>
+                <div class="col-md-3 ">
+                    <div class="alert alert-success text-center">
+                    Areas
+                    </div>                
+                </div>
+                <div class="col-md-12">
+                    <hr>
+                </div>
                 <?php foreach($areas as $area):?>
                     
                     <div class="col-md-3">

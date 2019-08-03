@@ -14,12 +14,16 @@ AND ar_activado=' '
 ORDER BY ar_cosfob asc ";
 
 $articulo_data = Comando::recordSet($pdo,$query);
-
-
+//print_pre($_GET);
 ?>
-
 <div class="row">
+    <div class="col-md-3 ">
+        <div class="alert alert-success text-center">
+        <?=$_GET['dep_nombre']?> 
+        </div>                
+    </div>
     <div class="col-md-12">
+        <hr>
         <h3><?=$articulo_data[0]['AR_DESCOR']?></h3>
         <p class="lead"><?=$articulo_data[0]['ar_descri']?></p>
         <input type="hidden" id="id" value="<?=$articulo_id?>"> 
@@ -124,6 +128,9 @@ $articulo_data = Comando::recordSet($pdo,$query);
     </div> 
 </div>
 
+<input type="hidden" id="area_id" value="<?=$_GET['area_id']?>">
+<input type="hidden" id="area_nombre" value="<?=$_GET['area_nombre']?>">
+
 <script>
 
 
@@ -160,8 +167,19 @@ $('#agregar').click(function(){
     // });
     // $("#menu").fadeOut();
     // $('#menu-btn').fadeIn();
-
     fillCart();
+    // Back
+    var area_id = $("#area_id").val();
+    var area_nom = $("#area_nombre").val();
+    $.ajax({
+        url: "pages/departamentos.php?area_id="+area_id+"&area_nombre="+area_nom,
+        success: function(result){
+            $(".menu_dep").fadeIn();
+            $(".menu_dep").html(result);
+        }
+    });
+    $(".articulos_container").empty();     
+
     $("#menu-btn").click();
 });
 

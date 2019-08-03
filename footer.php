@@ -99,8 +99,24 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<?=url_base()?>/dist/js/demo.js"></script>
 <script>
+
+var elem = document.documentElement;
+/* View in fullscreen */
+function openFullscreen() {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.mozRequestFullScreen) { /* Firefox */
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+    elem.msRequestFullscreen();
+  }
+}
+
   $(document).ready(function(){
     fillCart();   
+    openFullscreen();
   });
 
   function fillCart(){
@@ -213,11 +229,15 @@
             sessionStorage.removeItem('item');
             $("#cart-btn").click();
             fillCart();
+           
         }
     });
     $('#cliente').empty();
-
   });
+
+ 
+
+
 
 </script>
 </body>

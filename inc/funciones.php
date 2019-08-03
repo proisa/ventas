@@ -1,7 +1,8 @@
 <?php
 
 function url_base(){
-    return 'http://localhost/ventas';
+    //return 'http://localhost/ventas';
+    return 'http://10.0.0.232/ventas';
 }
 
 function print_pre($arr){
@@ -10,13 +11,10 @@ function print_pre($arr){
             print_r($arr);   
         echo '</pre>';  
     //}
-     
 }
 
 function echo_ln($content){
-    
     echo $content;
-
 }
 
 function selected($a,$b){

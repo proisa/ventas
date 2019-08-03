@@ -3,6 +3,20 @@ require '../inc/conexion.php';
 require '../header.php';
 require '../clases/Comando.php';
 
+if(isset($_GET) && !empty($_GET['ma'])){
+    $mesa = $_GET['ma'];
+
+    $select = "SELECT MA_FECENT FROM PVBDMESA WHERE MA_CODIGO='{$mesa}'";
+    $resSelect = Comando::recordSet($pdo,$select)[0];
+
+    if($resSelect['MA_FECENT'] != '1900-01-01 00:00:00.000'){
+         Comando::noRecordSet($pdo,"UPDATE PVBDMESA SET MA_OCUPA='' WHERE MA_CODIGO='$mesa'");
+    }else{
+        Comando::noRecordSet($pdo,"UPDATE PVBDMESA SET MA_OCUPA='', MO_CODIGO='' WHERE MA_CODIGO='$mesa'");
+    }   
+
+    $pdo->commit();
+}
 
 // COLOR1=rgb(255,174,94)  &&naranja
 // COLOR2=rgb(255,89,89)   &&rojo
@@ -75,6 +89,9 @@ $mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID"
     require '../footer.php';
 ?>
 <script>
+
+$("#cart-btn").hide();
+
 $('.mesa').click(function(){
     header_data = {
       'mesa':$(this).attr('data-id'),

@@ -13,6 +13,29 @@ if($_SESSION['login'] !== true){
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Proisa | Ventas</title>
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Tokens">
+  <link rel="apple-touch-startup-image" href="img/icon/apple-touch-icon-180x180.png">
+  <link rel="shortcut icon" href="img/icon/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="img/icon/apple-touch-icon-180x180.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="img/icon/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="img/icon/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="img/icon/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="img/icon/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="img/icon/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="img/icon/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="img/icon/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="img/icon/apple-touch-icon-180x180.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="128x128" href="niceicon.png">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" sizes="192x192" href="img/icon/apple-touch-icon-180x180.png">
+  <link rel="icon" sizes="128x128" href="img/con/apple-touch-icon-120x120.png">
+
+
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -44,6 +67,8 @@ if($_SESSION['login'] !== true){
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+
+  
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -79,14 +104,14 @@ if($_SESSION['login'] !== true){
   
   </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
 <div class="wrapper">
 
   <header class="main-header">
     <!-- Logo -->
     <a href="index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini"><b>P</b></span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>Proisa</span>
     </a>
@@ -101,13 +126,13 @@ if($_SESSION['login'] !== true){
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="<?=url_base()?>/dist/img/user.png" class="user-image" alt="User Image">
               <span class="hidden-xs"><?=$_SESSION['nombre']?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?=url_base()?>/dist/img/user.png" class="img-circle" alt="User Image">
                 <p>
                 <?=$_SESSION['nombre']?>
                 </p>
@@ -130,6 +155,7 @@ if($_SESSION['login'] !== true){
       </div>
     </nav>
   </header>
+ 
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -137,7 +163,7 @@ if($_SESSION['login'] !== true){
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?=url_base()?>/dist/img/user.png" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p><?=$_SESSION['nombre']?></p>
@@ -156,7 +182,7 @@ if($_SESSION['login'] !== true){
       </form> -->
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
-      
+      <?php if(empty(trim($_SESSION['mo_codigo']))): ?>
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU PRINCIPAL</li>
         <li class="active treeview">
@@ -175,7 +201,7 @@ if($_SESSION['login'] !== true){
           <li><a href="#"><i class="fa fa-cutlery"></i>Pedidos</a></li>
         </li>
       </ul>
-
+      <?php endif;?>
     </section>
     <!-- /.sidebar -->
   </aside>

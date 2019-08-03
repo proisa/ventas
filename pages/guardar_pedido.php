@@ -4,24 +4,24 @@ require '../inc/conexion.php';
 require '../inc/funciones.php';
 require '../clases/Comando.php';
 
-echo '<pre>';
-  echo 'Header <br>';
-  print_r(json_decode($_POST['header']));
-  echo '------------------<br>';
-  echo 'Detalle <br>';
-  print_r(json_decode($_POST['data']));
-  echo '------------------<br>';
-  //print_r($_SESSION);
-echo '</pre>';
+// echo '<pre>';
+//   echo 'Header <br>';
+//   print_r(json_decode($_POST['header']));
+//   echo '------------------<br>';
+//   echo 'Detalle <br>';
+//   print_r(json_decode($_POST['data']));
+//   echo '------------------<br>';
+//   //print_r($_SESSION);
+// echo '</pre>';
 
 $header = json_decode($_POST['header']);
 $detalle = json_decode($_POST['data']);
 $mesaConPedidos = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE WHERE ma_codigo='{$header->mesa}' AND He_tipfac <> 'C'")[0];
 
-echo 'Count: ' . count($mesaConPedidos);
-echo 'Datos de Mesa <br>';
-print_pre($mesaConPedidos);
-echo '------------------<br>';
+//echo 'Count: ' . count($mesaConPedidos);
+//echo 'Datos de Mesa <br>';
+//print_pre($mesaConPedidos);
+//echo '------------------<br>';
 //exit();
 if(count($mesaConPedidos) == 0){
   $fecha = Comando::recordSet($pdo,'SELECT getDate() as fecha')[0]['fecha'];
@@ -106,9 +106,8 @@ if(count($mesaConPedidos) > 0){
 }
 
 //echo $header_query;
-
-echo Comando::noRecordSet($pdo,$header_query);
-echo '<br>';
+Comando::noRecordSet($pdo,$header_query);
+//echo '<br>';
 foreach($detalle as $k => $v){
   $docum = '';
   $nota = !empty($v->nota) ? $v->nota : '';
@@ -131,8 +130,8 @@ foreach($detalle as $k => $v){
     '{$guarnicion}',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
     0,0,0,'')";
 
-echo Comando::noRecordSet($pdo,$detalle_query);
-echo '<br>';
+Comando::noRecordSet($pdo,$detalle_query);
+//echo '<br>';
 
   if($guarnicion != ''){
     $guarnicion_query = "INSERT INTO IVBDDETE 
@@ -146,8 +145,8 @@ echo '<br>';
       '',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
       0,0,0,'')";
 
-    echo Comando::noRecordSet($pdo,$guarnicion_query);
-    echo '<br>';
+    Comando::noRecordSet($pdo,$guarnicion_query);
+    //echo '<br>';
   }
 
   if($nota != ''){
@@ -162,33 +161,17 @@ echo '<br>';
       '',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
       0,0,0,'')";
 
-    echo Comando::noRecordSet($pdo,$guarnicion_query);
-    echo '<br>';
+  Comando::noRecordSet($pdo,$guarnicion_query);
+    //echo '<br>';
   }
 }
-
 $updateMesa = "UPDATE PVBDMESA
 SET MA_FECENT='$header_data->fecha_entrada',HE_NOMCLI='$header_data->nombre_cliente',MA_OCUPA='',MO_CODIGO='$header_data->mo_codigo' 
 WHERE MA_CODIGO='$header->mesa'";
-
 Comando::noRecordSet($pdo,$updateMesa);
 $pdo->commit();
-
-
-/*
-IF TIPO3=1  && SI SE VA A IMPRIMIR EL DOCUMENTO
-DN_PAGO="*"
-
-   UPDATE PVBDMESA SET MA_FECENT=?DN_FECENT,HE_NOMCLI=?DN_NOMCLI,MA_OCUPA='',MA_PAGO=?DN_PAGO,MO_CODIGO=?DN_MO_CODIGO WHERE MA_CODIGO=?DN_MESA
-
-  THISFORM.IMPIRME.CLICK              
-ELSE
-   UPDATE PVBDMESA SET MA_FECENT=?DN_FECENT,HE_NOMCLI=?DN_NOMCLI,MA_OCUPA='',MO_CODIGO=?DN_MO_CODIGO WHERE MA_CODIGO=?DN_MESA
-
-ENDIF    
-
-*/
-
-
-
 ?>
+
+<script>
+  window.location.href = 'pages/mesas.php';
+</script>
