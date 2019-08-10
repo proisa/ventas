@@ -51,7 +51,13 @@ $hide = '';
             ?>
             <div id="pedidos">
            
+            <div class="col-md-3">
+                    <a href="pages/mesas.php?ma=<?=trim($_GET['ma'])?>" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver a mesas</a> 
+                </div>
+               
             <div class="col-md-12">
+            <hr>
+            
            
             <table class="table">
                     <thead>
@@ -126,7 +132,7 @@ $hide = '';
                 <?php foreach($areas as $area):?>
                     
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-custom area btn-block" data-id="<?=trim($area['are_codigo'])?>" data-nombre="<?=$area['are_descri']?>" style="margin-bottom:4px !important;"><?=$area['are_descri']?></a>        
+                        <a href="#" class="btn btn-custom btn-lg area btn-block" data-id="<?=trim($area['are_codigo'])?>" data-nombre="<?=$area['are_descri']?>" style="margin-bottom:8px !important;"><?=$area['are_descri']?></a>        
                     </div>
                 <?php endforeach;?>
 

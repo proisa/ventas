@@ -90,6 +90,11 @@ $mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID"
 ?>
 <script>
 
+$(document).ready(function(){
+    clearCart();
+});
+
+
 $("#cart-btn").hide();
 
 $('.mesa').click(function(){
@@ -112,6 +117,8 @@ $('.mesa').click(function(){
         }
     });
 });
+
+
 
 setTimeout(function() {
   location.reload();

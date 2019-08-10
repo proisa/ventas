@@ -14,7 +14,7 @@ $areas = Comando::recordSet($pdo,"SELECT are_codigo,are_descri FROM IVBDAREA ORD
 <?php if($areas):?>
     <?php foreach($areas as $area):?> 
         <div class="col-md-3">
-            <a href="#" class="btn btn-custom area btn-block" data-id="<?=trim($area['are_codigo'])?>" data-nombre="<?=$area['are_descri']?>" style="margin-bottom:4px !important;"><?=$area['are_descri']?></a>        
+            <a href="#" class="btn btn-custom btn-lg area btn-block" data-id="<?=trim($area['are_codigo'])?>" data-nombre="<?=$area['are_descri']?>" style="margin-bottom:4px !important;"><?=$area['are_descri']?></a>        
         </div>
     <?php endforeach;?>
 <?php endif;?>

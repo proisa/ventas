@@ -23,7 +23,7 @@ $departamentos = Comando::recordSet($pdo,"SELECT DE_CODIGO,ar_descri,are_codigo 
 <?php if($departamentos):?>
     <?php  foreach($departamentos as $departamento):?>       
         <div class="col-md-3">
-            <a href="#" class="btn btn-custom departamento btn-block" data-id="<?=trim($departamento['DE_CODIGO'])?>" data-nombre="<?=$departamento['ar_descri']?>" style="margin-bottom:4px !important;"><?=$departamento['ar_descri']?></a>        
+            <a href="#" class="btn btn-custom btn-lg departamento btn-block" data-id="<?=trim($departamento['DE_CODIGO'])?>" data-nombre="<?=$departamento['ar_descri']?>" style="margin-bottom:10px !important;"><?=$departamento['ar_descri']?></a>        
         </div>
     <?php  endforeach;?>
 <?php endif;?>

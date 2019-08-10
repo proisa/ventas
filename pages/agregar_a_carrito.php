@@ -17,6 +17,9 @@ $articulo_data = Comando::recordSet($pdo,$query);
 //print_pre($_GET);
 ?>
 <div class="row">
+    <div class="col-md-3">
+        <a href="#" id="back-articulos" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver atras</a> 
+    </div>
     <div class="col-md-3 ">
         <div class="alert alert-success text-center">
         <?=$_GET['dep_nombre']?> 
@@ -24,24 +27,39 @@ $articulo_data = Comando::recordSet($pdo,$query);
     </div>
     <div class="col-md-12">
         <hr>
-        <h3><?=$articulo_data[0]['AR_DESCOR']?></h3>
-        <p class="lead"><?=$articulo_data[0]['ar_descri']?></p>
+        <h3 style="color:#337ab7;"><?=$articulo_data[0]['ar_descri']?></h3>
         <input type="hidden" id="id" value="<?=$articulo_id?>"> 
-        <input type="hidden" id="desc" value="<?=$articulo_data[0]['AR_DESCOR']?>"> 
+        <input type="hidden" id="desc" value="<?=$articulo_data[0]['ar_descri']?>"> 
         <input type="hidden" id="precio" value="<?=$articulo_data[0]['ar_predet']?>"> 
+        <input type="hidden" id="area_id" value="<?=$_GET['area_id']?>">
+        <input type="hidden" id="area_nombre" value="<?=$_GET['area_nombre']?>">
+        <input type="hidden" id="dep_id" value="<?=$_GET['dep_id']?>">
+        <input type="hidden" id="dep_nombre" value="<?=$_GET['dep_nombre']?>">
         <hr>
     </div>
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-10">
-                <label for="">Precio</label>
-                <p class="lead"><b>RD$<?=$articulo_data[0]['ar_predet']?></b></p>
+                <p style="font-size:20px;">Precio</p>
+                <p style="font-size:18px;"><b>RD$<?=$articulo_data[0]['ar_predet']?></b></p>
             </div>
 
             <div class="col-md-2">
-                <label for="">Cantidad</label>
-                <input type="number" id="cantidad" min="1" class="form-control" value="1">
+                <label for="" style="font-size:20px;">Cantidad</label>
+                <!-- <input type="number" id="cantidad" min="1" class="form-control " value="1"> -->
+                <div class="input-group input-group-lg">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" id="menos" type="button">-</button>
+                    </span>
+                    <input type="number" min="1" max="100" id="cantidad" class="form-control text-center" value="1" onkeypress="return isNumber(event)">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" id="mas" type="button">+</button>
+                    </span>
+                </div><!-- /input-group -->
+
             </div>
+
+
         </div>
         <hr>
     </div>
@@ -51,13 +69,13 @@ $articulo_data = Comando::recordSet($pdo,$query);
         ?>
          <?php if($guarniciones):?>
         <div class="col-md-4">
-            <p class="">Guarnicion</p>
+            <p style="font-size:20px;">Guarnicion</p>
             <?php 
             $i=1;
             foreach($guarniciones as $guarnicion):?>
-            <div class="form-check">
+            <div class="form-check" style="margin-botton:15px;">
                 <input class="form-check-input guarnicion" type="radio" data-nombre="<?=$guarnicion['ac_descri']?>" name="guarnicion" id="gn<?=$i?>" value="<?=$guarnicion['ID']?>">
-                <label class="form-check-label" for="gn<?=$i?>">
+                <label class="form-check-label" style="color:#337ab7;" for="gn<?=$i?>">
                    <?=$guarnicion['ac_descri']?>
                 </label>
             </div>
@@ -80,7 +98,7 @@ $articulo_data = Comando::recordSet($pdo,$query);
             <?php 
             $i=1;
             foreach($ingredientes as $ingrediente):?>
-             <div class="form-check">
+             <div class="form-check"  style="margin-botton:15px;">
                 <input class="form-check-input ingrediente" type="checkbox" name="ingrediente[]" id="tr<?=$i?>" value=" <?=$ingrediente['IN_DESCRI']?>">
                 <label class="form-check-label" for="tr<?=$i?>">
                    <?=$ingrediente['IN_DESCRI']?>
@@ -106,7 +124,7 @@ $articulo_data = Comando::recordSet($pdo,$query);
             <?php 
             $i=1;
             foreach($terminos as $termino):?>
-            <div class="form-check">
+            <div class="form-check"  style="margin-botton:15px;">
                 <input class="form-check-input termino" type="radio" data-nombre=" <?=$termino['TE_DESCRI']?>" name="termino" id="tr<?=$i?>" value=" <?=$termino['TE_CODIGO']?>">
                 <label class="form-check-label" for="tr<?=$i?>">
                    <?=$termino['TE_DESCRI']?>
@@ -183,7 +201,36 @@ $('#agregar').click(function(){
     $("#menu-btn").click();
 });
 
+$('#back-articulos').click(function(){
+    var area_id = $("#area_id").val();
+    var area_nom = $("#area_nombre").val();
+    var dep_id = $("#dep_id").val();
+    var dep_nom = $("#dep_nombre").val();
+    $.ajax({
+        url: "pages/articulos.php?dep_nombre="+dep_nom+"&dep_id="+dep_id+"&area_id="+area_id+"&area_nombre="+area_nom,
+        success: function(result){
+            $(".articulos_container").html(result);
+        }
+    });
+    $(".articulos_container").empty();
+});
 
+//--------------------------------------
+$("#mas").click(function(){
+    var cant =  parseInt($("#cantidad").val());
+    if(cant < 100){
+        cant = cant+1;
+    }
+	$("#cantidad").val(cant);
+});
+// -------------------------------------
+$("#menos").click(function(){
+	var cant =  parseInt($("#cantidad").val());
+    if(cant > 1){
+        cant = cant-1;
+    }
+	$("#cantidad").val(cant);
+});
 
 
 </script>

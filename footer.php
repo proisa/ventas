@@ -46,6 +46,7 @@
     <input type="text" class="form-control" id="cliente" maxlength="20">
     <br>
     <button id="crear_pedido" disabled='true' class="btn btn-success btn-block btn-lg">Hacer pedido</button>
+    <button onclick="closeCart();" class="btn btn-primary btn-block btn-lg">Volver</button>
   </aside>
   <!-- /.control-sidebar -->
 
@@ -217,6 +218,13 @@ function openFullscreen() {
     }
   }
 
+  function clearCart(){
+    sessionStorage.removeItem('header');
+    sessionStorage.removeItem('item');
+    $("#crear_pedido").attr('disabled',true);
+    $('#cliente').empty();
+    fillCart();
+  }
 
   $("#crear_pedido").click(function(){
     fillCart();
@@ -235,8 +243,18 @@ function openFullscreen() {
     $('#cliente').empty();
   });
 
- 
+  function closeCart(){
+    $("#cart-btn").click();
+  }
 
+  function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+  }
 
 
 </script>

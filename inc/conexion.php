@@ -2,7 +2,7 @@
 session_start();
 ini_set('display_errors',1);
 $SERVER_NAME = "dbserver";
-$DATABASE="facfoxsql";
+$DATABASE="bbq";
 $DB_USER="sa";
 $DB_PASSWORD='pr0i$$a';
 try

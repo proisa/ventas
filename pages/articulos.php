@@ -8,7 +8,7 @@ $nombre = $_GET['dep_nombre'];
 
 //print_pre($_GET);
 
-$query = "SELECT A.AR_CODIGO,A.AR_DESCRI,A.AR_DESCOR,A.AR_PREDET FROM IVBDARTI A
+$query = "SELECT A.AR_CODIGO,A.AR_DESCRI,A.AR_DESCOR,A.AR_PREDET,AR_SELECT FROM IVBDARTI A
 WHERE A.DE_CODIGO='{$departamento}' AND A.AR_control='S' and a.ar_activado=' ' 
 ORDER BY A.ar_cosfob asc";
 $articulos = Comando::recordSet($pdo,$query);
@@ -27,18 +27,23 @@ $articulos = Comando::recordSet($pdo,$query);
 <div class="list-group">
     <?php
     if($articulos):
+         
         foreach($articulos as $articulo): 
+        if($articulo['AR_SELECT'] == 'S'){
+            $disable = 'disabled';
+        }else{
+            $disable = '';  
+        }
     ?>  
     <!-- <a href="#" class="list-group-item list-group-item-action"><?=$articulo['AR_DESCRI']?>  -  <span class="text-right">RD$<?=number_format($articulo['AR_PREDET'],2)?></span></a> -->
 
-     <a href="#" class="list-group-item list-group-item-action articulo" data-id="<?=$articulo['AR_CODIGO']?>">
+     <button href="#" class="list-group-item list-group-item-action articulo <?=$disable?>" <?=$disable?> data-id="<?=$articulo['AR_CODIGO']?>">
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1"><?=$articulo['AR_DESCOR']?></h5>
+      <h4 class="mb-1" style="color:#337ab7; font-weight:bold;"><?=$articulo['AR_DESCRI']?></h4>
       <!-- <small>3 days ago</small> -->
     </div>
-    <p class="mb-1"><?=$articulo['AR_DESCRI']?></p>
-    <p class="text-right">RD$<?=number_format($articulo['AR_PREDET'],2)?></p>
-    </a>
+    <p class="text-right" style="font-size:18px;">RD$<?=number_format($articulo['AR_PREDET'],2)?></p>
+    </button>
 
 
     <?php
@@ -55,6 +60,7 @@ $articulos = Comando::recordSet($pdo,$query);
 
 <input type="hidden" id="area_id" value="<?=$_GET['area_id']?>">
 <input type="hidden" id="area_nombre" value="<?=$_GET['area_nombre']?>">
+<input type="hidden" id="dep_id" value="<?=$_GET['dep_id']?>">
 <input type="hidden" id="dep_nombre" value="<?=$_GET['dep_nombre']?>">
 
 
@@ -62,11 +68,12 @@ $articulos = Comando::recordSet($pdo,$query);
 
 $('.articulo').click(function(){
     var ar_id = $(this).attr('data-id');
+    var dep_id = $("#dep_id").val();
     var dep_nom = $("#dep_nombre").val();
     var area_id = $("#area_id").val();
     var area_nom = $("#area_nombre").val();
     $.ajax({
-        url: "pages/agregar_a_carrito.php?articulo_id="+ar_id+"&dep_nombre="+dep_nom+"&area_id="+area_id+"&area_nombre="+area_nom,
+        url: "pages/agregar_a_carrito.php?articulo_id="+ar_id+"&dep_nombre="+dep_nom+"&dep_id="+dep_id+"&area_id="+area_id+"&area_nombre="+area_nom,
         success: function(result){
             $(".articulos_container").html(result);
         }
