@@ -8,7 +8,7 @@ $nombre = $_GET['dep_nombre'];
 
 //print_pre($_GET);
 
-$query = "SELECT A.AR_CODIGO,A.AR_DESCRI,A.AR_DESCOR,A.AR_PREDET,AR_SELECT FROM IVBDARTI A
+$query = "SELECT A.AR_CODIGO,A.AR_DESCRI,A.AR_FOTO,A.AR_DESCOR,A.AR_PREDET,AR_SELECT FROM IVBDARTI A
 WHERE A.DE_CODIGO='{$departamento}' AND A.AR_control='S' and a.ar_activado=' ' 
 ORDER BY A.ar_cosfob asc";
 $articulos = Comando::recordSet($pdo,$query);
@@ -31,18 +31,31 @@ $articulos = Comando::recordSet($pdo,$query);
         foreach($articulos as $articulo): 
         if($articulo['AR_SELECT'] == 'S'){
             $disable = 'disabled';
+            $icon = "<i style='color:red' class='fa fa-ban fa-2x'></i>";
         }else{
-            $disable = '';  
+            $disable = ''; 
+            $icon = ''; 
         }
     ?>  
     <!-- <a href="#" class="list-group-item list-group-item-action"><?=$articulo['AR_DESCRI']?>  -  <span class="text-right">RD$<?=number_format($articulo['AR_PREDET'],2)?></span></a> -->
 
      <button href="#" class="list-group-item list-group-item-action articulo <?=$disable?>" <?=$disable?> data-id="<?=$articulo['AR_CODIGO']?>">
     <div class="d-flex w-100 justify-content-between">
-      <h4 class="mb-1" style="color:#337ab7; font-weight:bold;"><?=$articulo['AR_DESCRI']?></h4>
+      <h4 class="mb-1" style="color:#337ab7; font-weight:bold;"><?=$articulo['AR_DESCRI']?> <?=$icon?> </h4>
       <!-- <small>3 days ago</small> -->
     </div>
-    <p class="text-right" style="font-size:18px;">RD$<?=number_format($articulo['AR_PREDET'],2)?></p>
+    <div class="row">
+        <div class="col-md-6">
+            <?php if(trim($articulo['AR_FOTO'])):?>
+                 <img src="<?=url_base();?><?=$articulo['AR_FOTO']?>" alt="" width="80px;">
+            <?php endif; ?>
+            <!-- <?=$articulo['AR_FOTO']?> -->
+        </div>
+        <div class="col-md-6">
+        <p class="text-right" style="font-size:18px;"> <span>RD$<?=number_format($articulo['AR_PREDET'],2)?></span> </p>
+        </div>
+    </div>
+   
     </button>
 
 
