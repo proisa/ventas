@@ -34,11 +34,11 @@ class PrintUtil {
             $salto		= "\n";
             $dividir	= $this->PAlin($n_c,"__",'cen');
             $Encabezado =
-                $salto.
-                $salto.
-                $this->PAlin('Proisa','cen','').$salto.
-                $this->PAlin(' S.R.L','cen','').$salto.
+                "<h3>".$this->PAlin($this->config->nombre,'cen','','32')."</h3>".
+                $this->PAlin($this->config->direccion,'cen','').$salto.
+                $this->PAlin($this->config->direccion2,'cen','').$salto.
                 $this->PAlin($this->config->numero,'cen','').$salto.
+                $this->PAlin(' ','cen','_').
                 $dividir.
                 $header
                 .$salto;
@@ -73,29 +73,36 @@ class PrintUtil {
             $salto      = "\n";
             $dividir	= $salto.$this->PAlin("__",'cen','_').$salto;
             $ticket     = "";
-            if($dat['titulo1'] && $dat['titulo2']){
+            if($dat['titulo1']){
                 $ticket     .= $this->PAlin($dat['titulo1'],'cen',' ')
-                                .$salto
-                                .$this->PAlin($dat['titulo2'],'cen',' ').$dividir;
+                                .$salto.$salto;
             }else{
-                $ticket     .= $this->PAlin($dat['titulo1'],'cen',' ').$dividir;
+                $ticket     .= $this->PAlin($dat['titulo1'],'cen',' ').$salto;
             }
+
+            $ticket .= $this->PAlin2Colum('ORDEN #: '.$dat['orden'],'MESA: <b>'.$dat['mesa'].'</b>', ' ').$salto;
+            $ticket .= $this->PAlin2Colum('FECHA: '.$dat['fecha'],'CAJA #:'.$dat['caja'], ' ').$salto;
+            $ticket .= $this->PAlin2Colum('TURNO: '.$dat['turno'],'APERTURA: '.$dat['apertura'], ' ').$salto;
+            $ticket .= $this->PAlin('CAMARERO: '.$dat['camarero'],'izq', ' ').$dividir;
             /*
              * Recorriendo el Detalle:
              */
+            $ticket .= $this->PAlin('DESCRIPCION','izq', ' ').$salto;
+            $ticket .= $this->PAlin3Colum('CANTIDAD','PRECIO',' TOTAL',' ').$dividir;
             foreach ($dat['detalles'] as $KEY=>$VALOR)
             {
                 if(is_array($VALOR))
                 {
+
+                   // $this->PAlin3Colum('1','500','1000','.');
+
                     /*
                      * Detalles con Array multiple.
-                     */
+                     
                     $ticket .="\n".$this->PAlin( ''.strtoupper($KEY),'izq','_').$salto;
                     foreach($VALOR as $SUB_KEY=>$SUB_VALOR)
                     {
-                        /*
-                         * Sub Totales de Detalles.
-                         */
+                       
                         if(is_array($SUB_VALOR)){
                             $ticket .="\n".$this->PAlin( '- '.strtoupper($SUB_KEY),'izq',' ').$salto;
                             foreach($SUB_VALOR as $SUB_KEY2=>$SUB_VALOR2) {
@@ -105,11 +112,14 @@ class PrintUtil {
                             $ticket .= $this->PAlin2Colum( $SUB_KEY, $SUB_VALOR,'.').$salto;
                         }
                     }
+                    */
                 }else{
                     /*
                      * Detalle sin Array Multiple:
                      */
-                    $ticket .= $this->PAlin2Colum( $KEY, $VALOR,'.').$salto;
+                   // $ticket .= $this->PAlin2Colum( $KEY, $VALOR,'.').$salto;
+                    $ticket .= $this->PAlin('<b>Pechuga de pollo</b>','izq', ' ').$salto;
+                    $ticket .= $this->PAlin3Colum('1','500','1000','.');
                 }
 
                 if($KEY =='titulo'){
@@ -135,13 +145,18 @@ class PrintUtil {
          * @param $relleno
          * @return string
          */
-        public function PAlin($texto, $alinear, $relleno = '')
+        public function PAlin($texto, $alinear, $relleno = '',$espacio = NULL)
         {
             if(!$relleno){
                 $relleno = " ";
             }
 
             $n_c = $this->NoCaracteres;
+
+            if($espacio){
+                $n_c = $espacio;
+            }
+
             if ($alinear == 'der'){
                 return str_pad(trim($texto), $n_c, $relleno, STR_PAD_LEFT);
             }else if ($alinear == 'izq'){
@@ -171,6 +186,23 @@ class PrintUtil {
             $DivCentro2	 	= str_pad("",$DivCentro,$relleno,STR_PAD_LEFT);
 
             return $textIzquierda.$DivCentro2.$textDerecha;
+        }
+
+        public function PAlin3Colum($textIzquierda,$texCentro,$textDerecha,$relleno)
+        {
+            $n_c = $this->NoCaracteres;
+
+            if(!$relleno){
+                $relleno =". ";
+            }
+
+            $lenIzquierda 	= strlen($textIzquierda);
+            $lenCentro  	= strlen($texCentro);
+            $lenDerecha 	= strlen($textDerecha);
+            $DivCentro		= $n_c - ($lenIzquierda+$lenCentro+$lenDerecha);
+            $DivCentro2	 	= str_pad("",$DivCentro/2,$relleno,STR_PAD_LEFT);
+            
+            return $textIzquierda.$DivCentro2.$texCentro.$DivCentro2.$textDerecha;
         }
 
 }
