@@ -6,7 +6,9 @@ class Config {
     public $nombre;    
     public $numero;    
     public $direccion;    
-    public $direccion2;    
+    public $direccion2;   
+    public $itbis; 
+    public $ley; 
     
     public function __construct($pdo){
         $this->pdo = $pdo;
@@ -21,6 +23,20 @@ class Config {
         $this->direccion = $response->LETRERO2;
         $this->direccion2 = $response->LETRERO3;
         $this->numero = $response->LETRERO4;
+
+        // Impuestos 
+        $imp = $this->getItbis();
+        $this->itbis = $imp->ITBIS;
+        $this->ley = $imp->D_LEY;
+    }
+
+    function getItbis(){
+
+        $query = $this->pdo->query("SELECT ITBIS,D_LEY FROM FABDPROC WHERE cod_sucu=1 AND cod_empr=1");
+        $response = $query->fetchObject();
+        
+        return $response;
+
     }
 
 }

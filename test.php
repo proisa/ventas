@@ -5,8 +5,42 @@ require 'clases/Comando.php';
 require 'clases/PrintUtil.php';
 require 'clases/Config.php';
 
-
+echo dateFormat('2019-11-23 12:30:00','hora');
+echo '<br>';
 $print = new PrintUtil(new Config($pdo));
+
+$test = [[
+    'codigo'=>1,
+    'cantidad'=>1,
+    'descripcion'=>'Pechuga',
+    'precio'=>number_format(200,2)
+],
+[
+    'codigo'=>2,
+    'cantidad'=>1,
+    'descripcion'=>'Costillita',
+    'precio'=>number_format(400,2)
+],
+[
+    'codigo'=>3,
+    'cantidad'=>2,
+    'descripcion'=>'Agua',
+    'precio'=>number_format(15,2)
+],
+[
+    'codigo'=>3,
+    'cantidad'=>2,
+    'descripcion'=>'Agua',
+    'precio'=>number_format(15,2)
+],
+[
+    'codigo'=>3,
+    'cantidad'=>2,
+    'descripcion'=>'Agua',
+    'precio'=>number_format(15,2)
+]
+
+];
 
 $datos = [
     'titulo1'=>'O R D E N - D E - P A G O',
@@ -18,10 +52,17 @@ $datos = [
     'turno'=>'2',
     'apertura'=>date('H:m:s').' PM',
     'nota1'=>'Una nota',
-    'detalles'=>[
-        'clave 2'=> 'valor 2'
-    ]
+    'detalles'=>$test
 ];
+
+//print_pre($datos['detalles']);
+
+foreach($datos['detalles'] as $k => $v){
+
+    echo $v['cantidad'].' - '.$v['descripcion']. ' - '.$v['precio'].'<br>';
+}
+
+exit();
 
 // echo '<pre>';
 // echo $print->FormatTicketPAGO($datos);

@@ -45,13 +45,10 @@ class PrintUtil {
             //echo $Encabezado;
             $footer1 =
                 $salto.
-                $salto.
-                $salto.
                 $salto."".
                 $this->PAlin(" ",'cen','*').$salto.
                 $this->PAlin("Gracias por preferirnos! ",'cen','').$salto.
-                // $this->PAlin("www.midasred.do",'cen','').$salto.
-                // $dividir.$salto.
+                $salto.$salto.$salto.$salto.$salto.$salto.$salto.
                 $footer;
             if($content){
                 $ticket	= $Encabezado.$content.$footer1;
@@ -81,57 +78,44 @@ class PrintUtil {
             }
 
             $ticket .= $this->PAlin2Colum('ORDEN #: '.$dat['orden'],'MESA: <b>'.$dat['mesa'].'</b>', ' ').$salto;
-            $ticket .= $this->PAlin2Colum('FECHA: '.$dat['fecha'],'CAJA #:'.$dat['caja'], ' ').$salto;
-            $ticket .= $this->PAlin2Colum('TURNO: '.$dat['turno'],'APERTURA: '.$dat['apertura'], ' ').$salto;
-            $ticket .= $this->PAlin('CAMARERO: '.$dat['camarero'],'izq', ' ').$dividir;
+            $ticket .= $this->PAlin3Colum('FECHA: '.$dat['fecha'],'CAJA #:'.$dat['caja'],'TURNO:'.$dat['turno'], ' ').$salto;
+            $ticket .= $this->PAlin('CAMARERO: '.$dat['camarero'],'izq', ' ').$salto;
+            $ticket .= $this->PAlin('APERTURA: '.$dat['apertura'],'izq', ' ').$dividir;
             /*
              * Recorriendo el Detalle:
              */
             $ticket .= $this->PAlin('DESCRIPCION','izq', ' ').$salto;
             $ticket .= $this->PAlin3Colum('CANTIDAD','PRECIO',' TOTAL',' ').$dividir;
+            $subtotal = 0;
             foreach ($dat['detalles'] as $KEY=>$VALOR)
             {
                 if(is_array($VALOR))
                 {
-
-                   // $this->PAlin3Colum('1','500','1000','.');
-
-                    /*
-                     * Detalles con Array multiple.
-                     
-                    $ticket .="\n".$this->PAlin( ''.strtoupper($KEY),'izq','_').$salto;
-                    foreach($VALOR as $SUB_KEY=>$SUB_VALOR)
-                    {
-                       
-                        if(is_array($SUB_VALOR)){
-                            $ticket .="\n".$this->PAlin( '- '.strtoupper($SUB_KEY),'izq',' ').$salto;
-                            foreach($SUB_VALOR as $SUB_KEY2=>$SUB_VALOR2) {
-                                $ticket .= $this->PAlin2Colum( "    ".$SUB_KEY2, $SUB_VALOR2,'.').$salto;
-                            }
-                        }else{
-                            $ticket .= $this->PAlin2Colum( $SUB_KEY, $SUB_VALOR,'.').$salto;
-                        }
-                    }
-                    */
-                }else{
-                    /*
-                     * Detalle sin Array Multiple:
-                     */
-                   // $ticket .= $this->PAlin2Colum( $KEY, $VALOR,'.').$salto;
-                    $ticket .= $this->PAlin('<b>Pechuga de pollo</b>','izq', ' ').$salto;
-                    $ticket .= $this->PAlin3Colum('1','500','1000','.');
+                    $subtotal += $VALOR['precio']*$VALOR['cantidad'];
+                    $ticket .= $this->PAlin('<b>'.$VALOR['descripcion'].'</b>','izq', ' ').$salto;
+                    $ticket .= $this->PAlin3Colum($VALOR['cantidad'],$VALOR['precio'],number_format($VALOR['precio']*$VALOR['cantidad'],2),' ').$salto;
                 }
 
-                if($KEY =='titulo'){
-                    $ticket .="\n".$this->PAlin( '_____'.$VALOR.'_____','cen',' ').$salto;
-                }
+             
             }
+           
+            $m_itbis = ($subtotal*$this->config->itbis)/100;
+            $m_ley = ($subtotal*$this->config->ley)/100;
+            $total = $subtotal+$m_itbis+$m_ley;
 
-            $ticket .="\n\n".$this->PAlin( '___________','cen',' ').$salto;
+            $ticket .= $dividir;
+            $ticket .= $this->PAlin2Colum('Subtotal:',number_format($subtotal,2), ' ').$salto;
+            $ticket .= $this->PAlin2Colum('Itbis:',number_format($m_itbis,2), ' ').$salto;
+            $ticket .= $this->PAlin2Colum('% de Ley:',number_format($m_ley,2), ' ').$salto;
+            $ticket .= $this->PAlin2Colum('Total:',number_format($total,2), ' ').$salto.$salto;
 
-            if($dat['nota1']){
-                $ticket     .= "".$this->PAlin($dat['nota1'],'cen',' ').$salto;
-            }
+
+
+           //x $ticket .="\n\n".$this->PAlin( '___________','cen',' ').$salto;
+
+            // if($dat['nota1']){
+            //     $ticket     .= "".$this->PAlin($dat['nota1'],'cen',' ').$salto;
+            // }
             // if($dat['nota2'])
             //     $ticket     .= "".$this->PAlin($dat['nota2'],'cen',' ').$salto;
 

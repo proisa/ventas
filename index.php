@@ -105,13 +105,14 @@ $hide = '';
                         <td class="text-right">
                             <span><?=number_format($data[0]['HE_MONTO'],2)?></span><br>
                             <span><?=number_format($data[0]['HE_ITBIS'],2)?></span><br>
-                            <span><?=number_format($data[0]['HE_LEY'],2)?></span><br>
+                            <span><?=number_format($data[0]['HE_TOTLEY'],2)?></span><br>
                             <span><?=number_format($data[0]['HE_NETO'],2)?></span><br>
                         </td>
                     </tr>
                 </table>
                 <hr>
-            <a href="#" id="menu-btn" class="btn btn-lg btn-success btn-block menu-btn"><i class="fa fa-plus"></i> Agregar orden</a>    
+            <a href="#" id="menu-btn" style="padding-top:15px; padding-bottom:15px;" class="btn btn-lg btn-success btn-block menu-btn"><i class="fa fa-plus"></i> Agregar orden</a>    
+            <a href="#" id="imprimir" onclick="openWin('<?=$mesa?>')" style="padding-top:15px; padding-bottom:15px;" class="btn btn-primary btn-lg btn-block"> <i class="fa fa-print"></i> Imprimir </a>
             </div>
             </div>   
            
@@ -176,5 +177,15 @@ $('.menu-btn').click(function(){
     $(".articulos_container").empty();
     $("#pedidos").empty();
 });
+
+
+function openWin(mesa)
+  {
+    myWindow=window.open('http://localhost/ventas/print.php?mesa='+mesa,'','width=500,height=500');
+    myWindow.document.close(); //missing code
+    myWindow.focus();
+    myWindow.print(); 
+  }
+
 
 </script>

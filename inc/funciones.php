@@ -1,8 +1,8 @@
 <?php
 
 function url_base(){
-    //return 'http://localhost/ventas';
-    return 'http://10.0.0.232/ventas';
+    return 'http://localhost/ventas';
+    //return 'http://10.0.0.232/ventas';
 }
 
 function print_pre($arr){
@@ -23,8 +23,11 @@ function selected($a,$b){
     }
 }
 
-function dateFormat($fecha){
+function dateFormat($fecha,$tipo = 'fecha'){
     $d = new DateTime($fecha);
+    if($tipo == 'hora'){
+        return $d->format('H:i:s');
+    }
     return $d->format('d-m-Y');
 }
 
