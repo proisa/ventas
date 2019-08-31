@@ -9,6 +9,7 @@ class Config {
     public $direccion2;   
     public $itbis; 
     public $ley; 
+    public $impresion;
     
     public function __construct($pdo){
         $this->pdo = $pdo;
@@ -28,15 +29,18 @@ class Config {
         $imp = $this->getItbis();
         $this->itbis = $imp->ITBIS;
         $this->ley = $imp->D_LEY;
+        $this->tipo_impresion = $imp->FORMATOSTA;
     }
 
     function getItbis(){
 
-        $query = $this->pdo->query("SELECT ITBIS,D_LEY FROM FABDPROC WHERE cod_sucu=1 AND cod_empr=1");
+        $query = $this->pdo->query("SELECT ITBIS,D_LEY,FORMATOSTA FROM FABDPROC WHERE cod_sucu=1 AND cod_empr=1");
         $response = $query->fetchObject();
         
         return $response;
 
     }
+
+
 
 }

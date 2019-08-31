@@ -5,7 +5,7 @@ require '../clases/Comando.php';
 
 $articulo_id = $_GET['articulo_id'];
 
-$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente 
+$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_bar,ar_bar2,ar_postre,ar_caja,ar_tipococ,ar_tipoarea,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente 
 FROM ivbdarti 
 WHERE 
 AR_CODIGO='{$articulo_id}' AND
@@ -14,6 +14,7 @@ AND ar_activado=' '
 ORDER BY ar_cosfob asc ";
 
 $articulo_data = Comando::recordSet($pdo,$query);
+print_pre($articulo_data);
 //print_pre($_GET);
 ?>
 <div class="row">
@@ -28,13 +29,19 @@ $articulo_data = Comando::recordSet($pdo,$query);
     <div class="col-md-12">
         <hr>
         <h3 style="color:#337ab7;"><?=$articulo_data[0]['ar_descri']?></h3>
-        <input type="hidden" id="id" value="<?=$articulo_id?>"> 
-        <input type="hidden" id="desc" value="<?=$articulo_data[0]['ar_descri']?>"> 
-        <input type="hidden" id="precio" value="<?=$articulo_data[0]['ar_predet']?>"> 
-        <input type="hidden" id="area_id" value="<?=$_GET['area_id']?>">
-        <input type="hidden" id="area_nombre" value="<?=$_GET['area_nombre']?>">
-        <input type="hidden" id="dep_id" value="<?=$_GET['dep_id']?>">
-        <input type="hidden" id="dep_nombre" value="<?=$_GET['dep_nombre']?>">
+        <input type="hidden" id="id" value="<?=trim($articulo_id)?>"> 
+        <input type="hidden" id="desc" value="<?=trim($articulo_data[0]['ar_descri'])?>"> 
+        <input type="hidden" id="precio" value="<?=trim($articulo_data[0]['ar_predet'])?>"> 
+        <input type="hidden" id="area_id" value="<?=trim($_GET['area_id'])?>">
+        <input type="hidden" id="area_nombre" value="<?=trim($_GET['area_nombre'])?>">
+        <input type="hidden" id="dep_id" value="<?=trim($_GET['dep_id'])?>">
+        <input type="hidden" id="dep_nombre" value="<?=trim($_GET['dep_nombre'])?>">
+        <input type="hidden" id="ar_bar" value="<?=$articulo_data[0]['ar_bar']?>">
+        <input type="hidden" id="ar_bar2" value="<?=$articulo_data[0]['ar_bar2']?>">
+        <input type="hidden" id="ar_postre" value="<?=$articulo_data[0]['ar_postre']?>">
+        <input type="hidden" id="ar_caja" value="<?=$articulo_data[0]['ar_caja']?>">
+        <input type="hidden" id="ar_tipococ" value="<?=$articulo_data[0]['ar_tipococ']?>">
+        <input type="hidden" id="ar_tipoarea" value="<?=$articulo_data[0]['ar_tipoarea']?>">
         <hr>
     </div>
     <div class="col-md-12">
@@ -74,7 +81,7 @@ $articulo_data = Comando::recordSet($pdo,$query);
             $i=1;
             foreach($guarniciones as $guarnicion):?>
             <div class="form-check" style="margin-botton:15px;">
-                <input class="form-check-input guarnicion" type="radio" data-nombre="<?=$guarnicion['ac_descri']?>" name="guarnicion" id="gn<?=$i?>" value="<?=$guarnicion['ID']?>">
+                <input class="form-check-input guarnicion" type="radio" data-nombre="<?=trim($guarnicion['ac_descri'])?>" name="guarnicion" id="gn<?=$i?>" value="<?=$guarnicion['ID']?>">
                 <label class="form-check-label" style="color:#337ab7;" for="gn<?=$i?>">
                    <?=$guarnicion['ac_descri']?>
                 </label>
@@ -170,6 +177,12 @@ $('#agregar').click(function(){
         'termino_id':$("input[name='termino']:checked").val(),
         'termino_nombre':$("input[name='termino']:checked").attr('data-nombre'),
         'ingrediente':$("input[name='ingrediente[]']:checked").map(function(){return $(this).val().trim();}).get(),
+        'ar_bar':$('#ar_bar').val(),
+        'ar_bar2':$('#ar_bar2').val(),
+        'ar_postre':$('#ar_postre').val(),
+        'ar_caja':$('#ar_caja').val(),
+        'ar_tipococ':$('#ar_tipococ').val(),
+        'ar_tipoarea':$('#ar_tipoarea').val(),
     }
     arr.push(art_data);
     sessionStorage.setItem('item',JSON.stringify(arr));

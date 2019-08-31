@@ -5,7 +5,6 @@ require 'clases/Comando.php';
 require 'clases/PrintUtil.php';
 require 'clases/Config.php';
 
-
 $print = new PrintUtil(new Config($pdo),'movil');
 $data_pedidos = Comando::recordSet($pdo,"SELECT a.DE_FACTURA,a.DE_FECHA, a.DE_CAJA, a.DE_TURNO, a.DE_FECENT, SUM(a.DE_CANTID) as cantidad,a.DE_DESCRI as descripcion,a.DE_PRECIO as precio FROM ivbddete a LEFT JOIN ivbdarti b 
 ON A.AR_CODIGO=B.AR_CODIGO WHERE a.ma_codigo='{$_GET['mesa']}' AND a.de_tipfac<>'C' AND a.DE_PRECIO > 0 GROUP BY a.DE_FACTURA,a.DE_FECHA, a.DE_CAJA, a.DE_TURNO, a.DE_FECENT, a.AR_CODIGO,a.DE_DESCRI,a.DE_PRECIO");
@@ -55,8 +54,6 @@ $datos = [
         <pre>
         <?=$print->FormatTicketPAGO($datos);?>
         </pre>
-       
-
     <script>
         //window.print();
     </script>

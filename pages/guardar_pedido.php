@@ -3,7 +3,6 @@ date_default_timezone_set('America/Santo_Domingo');
 require '../inc/conexion.php';
 require '../inc/funciones.php';
 require '../clases/Comando.php';
-
 // echo '<pre>';
 //   echo 'Header <br>';
 //   print_r(json_decode($_POST['header']));
@@ -13,11 +12,19 @@ require '../clases/Comando.php';
 //   echo '------------------<br>';
 //   //print_r($_SESSION);
 // echo '</pre>';
-
 $header = json_decode($_POST['header']);
 $detalle = json_decode($_POST['data']);
-$mesaConPedidos = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE WHERE ma_codigo='{$header->mesa}' AND He_tipfac <> 'C'")[0];
 
+$data = [
+  'mesa'=>'02',
+  'data'=>$_POST['data']
+];
+
+print_pre($data);
+
+exit();
+
+$mesaConPedidos = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE WHERE ma_codigo='{$header->mesa}' AND He_tipfac <> 'C'")[0];
 //echo 'Count: ' . count($mesaConPedidos);
 //echo 'Datos de Mesa <br>';
 //print_pre($mesaConPedidos);

@@ -181,7 +181,7 @@ $('.menu-btn').click(function(){
 
 function openWin(mesa)
   {
-    myWindow=window.open('http://localhost/ventas/print.php?mesa='+mesa,'','width=500,height=500');
+    myWindow=window.open('http://10.0.0.232/ventas/print.php?mesa='+mesa,'','width=500,height=500');
     myWindow.document.close(); //missing code
     myWindow.focus();
     myWindow.print(); 

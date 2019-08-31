@@ -1,12 +1,13 @@
 <?php
+
 require 'inc/conexion.php';
 require 'inc/funciones.php';
 require 'clases/Comando.php';
 require 'clases/PrintUtil.php';
 require 'clases/Config.php';
 
-echo dateFormat('2019-11-23 12:30:00','hora');
-echo '<br>';
+// echo dateFormat('2019-11-23 12:30:00','hora');
+// echo '<br>';
 $print = new PrintUtil(new Config($pdo));
 
 $test = [[

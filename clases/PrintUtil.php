@@ -8,11 +8,12 @@ class PrintUtil {
         public      $dividir         = "";
         private     $config;
 
-        function __construct($config,$tipo_ticket = 'termica')
+        function __construct($config)
         {
 
             $this->config = $config;
-            if($tipo_ticket =='movil'){
+
+            if($this->config->tipo_impresion == 6){
                 $this->NoCaracteres = 30;
             }else{
                 $this->NoCaracteres = 40;
