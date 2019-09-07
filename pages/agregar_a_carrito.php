@@ -5,7 +5,7 @@ require '../clases/Comando.php';
 
 $articulo_id = $_GET['articulo_id'];
 
-$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_bar,ar_bar2,ar_postre,ar_caja,ar_tipococ,ar_tipoarea,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente 
+$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_bar,ar_bar2,ar_postre,ar_caja,ar_cocina,ar_tipococ,ar_tipoarea,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente 
 FROM ivbdarti 
 WHERE 
 AR_CODIGO='{$articulo_id}' AND
@@ -14,7 +14,7 @@ AND ar_activado=' '
 ORDER BY ar_cosfob asc ";
 
 $articulo_data = Comando::recordSet($pdo,$query);
-print_pre($articulo_data);
+//print_pre($articulo_data);
 //print_pre($_GET);
 ?>
 <div class="row">
@@ -40,6 +40,7 @@ print_pre($articulo_data);
         <input type="hidden" id="ar_bar2" value="<?=$articulo_data[0]['ar_bar2']?>">
         <input type="hidden" id="ar_postre" value="<?=$articulo_data[0]['ar_postre']?>">
         <input type="hidden" id="ar_caja" value="<?=$articulo_data[0]['ar_caja']?>">
+        <input type="hidden" id="ar_cocina" value="<?=$articulo_data[0]['ar_cocina']?>">
         <input type="hidden" id="ar_tipococ" value="<?=$articulo_data[0]['ar_tipococ']?>">
         <input type="hidden" id="ar_tipoarea" value="<?=$articulo_data[0]['ar_tipoarea']?>">
         <hr>
@@ -181,6 +182,7 @@ $('#agregar').click(function(){
         'ar_bar2':$('#ar_bar2').val(),
         'ar_postre':$('#ar_postre').val(),
         'ar_caja':$('#ar_caja').val(),
+        'ar_cocina':$('#ar_cocina').val(),
         'ar_tipococ':$('#ar_tipococ').val(),
         'ar_tipoarea':$('#ar_tipoarea').val(),
     }

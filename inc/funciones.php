@@ -14,7 +14,7 @@ function print_pre($arr){
 }
 
 function echo_ln($content){
-    echo $content;
+    echo $content.'<br>';
 }
 
 function selected($a,$b){

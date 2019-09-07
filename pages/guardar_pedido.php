@@ -1,5 +1,6 @@
 <?php 
 date_default_timezone_set('America/Santo_Domingo');
+ini_set('display_errors',0);
 require '../inc/conexion.php';
 require '../inc/funciones.php';
 require '../clases/Comando.php';
@@ -15,14 +16,15 @@ require '../clases/Comando.php';
 $header = json_decode($_POST['header']);
 $detalle = json_decode($_POST['data']);
 
-$data = [
-  'mesa'=>'02',
-  'data'=>$_POST['data']
-];
+//print_pre($detalle);
+// $data = [
+//   'mesa'=>'02',
+//   'data'=>$_POST['data']
+// ];
 
-print_pre($data);
 
-exit();
+
+//exit();
 
 $mesaConPedidos = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE WHERE ma_codigo='{$header->mesa}' AND He_tipfac <> 'C'")[0];
 //echo 'Count: ' . count($mesaConPedidos);
@@ -118,12 +120,28 @@ Comando::noRecordSet($pdo,$header_query);
 foreach($detalle as $k => $v){
   $docum = '';
   $nota = !empty($v->nota) ? $v->nota : '';
+  $tipo_orden = 'COCINA';
+  $tipo_cocina = '';
   $guarnicion = isset($v->guarnicion_id) ? $v->guarnicion_id : '';
 
   if($guarnicion != '' || $nota != ''){
      Comando::noRecordSet($pdo,"UPDATE IVBDPROC SET CREAUX=CREAUX+1");
      $data = Comando::recordSet($pdo,"SELECT CREAUX FROM IVBDPROC");
      $docum = $data[0]['CREAUX'];
+  }
+
+  if($v->ar_tipococ == 1){
+    $tipo_cocina = 'E';
+  }elseif($v->ar_tipococ == 2){
+    $tipo_cocina = 'F';
+  }
+
+  if($v->ar_bar == 1 || $v->ar_bar2 == 1){
+    $tipo_orden = 'BAR';
+  }elseif($v->ar_postre == 1){
+    $tipo_orden = 'POSTRE';
+  }elseif($v->ar_caja == 1){
+    $tipo_orden = 'CAJA';
   }
 
   $detalle_query = "INSERT INTO IVBDDETE 
@@ -133,12 +151,16 @@ foreach($detalle as $k => $v){
    DE_PR1,DE_PR2,DE_PR3,AR_codigo2)
     VALUES
     ('{$header_data->tipo}','{$header_data->factura}','{$header_data->fecha}','{$header_data->nombre_cliente}','{$header_data->tipo_comp}',1,1,0,'{$header_data->codigo_cliente}','{$header_data->caja}','{$header_data->turno}','{$header_data->mesa}','{$header_data->mo_codigo}',
-    0,'{$v->descripcion}',{$v->cantidad},'{$v->id}',{$v->precio},0,0,
+    0,'{$v->descripcion}','{$v->cantidad}','{$v->id}',{$v->precio},0,0,
     '{$guarnicion}',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
     0,0,0,'')";
 
 Comando::noRecordSet($pdo,$detalle_query);
-//echo '<br>';
+
+// IMPRESION 
+$impresion_query = "INSERT INTO ORDENESIMPRESION (DOCUMENTO,FACTURA,MESA,FECHA,ARTICULO,DESCRIPCION,SECUENCIA,CANTIDAD,TIPO_ORDEN,TIPO_COCINA,TIPO_AREA,CAMARERO) VALUES ('{$header_data->factura}','{$header_data->factura}','{$header_data->mesa}','{$header_data->fecha}','{$v->id}','{$v->descripcion}','{$docum}','{$v->cantidad}','{$tipo_orden}','{$tipo_cocina}','{$v->ar_tipoarea}','{$header_data->mo_codigo}')";
+Comando::noRecordSet($pdo,$impresion_query);
+
 
   if($guarnicion != ''){
     $guarnicion_query = "INSERT INTO IVBDDETE 
@@ -152,8 +174,12 @@ Comando::noRecordSet($pdo,$detalle_query);
       '',0,'{$docum}','{$header_data->al_codigo}','','{$header_data->fecha_entrada}','{$header_data->fecha_salida}','',
       0,0,0,'')";
 
-    Comando::noRecordSet($pdo,$guarnicion_query);
+      Comando::noRecordSet($pdo,$guarnicion_query);
     //echo '<br>';
+
+    // IMPRESION 
+    $impresion_query = "INSERT INTO ORDENESIMPRESION (DOCUMENTO,FACTURA,MESA,FECHA,ARTICULO,DESCRIPCION,SECUENCIA,CANTIDAD,TIPO_ORDEN,TIPO_COCINA,TIPO_AREA,CAMARERO) VALUES ('{$header_data->factura}','{$header_data->factura}','{$header_data->mesa}','{$header_data->fecha}','','{$v->guarnicion_nombre}','{$docum}','0','{$tipo_orden}','{$tipo_cocina}','{$v->ar_tipoarea}','{$header_data->mo_codigo}')";
+    Comando::noRecordSet($pdo,$impresion_query);
   }
 
   if($nota != ''){
@@ -169,6 +195,11 @@ Comando::noRecordSet($pdo,$detalle_query);
       0,0,0,'')";
 
   Comando::noRecordSet($pdo,$guarnicion_query);
+
+      // IMPRESION 
+      $impresion_query = "INSERT INTO ORDENESIMPRESION (DOCUMENTO,FACTURA,MESA,FECHA,ARTICULO,DESCRIPCION,SECUENCIA,CANTIDAD,TIPO_ORDEN,TIPO_COCINA,TIPO_AREA,CAMARERO) VALUES ('{$header_data->factura}','{$header_data->factura}','{$header_data->mesa}','{$header_data->fecha}','','{$v->nota}','{$docum}','0','{$tipo_orden}','{$tipo_cocina}','{$v->ar_tipoarea}','{$header_data->mo_codigo}')";
+      Comando::noRecordSet($pdo,$impresion_query);
+
     //echo '<br>';
   }
 }
@@ -177,8 +208,23 @@ SET MA_FECENT='$header_data->fecha_entrada',HE_NOMCLI='$header_data->nombre_clie
 WHERE MA_CODIGO='$header->mesa'";
 Comando::noRecordSet($pdo,$updateMesa);
 $pdo->commit();
-?>
 
+// ORDENESIMPRESION
+// [DOCUMENTO] [varchar](10) NOT NULL,
+// [FACTURA] [varchar](10) NOT NULL,
+// [MESA] [varchar](5) NOT NULL,
+// [FECHA] [datetime] NOT NULL,
+// [ARTICULO] [char](20) NOT NULL,
+// [DESCRIPCION] [varchar](40) NOT NULL,
+// [SECUENCIA] [varchar](10) NOT NULL,
+// [CANTIDAD] [numeric](14, 2) NOT NULL,
+// [TIPO_ORDEN] [varchar](12) NOT NULL,
+// [TIPO_COCINA] [varchar](1) NOT NULL,
+// [TIPO_AREA] [int] NOT NULL,
+// [CAMARERO] [varchar](5) NOT NULL,
+
+?>
 <script>
-  window.location.href = 'pages/mesas.php';
+ window.location.href = 'pages/mesas.php';
 </script>
+

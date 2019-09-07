@@ -3,7 +3,6 @@ class PrintUtil {
 
         public      $Empresa_Nombre  = "Proisa S.R.L";
         public      $NoCaracteres;
-        private     $connI;
         public      $salto           = "\n";
         public      $dividir         = "";
         private     $config;
@@ -110,15 +109,6 @@ class PrintUtil {
             $ticket .= $this->PAlin2Colum('% de Ley:',number_format($m_ley,2), ' ').$salto;
             $ticket .= $this->PAlin2Colum('Total:',number_format($total,2), ' ').$salto.$salto;
 
-
-
-           //x $ticket .="\n\n".$this->PAlin( '___________','cen',' ').$salto;
-
-            // if($dat['nota1']){
-            //     $ticket     .= "".$this->PAlin($dat['nota1'],'cen',' ').$salto;
-            // }
-            // if($dat['nota2'])
-            //     $ticket     .= "".$this->PAlin($dat['nota2'],'cen',' ').$salto;
 
             $ticket2 = $this->TicketFormatPOS("",$ticket,"");
             return $ticket2;

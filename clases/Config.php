@@ -18,18 +18,17 @@ class Config {
 
     function setData(){
 
-        $query = $this->pdo->query("SELECT LETRERO1,LETRERO2,LETRERO3,LETRERO4,LETRERO5 FROM FABDPROC");
+        $query = $this->pdo->query("SELECT LETRERO1,LETRERO2,LETRERO3,LETRERO4,LETRERO5,ITBIS,D_LEY,FORMATOSTA FROM FABDPROC");
         $response = $query->fetchObject();
         $this->nombre = $response->LETRERO1;
         $this->direccion = $response->LETRERO2;
         $this->direccion2 = $response->LETRERO3;
         $this->numero = $response->LETRERO4;
-
+        $this->tipo_impresion = $response->FORMATOSTA;
         // Impuestos 
-        $imp = $this->getItbis();
-        $this->itbis = $imp->ITBIS;
-        $this->ley = $imp->D_LEY;
-        $this->tipo_impresion = $imp->FORMATOSTA;
+        $this->itbis = $response->ITBIS;
+        $this->ley = $response->D_LEY;
+       
     }
 
     function getItbis(){
