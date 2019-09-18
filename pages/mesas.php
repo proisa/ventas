@@ -18,32 +18,6 @@ if(isset($_GET) && !empty($_GET['ma'])){
     $pdo->commit();
 }
 
-// COLOR1=rgb(255,174,94)  &&naranja
-// COLOR2=rgb(255,89,89)   &&rojo
-// COLOR3=rgb(64,128,128)   &&verde
-// FOTO_DIVIDIDA="\CONTAPROSQL\ICONOS\DIVIdida.JPG"
-
-
-//    IF PVBDMESA.MO_CODIGO=MOZOS
-//            .b&kw.backcolor=COLOR1
-//     ELSE
-//            .b&kw.backcolor=COLOR2
-//     ENDIF   
-
-//    IF !EMPTY(PVBDMESA.MA_OCUPA)
-//           .b&kw.backcolor=COLOR2
-//    ENDIF							         
-//    IF !EMPTY(PVBDMESA.MA_PAGO)
-//         .b&kw.backcolor=COLOR3
-//    ENDIF
-//    IF !EMPTY(PVBDMESA.LETRA)
-//         .b&kw.PICTURE=FOTO_DIVIDIDA
-//    ENDIF
-//    IF !EMPTY(pvbdmesa.HE_NOMCLI)
-//           .b&kw.CAPTION=STR(&kw,3,0)+" "+ALLTRIM(pvbdmesa.HE_NOMCLI)
-//           .b&kw.FONTSIZE=9
-//    ENDIF   
-
 
 $mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID");
 //print_pre($mesas);
@@ -54,6 +28,7 @@ $mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID"
             <?php foreach($mesas as $mesa):?>
             <?php 
                 $color = '';
+                $dividida = '--';
                 
                 if(!empty(trim($mesa['MA_PAGO']))){
                     $color = 'verde';
@@ -67,13 +42,28 @@ $mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID"
                     $color = 'rojo';
                 }
 
+                if(trim($mesa['MA_CODIGO']) == '06'){
+                    $dividida = 'dividida';
+                }
+
+            
             ?>
             <div class="col-md-3">
-                <div class="c_box <?=$color?>">
+                <div class="c_box <?=$color?> <?=$dividida?> ">
                 <div class="mesa" data-id="<?=$mesa['MA_CODIGO']?>">
                     <h2><?=$mesa['MA_CODIGO']?></h2>
                 </div>
-                <p class="text-center"><?=$mesa['HE_NOMCLI']?> &nbsp </p>
+                <p class="text-center" style="font-size:22px;"><?=$mesa['HE_NOMCLI']?> &nbsp </p>
+               
+                <?php if(!empty(trim($mesa['MO_CODIGO']))): ?>
+                    <p>
+                    <a href="" class="btn btn-primary btn-flat btn-lg" title="Dividir cuenta">Dividir  <i class="fa fa-clone" aria-hidden="true"></i></a>
+                    </p>
+                   
+                <?php else:?>
+                <p class="text-center"> &nbsp; </p>
+                <?php endif;?>
+               
                 </div>
             </div>
             <input type="hidden" id="cliente<?=trim($mesa['MA_CODIGO'])?>" value="<?=$mesa['HE_NOMCLI']?>">
@@ -120,9 +110,9 @@ $('.mesa').click(function(){
 
 
 
-setTimeout(function() {
-  location.reload();
-}, 5000);
+// setTimeout(function() {
+//   location.reload();
+// }, 5000);
 
 
 </script>
