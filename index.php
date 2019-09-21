@@ -10,6 +10,11 @@ $areas = Comando::recordSet($pdo,"SELECT are_codigo,are_descri FROM IVBDAREA ORD
 $mesa = $_GET['ma'];
 $data = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE WHERE ma_codigo='{$mesa}' AND He_tipfac <> 'C'");
 
+
+if(isset($_GET['div']) && $_GET['div'] == 'true'){
+    //
+}
+
 //print_pre($areas);
 
 //print_pre($data);
@@ -120,7 +125,7 @@ $hide = '';
 
             <div class="menu" <?=$hide;?> > 
                 <div class="col-md-3">
-                    <a href="pages/mesas.php?ma=<?=trim($_GET['ma'])?>" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver a mesas</a> 
+                    <a href="pages/mesas.php?ma=<?=trim($_GET['ma'])?>&div=<?=$_GET['div']?>" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver a mesas</a> 
                 </div>
                 <div class="col-md-3 ">
                     <div class="alert alert-success text-center">
@@ -186,6 +191,5 @@ function openWin(mesa)
     myWindow.focus();
     myWindow.print(); 
   }
-
 
 </script>

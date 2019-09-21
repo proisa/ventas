@@ -3,26 +3,27 @@ require '../inc/conexion.php';
 require '../header.php';
 require '../clases/Comando.php';
 
-if(isset($_GET) && !empty($_GET['ma'])){
-    $mesa = $_GET['ma'];
+// if(isset($_GET) && !empty($_GET['ma'])){
+//     $mesa = $_GET['ma'];
 
-    $select = "SELECT MA_FECENT FROM PVBDMESA WHERE MA_CODIGO='{$mesa}'";
-    $resSelect = Comando::recordSet($pdo,$select)[0];
+//     $select = "SELECT MA_FECENT FROM PVBDMESA WHERE MA_CODIGO='{$mesa}'";
+//     $resSelect = Comando::recordSet($pdo,$select)[0];
 
-    if($resSelect['MA_FECENT'] != '1900-01-01 00:00:00.000'){
-         Comando::noRecordSet($pdo,"UPDATE PVBDMESA SET MA_OCUPA='' WHERE MA_CODIGO='$mesa'");
-    }else{
-        Comando::noRecordSet($pdo,"UPDATE PVBDMESA SET MA_OCUPA='', MO_CODIGO='' WHERE MA_CODIGO='$mesa'");
-    }   
+//     if($resSelect['MA_FECENT'] != '1900-01-01 00:00:00.000'){
+//          Comando::noRecordSet($pdo,"UPDATE PVBDMESA SET MA_OCUPA='' WHERE MA_CODIGO='$mesa'");
+//     }else{
+//         Comando::noRecordSet($pdo,"UPDATE PVBDMESA SET MA_OCUPA='', MO_CODIGO='' WHERE MA_CODIGO='$mesa'");
+//     }   
 
-    $pdo->commit();
-}
+//     $pdo->commit();
+// }
+
 
 // echo is_numeric(10);
 // echo is_numeric('10');
 // echo is_numeric('A10');
-
-$mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID");
+$mesa = $_GET['ma'];
+$mesas =  Comando::recordSet($pdo,"SELECT A.*,B.* FROM IVBDHETE A INNER JOIN PVBDMESA B ON A.MA_CODIGO=B.MA_CODIGO WHERE A.MA_DEPEN='{$mesa}' OR B.MA_CODIGO = '{$mesa}' AND LEN(A.HE_TIPFAC)=0 order by a.ma_codigo");
 //print_pre($mesas);
 ?>
 <div class="box box-primary">
@@ -49,22 +50,15 @@ $mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID"
                     $dividida = 'dividida';
                 }
 
+            
             ?>
             <div class="col-md-3">
-                <div class="c_box <?=$color?> <?=$dividida?> ">
+                <div class="c_box <?=$color?>">
                 <div class="mesa" data-id="<?=$mesa['MA_CODIGO']?>">
                     <h2><?=$mesa['MA_CODIGO']?></h2>
                 </div>
                 <p class="text-center" style="font-size:22px;"><?=$mesa['HE_NOMCLI']?> &nbsp </p>
-               
-                <?php if(!empty(trim($mesa['MO_CODIGO']))): ?>
-                    <p>
-                    <button class="btn btn-primary btn-flat btn-lg dividir" data-id="<?=$mesa['MA_CODIGO']?>" title="Dividir cuenta">Dividir  <i class="fa fa-clone" aria-hidden="true"></i></button>
-                    </p>
-                   
-                <?php else:?>
-                <p class="text-center"> &nbsp; </p>
-                <?php endif;?>
+
                
                 </div>
             </div>
@@ -86,13 +80,10 @@ $(document).ready(function(){
     clearCart();
 });
 
-
 $("#cart-btn").hide();
-
 $('.mesa').click(function(){
     header_data = {
       'mesa':$(this).attr('data-id'),
-      'mesa_padre':'',
       'cliente':$('#cliente'+$(this).attr('data-id')).val()
     }
     sessionStorage.setItem('header',JSON.stringify(header_data));
@@ -103,10 +94,7 @@ $('.mesa').click(function(){
         success: function(result){
             if(result.resp == 'Error'){
                 alert(result.msj);
-            }else if(result.resp == 'submesas'){
-                window.location.href = 'submesas.php?ma='+result.mesa;
-            }
-            else{
+            }else{
                 window.location.href = '../index.php?ma='+header_data.mesa+'&cliente='+header_data.cliente;
             }
             //console.log(result.msj);
@@ -114,28 +102,6 @@ $('.mesa').click(function(){
     });
 });
 
-$('.dividir').click(function(){
-   
-    $.ajax({
-        url: "../process/TableProcess.php",
-        type:'post',
-        data: 'dividir="si"&mesa='+$(this).attr('data-id')+'&camarero='+$('#camarero').val(),
-        success: function(result){
-            if(result.resp == 'Error'){
-                alert(result.msj);
-            }else{
-                header_data = {
-                'mesa':result.data.mesa,
-                'cliente':result.data.cliente,
-                'mesa_padre':result.data.mesa_padre
-                }
-                sessionStorage.setItem('header',JSON.stringify(header_data));
-                window.location.href = '../index.php?ma='+header_data.mesa+'&cliente='+header_data.cliente+'&div=true';
-            }
-            //console.log(result.msj);
-        }
-    });
-});
 // setTimeout(function() {
 //   location.reload();
 // }, 5000);

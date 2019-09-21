@@ -50,4 +50,14 @@ function getItbis($pdo){
 
 }
 
+function getNumeroConCero($numero){
+
+    $cero = '0';
+    if($numero < 10){
+        return $numero = $cero.$numero;
+    }
+    return $numero;
+
+}
+
 ?>

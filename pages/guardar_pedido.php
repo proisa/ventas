@@ -63,7 +63,7 @@ if(count($mesaConPedidos) == 0){
     'mo_codigo'=>$_SESSION['mo_codigo'],
     'nombre_cliente'=>$header->cliente,
     'usuario_id'=>$_SESSION['id'],
-    'dependencia_mesa'=>'',
+    'dependencia_mesa'=>$header->mesa_padre,
   ]; 
 
 }else{
@@ -93,7 +93,7 @@ if(count($mesaConPedidos) == 0){
     'mo_codigo'=>$_SESSION['mo_codigo'],
     'nombre_cliente'=>$mesaConPedidos['HE_NOMBRE'],
     'usuario_id'=>$_SESSION['id'],
-    'dependencia_mesa'=>'',
+    'dependencia_mesa'=>$header->mesa_padre,
   ]; 
 }
 // echo '<pre>';
