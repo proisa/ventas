@@ -7,13 +7,12 @@ require('../clases/Comando.php');
 $auth = new Auth($pdo);
 // Login 
 if($auth->login($_POST['usuario'],$_POST['clave'])){
-    header('Location: ../pages/mesas.php');
-
-    // if($auth->nivel == 'G'){
-    //     header('Location: ../pages/mesas.php');
-    // }else{
-    //     header('Location: ../pages/camareros.php');
-    // }
+  
+    if($auth->nivel == 'C'){
+        header('Location: ../pages/mesas.php');
+    }else{
+        header('Location: ../pages/resumen_ventas.php');
+    }
 
 }else{
     header('Location: ../login.php?auth=failed');

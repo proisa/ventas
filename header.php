@@ -193,12 +193,14 @@ if($_SESSION['login'] !== true){
             </span>
           </a>
           <ul class="treeview-menu">
-              <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Resumen</a></li>
+              <li class="active"><a href="<?=url_base()?>/pages/resumen_ventas.php"><i class="fa fa-circle-o"></i>Resumen de ventas</a></li>
+              <li><a href="<?=url_base()?>/pages/pedidos.php"><i class="fa fa-cutlery"></i>Ordenes en cocina</a></li>
+              <li><a href="<?=url_base()?>/pages/mesas_abiertas.php"><i class="fa fa-circle-o"></i>Mesa abiertas</a></li>
           </ul>
-          <li><a href="<?=url_base()?>/pages/camareros.php"><i class="fa fa-users"></i>Camareros</a></li>
-          <li><a href="<?=url_base()?>/pages/mesas.php"><i class="fa fa-circle-o"></i>Mesas</a></li>
+          <!-- <li><a href="<?=url_base()?>/pages/camareros.php"><i class="fa fa-users"></i>Camareros</a></li>
+          <li><a href="<?=url_base()?>/pages/mesas.php"><i class="fa fa-circle-o"></i>Mesas</a></li> -->
           <!-- <li><a href="<?=url_base()?>/index.php"><i class="fa fa-file-text-o"></i>Menu</a></li> -->
-          <li><a href="#"><i class="fa fa-cutlery"></i>Pedidos</a></li>
+         
         </li>
       </ul>
       <?php endif;?>

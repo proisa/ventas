@@ -23,6 +23,9 @@ class Auth{
             $_SESSION['id'] = $data->ID;
             $_SESSION['nombre'] = $data->USUARIO;
             $_SESSION['mo_codigo'] = $data->MO_CODIGO;
+
+            $this->nivel = (trim($data->MO_CODIGO)) ? 'C' : 'A';
+
             return true;
         }else{
             $this->error = 'Login error';

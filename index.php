@@ -125,7 +125,7 @@ $hide = '';
 
             <div class="menu" <?=$hide;?> > 
                 <div class="col-md-3">
-                    <a href="pages/mesas.php?ma=<?=trim($_GET['ma'])?>&div=<?=$_GET['div']?>" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver a mesas</a> 
+                    <a href="pages/mesas.php?ma=<?=trim($_GET['ma'])?>&ma_sup=<?=$_GET['ma_sup']?>&back=true" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver a mesas</a> 
                 </div>
                 <div class="col-md-3 ">
                     <div class="alert alert-success text-center">
