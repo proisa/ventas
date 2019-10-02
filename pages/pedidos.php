@@ -59,7 +59,7 @@ SELECT RIGHT('0000000000'+RTRIM(LTRIM(HE_SECUENCIA)),10) AS secuencia
             [HE_DIRE2] =>  
 */
 
-$query = "SELECT TOP 10 RIGHT('0000000000'+RTRIM(LTRIM(HE_SECUENCIA)),10) AS secuencia
+$query = "SELECT TOP 50 RIGHT('0000000000'+RTRIM(LTRIM(HE_SECUENCIA)),10) AS secuencia
 ,RTRIM(LTRIM(a.HE_FACTURA)) AS orden
 ,RTRIM(CONVERT(CHAR,a.HE_HORA,0)) AS hora
 ,a.MA_CODIGO
@@ -135,7 +135,7 @@ require '../header.php';
                             <td><?=$orden['MA_CODIGO']?></td>
                             <td><?=$orden['mo_descri']?></td>
                             <td>
-                                <button class="btn btn-info btn-flat detalles" data-orden="<?=$orden['orden']?>" data-sec="<?=$orden['secuencia']?>">Ver detalles</button>
+                                <button class="btn btn-info btn-flat detalles" data-orden="<?=$orden['orden']?>" data-sec="<?=$orden['secuencia']?>" data-mesa="<?=$orden['MA_CODIGO']?>" data-camarero="<?=$orden['mo_descri']?>" data-cliente="<?=$orden['CL_NOMBRE']?>">Ver detalles</button>
                             </td>
                         </tr>
                     <?php endforeach;?>
@@ -152,14 +152,13 @@ require '../header.php';
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <h4 class="modal-title" id="myModalLabel">Detalle del  pedido</h4>
       </div>
       <div class="modal-body">
        
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
@@ -173,8 +172,19 @@ require '../header.php';
     $('.detalles').click(function(){
         $('.modal-body').empty();
 
+        var cliente = $(this).attr('data-cliente');
         var orden = $(this).attr('data-orden');
         var sec = $(this).attr('data-sec');
+        var mesa = $(this).attr('data-mesa');
+        var camarero = $(this).attr('data-camarero');
+        var li = '';
+        var entrada_header = '';
+        var plato_fuerte_header = '';
+        var template = `<h3>Cliente: ${cliente}</h3>
+       <h3> Secuencia: ${sec}  <span class="pull-right">Orden: ${orden}</span><br>
+        Mesa: ${mesa}<br> Camarero: ${camarero}</h3>
+        <hr>
+        `;
     
         $.ajax({
             url: "pedidos.php?detalle=true",
@@ -182,15 +192,57 @@ require '../header.php';
             dataType: "json",
             data: "&orden="+orden+"&sec="+sec,
             success: function(result){
-                $.each(result.data, function(i, item) {
-                   var template = `<ul>
-                            <li>${item.DE_DESCRI}</li>
-                   </ul>`;     
 
-                    $('.modal-body').append(template);  
+                var entradas_validacion = 0;
+                var plato_fuerte_validacion = 0;
+
+                $.each(result.data, function(i, item) {
+                  var detalle = ''; 
+                  var art = '';
+                  var entrada = '';
+                  var plato_fuerte = '';
+                 
+
+                  if(item.DE_TIPOCOC == 'E'){
+                        entradas_validacion++;
+                  }
+
+                  if(item.DE_TIPOCOC == 'F'){
+                        plato_fuerte_validacion++;
+                  }
+
+                  //li += `<li>${item.DE_CANTID}</li>`;
+
+                //   if(item.DE_CANTID !== '.00' && item.DE_TIPOCOC == 'F'){
+                //     art =  item.DE_CANTID+' '+item.DE_DESCRI;
+                //   }else if(item.DE_CANTID == '.00' && item.DE_MODO == '*'){
+                //     detalle = `<ul>
+                //             <li>${item.DE_DESCRI}</li>
+                //             </ul>`;  
+                //   }else{
+                //       art = item.DE_DESCRI;
+                //   }
+                 
+                //    template += `<ul>
+                //             <li>${art}${detalle}</li>
+                //    </ul>`;     
+
                 });
-            
-                console.log(result);
+
+                if(entradas_validacion > 0){
+                    entrada_header = '**************************** ENTRADAS ****************************';
+                }
+
+                if(plato_fuerte_validacion > 0){
+                    plato_fuerte_header = '**************************** PLATOS FUERTES *************************';
+                }
+
+                template += `${entrada_header}<br>
+                         ${plato_fuerte_header}
+                            `;
+
+                $('.modal-body').append(template);  
+               // console.log(li);
             }
         });
         $('#myModal').modal('show');
