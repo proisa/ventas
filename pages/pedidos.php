@@ -1,5 +1,6 @@
 <?php
 require '../inc/conexion.php';
+//require '../inc/funciones.php';
 require '../clases/Comando.php';
 
 /*
@@ -135,7 +136,7 @@ require '../header.php';
                             <td><?=$orden['MA_CODIGO']?></td>
                             <td><?=$orden['mo_descri']?></td>
                             <td>
-                                <button class="btn btn-info btn-flat detalles" data-orden="<?=$orden['orden']?>" data-sec="<?=$orden['secuencia']?>" data-mesa="<?=$orden['MA_CODIGO']?>" data-camarero="<?=$orden['mo_descri']?>" data-cliente="<?=$orden['CL_NOMBRE']?>">Ver detalles</button>
+                                <button class="btn btn-info btn-flat detalles" data-orden="<?=$orden['orden']?>" data-sec="<?=$orden['secuencia']?>" data-mesa="<?=$orden['MA_CODIGO']?>" data-camarero="<?=$orden['mo_descri']?>" data-cliente="<?=$orden['CL_NOMBRE']?>" data-hora="<?=$orden['hora']?>">Ver detalles</button>
                             </td>
                         </tr>
                     <?php endforeach;?>
@@ -177,12 +178,14 @@ require '../header.php';
         var sec = $(this).attr('data-sec');
         var mesa = $(this).attr('data-mesa');
         var camarero = $(this).attr('data-camarero');
+        var hora = $(this).attr('data-hora');
+
         var li = '';
         var entrada_header = '';
         var plato_fuerte_header = '';
         var template = `<h3>Cliente: ${cliente}</h3>
        <h3> Secuencia: ${sec}  <span class="pull-right">Orden: ${orden}</span><br>
-        Mesa: ${mesa}<br> Camarero: ${camarero}</h3>
+        Mesa: ${mesa} <span class="pull-right">Hora: ${hora}</span> <br> Camarero: ${camarero}</h3>
         <hr>
         `;
     
@@ -195,21 +198,50 @@ require '../header.php';
 
                 var entradas_validacion = 0;
                 var plato_fuerte_validacion = 0;
-
+                var entrada = '';
+                var plato_fuerte = '';    
                 $.each(result.data, function(i, item) {
                   var detalle = ''; 
                   var art = '';
-                  var entrada = '';
-                  var plato_fuerte = '';
                  
-
                   if(item.DE_TIPOCOC == 'E'){
                         entradas_validacion++;
+
+                        li += `<li>${item.DE_CANTID}</li>`;
+
+                        if(item.DE_CANTID !== '.00'){
+                            art =  item.DE_CANTID+' '+item.DE_DESCRI;
+                        }else if(item.DE_CANTID == '.00' && item.DE_MODO == '*'){
+                            detalle = `<ul>
+                                    <li>${item.DE_DESCRI}</li>
+                                    </ul>`;  
+                        }else{
+                            art = item.DE_DESCRI;
+                        }
+                      
+                        entrada += `<li>${art}${detalle}</li>`;
                   }
 
                   if(item.DE_TIPOCOC == 'F'){
                         plato_fuerte_validacion++;
+
+                        li += `<li>${item.DE_CANTID}</li>`;
+
+                        if(item.DE_CANTID !== '.00'){
+                            art =  item.DE_CANTID+' '+item.DE_DESCRI;
+                        }else if(item.DE_CANTID == '.00' && item.DE_MODO == '*'){
+                            detalle = `<ul>
+                                    <li>${item.DE_DESCRI}</li>
+                                    </ul>`;  
+                        }else{
+                            art = item.DE_DESCRI;
+                        }
+
+                        plato_fuerte +=  `<li>${art}${detalle}</li>`;
+
                   }
+
+
 
                   //li += `<li>${item.DE_CANTID}</li>`;
 
@@ -230,7 +262,7 @@ require '../header.php';
                 });
 
                 if(entradas_validacion > 0){
-                    entrada_header = '**************************** ENTRADAS ****************************';
+                    entrada_header = '********************************* ENTRADAS *********************************';
                 }
 
                 if(plato_fuerte_validacion > 0){
@@ -238,8 +270,10 @@ require '../header.php';
                 }
 
                 template += `${entrada_header}<br>
-                         ${plato_fuerte_header}
-                            `;
+                                <ul>${entrada}</ul>
+                         ${plato_fuerte_header}<br>
+                                <ul>${plato_fuerte}</ul>
+                            <hr>`;
 
                 $('.modal-body').append(template);  
                // console.log(li);
