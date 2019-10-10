@@ -12,25 +12,21 @@ require 'clases/Config.php';
 // //$comando2 = Comando::noRecordSet($pdo,$delete);
 // print_pre($comando1);
 
-function getLetraNombre($numero){
+$res1[] = [
+    '2018-01-01'=>'1,000',
+    '2018-01-02'=>'2,000',
+    '2018-01-03'=>'3,000'
+];
 
-    $cero = '0';
-    if($numero < 10){
-        return $numero = $cero.$numero;
-    }
-    return $numero;
-    
-}
+$res2[] = [
+    '2019-01-01'=>'4,000',
+    '2019-01-02'=>'6,000',
+    '2019-01-03'=>'2,000'
+];
 
-$num = "00";
+$resp3 = array_merge($res1,[$res2]);
 
-$num += 1;
-
-echo getLetraNombre($num);
-
-
-
-
+print_pre($resp3);
 
 
 //var_dump($comando2);
