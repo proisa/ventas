@@ -170,6 +170,9 @@ require '../header.php';
 ?>
 
 <script>
+
+$("#cart-btn").hide();
+
     $('.detalles').click(function(){
         $('.modal-body').empty();
 

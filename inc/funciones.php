@@ -2,7 +2,7 @@
 
 function url_base(){
     //return 'http://localhost/ventas';
-    return 'http://10.0.0.40/ventas';
+    return 'http://10.0.0.32/ventas';
 }
 
 function print_pre($arr){

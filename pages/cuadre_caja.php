@@ -212,3 +212,7 @@ $detalleResp = Comando::recordSet($pdo,$datalle);
 <?php 
     require '../footer.php';
 ?>
+
+<script>
+$("#cart-btn").hide();
+</script>
