@@ -92,6 +92,10 @@ if($_SESSION['login'] !== true){
   margin-bottom:10px;
 }
 
+.sidebar-menu, .main-sidebar .user-panel, .sidebar-menu>li.header {
+  white-space: initial !important;
+}
+
 
   @media (max-width: 580px) and (min-width:1px){
       .control-sidebar-bg, .control-sidebar {
@@ -193,15 +197,31 @@ if($_SESSION['login'] !== true){
             </span>
           </a>
           <ul class="treeview-menu">
-              <li class="active"><a href="<?=url_base()?>/pages/resumen_ventas.php"><i class="fa fa-circle-o"></i>Resumen de ventas</a></li>
+        
               <li class="active"><a href="<?=url_base()?>/pages/cuadre_caja.php"><i class="fa fa-circle-o"></i>Cuadre de caja</li>
               <li><a href="<?=url_base()?>/pages/pedidos.php"><i class="fa fa-cutlery"></i>Ordenes en cocina</a></li>
               <li><a href="<?=url_base()?>/pages/mesas_abiertas.php"><i class="fa fa-circle-o"></i>Mesa abiertas</a></li>
+        
           </ul>
           <!-- <li><a href="<?=url_base()?>/pages/camareros.php"><i class="fa fa-users"></i>Camareros</a></li>
           <li><a href="<?=url_base()?>/pages/mesas.php"><i class="fa fa-circle-o"></i>Mesas</a></li> -->
           <!-- <li><a href="<?=url_base()?>/index.php"><i class="fa fa-file-text-o"></i>Menu</a></li> -->
-         
+        </li>
+        <li class="active treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Reportes</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li class="active"><a href="<?=url_base()?>/pages/resumen_ventas.php"><i class="fa fa-circle-o"></i>Resumen de ventas</a></li>
+              <li><a href="<?=url_base()?>/pages/ventas_departamentos.php"><i class="fa fa-circle-o"></i>Ventas por Departamentos</a></li>
+              <li><a href="<?=url_base()?>/pages/ventas_departamentos.php"><i class="fa fa-circle-o"></i>Ventas por Categorias</a></li>
+          </ul>
+          <!-- <li><a href="<?=url_base()?>/pages/camareros.php"><i class="fa fa-users"></i>Camareros</a></li>
+          <li><a href="<?=url_base()?>/pages/mesas.php"><i class="fa fa-circle-o"></i>Mesas</a></li> -->
+          <!-- <li><a href="<?=url_base()?>/index.php"><i class="fa fa-file-text-o"></i>Menu</a></li> -->
         </li>
       </ul>
       <?php endif;?>
