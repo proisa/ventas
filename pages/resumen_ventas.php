@@ -77,6 +77,14 @@ if(isset($_POST['comparar'])){
 require '../header.php';
 ?>
 
+<style>
+
+#charge1,#charge2 {
+    display:none;
+}
+
+</style>
+
 <h1>Resumen de ventas</h1>
 <div class="box box-primary">
     <div class="box-header with-border">
@@ -95,7 +103,7 @@ require '../header.php';
             <option value="dia">Dia</option>
             <option value="mes">Mes</option>
         </select>
-        <button type="button" id="consultar" class="btn btn-default">Consultar</button>
+        <button type="button" id="consultar" class="btn btn-success">Consultar <span id="charge1"><i class="fa fa-circle-o-notch fa-spin"></i></span> </button>
         </form>
     </div>
     <div class="box-body">
@@ -120,7 +128,7 @@ require '../header.php';
             <label for="exampleInputEmail2">Fecha 2: </label>
             <input type="text" class="form-control year" id="anio2">
         </div>
-        <button type="button" id="comparar" class="btn btn-default">Consultar</button>
+        <button type="button" id="comparar" class="btn btn-success">Consultar <span id="charge2"><i class="fa fa-circle-o-notch fa-spin"></i></span></button>
         </form>
     </div>
     <div class="box-body">
@@ -149,7 +157,9 @@ $('.year').datepicker({
 });
 
 $("#consultar").click(function(){
+    $(this).attr('disabled','disabled');
     $("#ventas_diarias").empty();
+    $("#charge1").show();
     var fecha1 = $("#fecha1").val();
     var fecha2 = $("#fecha2").val();
     var rango = $("#rango").val();
@@ -160,7 +170,6 @@ $("#consultar").click(function(){
             dataType: "json",
             data: "consultar=true&fecha1="+fecha1+"&fecha2="+fecha2+"&rango="+rango,
             success: function(result){
-
                 Morris.Bar({
                     element: 'ventas_diarias',
                     data: result,
@@ -171,11 +180,17 @@ $("#consultar").click(function(){
                     }).on('click', function(i, row){
                     console.log(i, row);
                     });
+                    $("#charge1").hide();
+                    $("#consultar").removeAttr('disabled');
                 } // End result
+                
     }); // End Ajax
+    
 });
 
 $("#comparar").click(function(){
+    $(this).attr('disabled','disabled');
+    $("#charge2").show();
     $("#comparativo").empty();
     var anio1 = $("#anio1").val();
     var anio2 = $("#anio2").val();
@@ -197,6 +212,8 @@ $("#comparar").click(function(){
                     }).on('click', function(i, row){
                     console.log(i, row);
                     });
+                    $("#charge2").hide();
+                    $("#comparar").removeAttr('disabled');
                 } // End result
     }); // End Ajax
 });

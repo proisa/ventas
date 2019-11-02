@@ -43,7 +43,7 @@ if(isset($_GET) && !empty($_GET['ma'])){
 // echo is_numeric('10');
 // echo is_numeric('A10');
 
-$mesas =  Comando::recordSet($pdo,"SELECT TOP 10 * FROM PVBDMESA ORDER BY MA_ID");
+$mesas =  Comando::recordSet($pdo,"SELECT TOP 25 * FROM PVBDMESA ORDER BY MA_ID");
 //print_pre($mesas);
 ?>
 <div class="box box-primary">

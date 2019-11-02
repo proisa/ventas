@@ -29,6 +29,7 @@ $mesas =  Comando::recordSet($pdo,"SELECT A.*,B.* FROM IVBDHETE A INNER JOIN PVB
 <div class="box box-primary">
     <div class="box-body">
         <div class="row">
+            <?php if($mesas):?>
             <?php foreach($mesas as $mesa):?>
             <?php 
                 $color = '';
@@ -64,6 +65,10 @@ $mesas =  Comando::recordSet($pdo,"SELECT A.*,B.* FROM IVBDHETE A INNER JOIN PVB
             </div>
             <input type="hidden" id="cliente<?=trim($mesa['MA_CODIGO'])?>" value="<?=$mesa['HE_NOMCLI']?>">
             <?php endforeach;?>
+            <?php else: ?>
+            <p>No hay datos disponibles </p>
+            <a href="mesas.php?ma=<?=trim($_GET['ma'])?>" class="btn-success btn">Volver atras</a>
+            <?php endif;?>
         </div>
     </div>
 </div>

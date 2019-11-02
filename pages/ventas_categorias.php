@@ -5,20 +5,17 @@ require '../clases/Comando.php';
 
 
 
-//$fecha1 = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('Y-m-d');
-//$fecha2 = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('Y-m-d');
+$fecha1 = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('Y-m-d');
+$fecha2 = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('Y-m-d');
 
-$fecha1 = '2018-01-01';
-$fecha2 = '2018-01-31';
+//$fecha1 = '2018-01-01';
+//$fecha2 = '2018-01-31';
 //$departamento = isset($_POST['departamento']) && $_POST['departamento'] !== ""  ? " AND b.de_codigo = ".$_POST['departamento'] : "";
 //if(isset($_POST['consultar'])){
 
-        $query = "SELECT  a.ar_codigo
-		,SUM(CASE WHEN A.MA_CODIGO<>'DL' THEN A.DE_CANTID ELSE 0 END)VALOR1
-		,SUM(CASE WHEN A.MA_CODIGO ='DL' THEN A.DE_CANTID ELSE 0 END)VALOR1DL
-		,SUM(A.DE_COSTO*(A.DE_CANTID))VALOR2
-		,SUM(CASE WHEN A.MA_CODIGO<>'DL' THEN A.DE_PRECIO*(A.DE_CANTID) ELSE 0 END)VALOR3
-		,SUM(CASE WHEN A.MA_CODIGO ='DL' THEN A.DE_PRECIO*(A.DE_CANTID) ELSE 0 END)VALOR3DL
+        $query = "SELECT  a.ar_codigo   
+		,SUM(A.DE_CANTID)CANTIDAD
+		,SUM(A.DE_PRECIO*(A.DE_CANTID))TOTAL
 		,ISNULL(b.de_codigo,'')de_codigo,ISNULL(b.ar_descri,'')ar_descri,ISNULL(c.ar_descri,'')departa
         ,ISNULL(b.ma_codigo,'')ma_codigo,ISNULL(d.ar_descri,'')categoria
 	FROM ivbddepe as a
@@ -60,6 +57,11 @@ $fecha2 = '2018-01-31';
         background: #b3d9ff !important;
         font-size: 18px;
     }
+
+    .totales-cat {
+        background: #03dd8c !important;
+        font-size: 18px;
+    }
 </style>
 
 
@@ -95,10 +97,7 @@ $fecha2 = '2018-01-31';
                     <thead>
                         <th>Codigo</th>
                         <th>Descripcion</th>
-                        <th class="text-right">Cant. En Restaurante</th>
-                        <th class="text-right">Cant. En Delivery</th>
-                        <th class="text-right">Total Restaurante</th>
-                        <th class="text-right">Total Delivery</th>
+                        <th class="text-right">Cantidad General</th>
                         <th class="text-right">Total General</th>
                     </thead>
                     <tbody>
@@ -112,13 +111,10 @@ $fecha2 = '2018-01-31';
                             $cam2= '';
 
                             $t1 = 0;
-                            $t1DL = 0;
                             $t2 = 0;
-                            $t2DL = 0;
                             $t3 = 0;
-                            $t3DL = 0;
                             $t4 = 0;
-                            $t4DL = 0;
+                
                             if($resp):
                             foreach ($resp as $dep): ?>
 
@@ -128,15 +124,9 @@ $fecha2 = '2018-01-31';
                                     <td></td>
                                     <td>Totales por Departamentos</td>
                                     <td class="text-right"><?=number_format($t1,2)?></td>
-                                    <td class="text-right"><?=number_format($t1DL,2)?></td>
                                     <td class="text-right"><?=number_format($t2,2)?></td>
-                                    <td class="text-right"><?=number_format($t2DL,2)?></td>
-                                    <td class="text-right"><?=number_format($t2+$t2DL,2)?></td>
                                 </tr>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -144,38 +134,28 @@ $fecha2 = '2018-01-31';
                                 </tr>
                                 <?php 
                                      $t1 = 0;
-                                     $t1DL = 0;
                                      $t2 = 0;
-                                     $t2DL = 0;
                                      $s1= 0;
                                     endif;?>
                             <?php endif;?>
 
                             <?php  if ($reg > 0): ?>
                                 <?php  if ($dep['ma_codigo'] !== $cam1): ?>
-                                <tr class="totales">
+                                <tr class="totales-cat">
                                     <td></td>
                                     <td>Totales por Categorias</td>
-                                    <td class="text-right"><?=number_format($t1,2)?></td>
-                                    <td class="text-right"><?=number_format($t1DL,2)?></td>
-                                    <td class="text-right"><?=number_format($t2,2)?></td>
-                                    <td class="text-right"><?=number_format($t2DL,2)?></td>
-                                    <td class="text-right"><?=number_format($t2+$t2DL,2)?></td>
+                                    <td class="text-right"><?=number_format($t3,2)?></td>
+                                    <td class="text-right"><?=number_format($t4,2)?></td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
                                 </tr>
                                 <?php 
-                                     $t1 = 0;
-                                     $t1DL = 0;
-                                     $t2 = 0;
-                                     $t2DL = 0;
+                                     $t3 = 0;
+                                     $t4 = 0;
                                      $s= 0;
                                     endif;?>
                             <?php endif;?>
@@ -188,9 +168,6 @@ $fecha2 = '2018-01-31';
                                         <td><?=$dep['categoria']?></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
                                      </tr>
                             <?php endif;?>
                             <?php  if ($s1 == 0): ?>
@@ -199,30 +176,22 @@ $fecha2 = '2018-01-31';
                                         <td><?=$dep['departa']?></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
                                      </tr>
                             <?php endif;?>
                             
                             <tr>
                                 <td><?=$dep['ar_codigo']?></td>
                                 <td><?=$dep['ar_descri']?></td>
-                                <td class="text-right"><?=$dep['VALOR1']?></td>
-                                <td class="text-right"><?=$dep['VALOR1DL']?></td>
-                                <td class="text-right"><?=number_format($dep['VALOR3'],2)?></td>
-                                <td class="text-right"><?=number_format($dep['VALOR3DL'],2)?></td>
-                                <td class="text-right"><?=number_format($dep['VALOR3']+$dep['VALOR3DL'],2)?></td>
+                                <td class="text-right"><?=$dep['CANTIDAD']?></td>
+                                <td class="text-right"><?=number_format($dep['TOTAL'],2)?></td>
                             </tr>
 
                         <?php 
 
-                        $t1 = $t1 + $dep['VALOR1'];
-                        $t1DL = $t1DL + $dep['VALOR1DL'];
-                        $t2 = $t2 + $dep['VALOR3'];
-                        $t2DL = $t2DL + $dep['VALOR3DL'];
-                        $t3 = $t3 +$dep['VALOR1'];
-                        $t3DL = $t3DL + $dep['VALOR1DL'];
+                        $t1 = $t1 + $dep['CANTIDAD'];
+                        $t2 = $t2 + $dep['TOTAL'];
+                        $t3 = $t3 + $dep['CANTIDAD'];
+                        $t4 = $t4 + $dep['TOTAL'];
                        // $t4 += $t2;
 
                         $reg++;
@@ -235,12 +204,15 @@ $fecha2 = '2018-01-31';
                         endif;?>
                          <tr class="totales">
                                     <td></td>
-                                    <td>Totales</td>
+                                    <td>	Totales por Departamentos</td>
                                     <td class="text-right"><?=number_format($t1,2)?></td>
-                                    <td class="text-right"><?=number_format($t1DL,2)?></td>
                                     <td class="text-right"><?=number_format($t2,2)?></td>
-                                    <td class="text-right"><?=number_format($t2DL,2)?></td>
-                                    <td class="text-right"><?=number_format($t2+$t2DL,2)?></td>
+                        </tr>
+                        <tr class="totales-cat">
+                                    <td></td>
+                                    <td>	Totales por Categorias</td>
+                                    <td class="text-right"><?=number_format($t3,2)?></td>
+                                    <td class="text-right"><?=number_format($t4,2)?></td>
                         </tr>
                     </tbody>
                </table>
