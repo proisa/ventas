@@ -23,7 +23,6 @@ function getConfig($pdo){
             sessionStorage.setItem('url_base','".$url."');
         </script>
     ";
-
 }
 
 ?>
