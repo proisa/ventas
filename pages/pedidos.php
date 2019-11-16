@@ -80,8 +80,11 @@ FROM pvbdhecocina as a
 WHERE a.HE_MODO='' ORDER BY HE_SECUENCIA" ;
 
 $ordenes = Comando::recordSet($pdo,$query);
+// echo '<pre>';
+// print_r($ordenes);
+// echo '</pre>';
 
-//print_pre($ordenes);
+
 
 /*
 

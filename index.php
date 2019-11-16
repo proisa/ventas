@@ -3,7 +3,7 @@ require 'inc/conexion.php';
 //require 'inc/funciones.php';
 require 'header.php';
 require 'clases/Comando.php';
-getItbis($pdo);
+getConfig($pdo);
 
 $departamentos = Comando::recordSet($pdo,"SELECT DE_CODIGO,ar_descri,are_codigo FROM IVBDDEPT WHERE AR_PRESENT=1 ORDER BY are_codigo ASC");
 $areas = Comando::recordSet($pdo,"SELECT are_codigo,are_descri FROM IVBDAREA ORDER BY are_codigo ASC");
@@ -186,7 +186,7 @@ $('.menu-btn').click(function(){
 
 function openWin(mesa)
   {
-    myWindow=window.open('http://10.0.0.232/ventas/print.php?mesa='+mesa,'','width=500,height=500');
+    myWindow=window.open(sessionStorage.getItem('url_base')+'/print.php?mesa='+mesa,'','width=500,height=500');
     myWindow.document.close(); //missing code
     myWindow.focus();
     myWindow.print(); 
