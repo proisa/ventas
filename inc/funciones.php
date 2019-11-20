@@ -23,6 +23,15 @@ function dateFormat($fecha,$tipo = 'fecha'){
     return $d->format('d-m-Y');
 }
 
+function dateOrderPass($hora){
+    $hora_actual = date('H:i:s');
+    // Difference in year, month, days 
+    $time1 = date_create($hora); 
+    $time2 = date_create($hora_actual); 
+    $interval_hour = date_diff($time1, $time2); 
+
+    return "{$interval_hour->h} horas, {$interval_hour->i} minutos y {$interval_hour->s} segundos";
+}
 
 
 function getNumeroConCero($numero){

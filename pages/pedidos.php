@@ -1,4 +1,5 @@
 <?php
+
 require '../inc/conexion.php';
 //require '../inc/funciones.php';
 require '../clases/Comando.php';
@@ -79,13 +80,11 @@ FROM pvbdhecocina as a
     left join ivbdhedely as h on a.HE_FACTURA=h.HE_FACTURA
 WHERE a.HE_MODO='' ORDER BY HE_SECUENCIA" ;
 
+
 $ordenes = Comando::recordSet($pdo,$query);
 // echo '<pre>';
 // print_r($ordenes);
 // echo '</pre>';
-
-
-
 /*
 
 SELECT *
@@ -109,8 +108,6 @@ if(isset($_GET['detalle'])){
     exit();
 }
 
-
-
 require '../header.php';
 
 ?>
@@ -121,12 +118,14 @@ require '../header.php';
         <hr>
         <div class="row">
             <div class="col-md-12">
+                <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <th>Secuencia</th>
                         <th>Orden</th>
                         <th>Fecha / Hora</th>
                         <th>Mesa</th>
+                        <th>Cliente</th>
                         <th>Camarero</th>
                         <th></th>
                     </thead>
@@ -137,14 +136,23 @@ require '../header.php';
                             <td><?=$orden['orden']?></td>
                             <td><?=dateFormat($orden['HE_FECHA'])?> / <?=$orden['hora']?></td>
                             <td><?=$orden['MA_CODIGO']?></td>
+                            <td><?=$orden['CL_NOMBRE']?></td>
                             <td><?=$orden['mo_descri']?></td>
                             <td>
-                                <button class="btn btn-info btn-flat detalles" data-orden="<?=$orden['orden']?>" data-sec="<?=$orden['secuencia']?>" data-mesa="<?=$orden['MA_CODIGO']?>" data-camarero="<?=$orden['mo_descri']?>" data-cliente="<?=$orden['CL_NOMBRE']?>" data-hora="<?=$orden['hora']?>">Ver detalles</button>
+                                <button class="btn btn-info btn-flat detalles" 
+                                data-orden="<?=$orden['orden']?>" 
+                                data-sec="<?=$orden['secuencia']?>" 
+                                data-mesa="<?=$orden['MA_CODIGO']?>" 
+                                data-camarero="<?=$orden['mo_descri']?>" 
+                                data-cliente="<?=$orden['CL_NOMBRE']?>" 
+                                data-hora="<?=$orden['hora']?>"
+                                data-tiempo-pasado="<?=dateOrderPass($orden['HE_HORA'])?>" >Ver detalles</button>
                             </td>
                         </tr>
                     <?php endforeach;?>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
@@ -156,7 +164,7 @@ require '../header.php';
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Detalle del  pedido</h4>
+        <h4 style="font-size: 24px;"  id="myModalLabel">Detalle del  pedido</h4>
       </div>
       <div class="modal-body">
        
@@ -185,13 +193,16 @@ $("#cart-btn").hide();
         var mesa = $(this).attr('data-mesa');
         var camarero = $(this).attr('data-camarero');
         var hora = $(this).attr('data-hora');
+        var tiempo_pasado = $(this).attr('data-tiempo-pasado');
 
         var li = '';
         var entrada_header = '';
         var plato_fuerte_header = '';
-        var template = `<h3>Cliente: ${cliente}</h3>
-       <h3> Secuencia: ${sec}  <span class="pull-right">Orden: ${orden}</span><br>
-        Mesa: ${mesa} <span class="pull-right">Hora: ${hora}</span> <br> Camarero: ${camarero}</h3>
+        var template = `<h4>Cliente: <b>${cliente}</b></h4>
+       <h4> Secuencia: <b>${sec}</b>  <span class="pull-right">Orden: <b> ${orden}</b></span><br>
+        Mesa: <b>${mesa}</b> <span class="pull-right">Hora: <b>${hora}</b></span> <br> Camarero: <b>${camarero}</b> <br> 
+        Tiempo Transcurrido: <span style="color:#ea0202"> <b>${tiempo_pasado}</b> </span>
+        </h4>
         <hr>
         `;
     
