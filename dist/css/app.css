@@ -48,3 +48,13 @@
     background-image: url('../img/lines.jpg');
 }
 
+
+.t-cuadre {
+    display: inline-block;
+    padding:10px;
+    background: #c4e9ff;
+    margin-top:0;
+}
+
+
+

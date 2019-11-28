@@ -2,7 +2,7 @@
 
 function url_base(){
     //return 'http://localhost/ventas';
-    return 'http://10.0.10.25/ventas';
+    return 'http://10.0.10.37/ventas';
 }
 
 function getConfig($pdo){
