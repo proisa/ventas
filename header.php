@@ -199,9 +199,10 @@ if($_SESSION['login'] !== true){
           </a>
           <ul class="treeview-menu">
         
-              <li class="active"><a href="<?=url_base()?>/pages/cuadre_caja.php"><i class="fa fa-circle-o"></i>Cuadre de caja</li>
-              <li><a href="<?=url_base()?>/pages/pedidos.php"><i class="fa fa-cutlery"></i>Ordenes en cocina</a></li>
-              <li><a href="<?=url_base()?>/pages/mesas_abiertas.php"><i class="fa fa-circle-o"></i>Mesa abiertas</a></li>
+              <li class="active"><a href="<?=url_base()?>/pages/cuadre_caja.php"><i class="fa fa-circle-o"></i>Cuadre de Caja</li>
+              <li class="active"><a href="<?=url_base()?>/pages/cuadre_caja_historico.php"><i class="fa fa-circle-o"></i>Cuadre de Caja Historico</li>
+              <li><a href="<?=url_base()?>/pages/pedidos.php"><i class="fa fa-cutlery"></i>Ordenes en Cocina</a></li>
+              <li><a href="<?=url_base()?>/pages/mesas_abiertas.php"><i class="fa fa-circle-o"></i>Mesa Abiertas</a></li>
         
           </ul>
           <!-- <li><a href="<?=url_base()?>/pages/camareros.php"><i class="fa fa-users"></i>Camareros</a></li>
