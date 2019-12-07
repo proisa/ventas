@@ -112,6 +112,15 @@ require '../header.php';
 
 ?>
 
+<style>
+
+.DL {
+    background:yellow;
+}
+
+
+</style>
+
 <div class="box box-primary">
     <div class="box-body">
         <h2>Ordenes en cocina</h2>
@@ -131,11 +140,11 @@ require '../header.php';
                     </thead>
                     <tbody>
                     <?php foreach($ordenes as $orden):?>
-                        <tr>
+                       <tr>
                             <td><?=$orden['secuencia']?></td>
                             <td><?=$orden['orden']?></td>
                             <td><?=dateFormat($orden['HE_FECHA'])?> / <?=$orden['hora']?></td>
-                            <td><?=$orden['MA_CODIGO']?></td>
+                            <td class="<?=$orden['MA_CODIGO']?>"> <?=$orden['MA_CODIGO']?></td>
                             <td><?=$orden['CL_NOMBRE']?></td>
                             <td><?=$orden['mo_descri']?></td>
                             <td>

@@ -47,7 +47,7 @@ function getNumeroConCero($numero){
 function clearDate($fecha){
     $ffecha = $fecha;
     $ffecha = explode('/',$ffecha);
-    $ffecha = $ffecha[2].$ffecha[1].$ffecha[0];
+    $ffecha = $ffecha[2].$ffecha[0].$ffecha[1];
     return $ffecha;
 }
 
