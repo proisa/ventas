@@ -1,6 +1,6 @@
 <?php
 require '../inc/conexion.php';
-
+require '../inc/funciones.php';
 require '../clases/Comando.php';
 
 
@@ -30,7 +30,11 @@ if(isset($_POST['consultar'])){
     }
 
     $resp = Comando::recordSet($pdo,$query);
-    echo json_encode($resp);
+    echo json_encode([
+        'fecha1'=>getDateString($fecha1),
+        'fecha2'=>getDateString($fecha2),
+        'data'=>$resp
+    ]);
     exit();
 }
 
@@ -105,6 +109,7 @@ require '../header.php';
         </select>
         <button type="button" id="consultar" class="btn btn-success">Consultar <span id="charge1"><i class="fa fa-circle-o-notch fa-spin"></i></span> </button>
         </form>
+        <h3 class="text-center" id="rango_fechas"></h3>
     </div>
     <div class="box-body">
         <div class="row">
@@ -159,6 +164,7 @@ $('.year').datepicker({
 $("#consultar").click(function(){
     $(this).attr('disabled','disabled');
     $("#ventas_diarias").empty();
+    $("#rango_fechas").empty();
     $("#charge1").show();
     var fecha1 = $("#fecha1").val();
     var fecha2 = $("#fecha2").val();
@@ -172,16 +178,17 @@ $("#consultar").click(function(){
             success: function(result){
                 Morris.Bar({
                     element: 'ventas_diarias',
-                    data: result,
+                    data: result.data,
                     xkey: 'fecha',
                     ykeys: ['ventas'],
-                    labels: ['ventas'],
-                    xLabels: 'day',
+                    labels: ['Ventas'],
+                    barColors: ['#089e59'],
                     }).on('click', function(i, row){
                     console.log(i, row);
                     });
                     $("#charge1").hide();
                     $("#consultar").removeAttr('disabled');
+                    $("#rango_fechas").append('Desde el '+ result.fecha1+' - Hasta el '+ result.fecha2)
                 } // End result
                 
     }); // End Ajax
@@ -200,17 +207,15 @@ $("#comparar").click(function(){
             dataType: "json",
             data: "comparar=true&anio1="+anio1+"&anio2="+anio2,
             success: function(result){
-
                 Morris.Bar({
                     element: 'comparativo',
                     data: result,
                     xkey: 'MESL',
                     ykeys: ['HE_NETO1','HE_NETO2'],
                     labels: [anio1,anio2],
-                    xLabels: 'day',
                    /* barColors: ['#000','#ccc'],*/
                     }).on('click', function(i, row){
-                    console.log(i, row);
+                        console.log(i, row);
                     });
                     $("#charge2").hide();
                     $("#comparar").removeAttr('disabled');

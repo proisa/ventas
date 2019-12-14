@@ -173,7 +173,7 @@ $detalleResp = Comando::recordSet($pdo,$datalle);
 //print_pre($detalleResp);
 
 ?>
-<h1>Cuadre de caja</h1>
+<h1>Cuadre de caja <small><?=getDateString(date('Ymd'))?></small></h1>
 
 <div class="row">
     <div class="col-md-6">

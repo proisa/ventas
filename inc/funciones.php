@@ -47,8 +47,43 @@ function getNumeroConCero($numero){
 function clearDate($fecha){
     $ffecha = $fecha;
     $ffecha = explode('/',$ffecha);
-    $ffecha = $ffecha[2].$ffecha[0].$ffecha[1];
+    $ffecha = $ffecha[2].$ffecha[1].$ffecha[0];
     return $ffecha;
+}
+
+function getDateString($date){
+    // Sabado 2 de Marzo del 2019
+    $dias = [
+        'Monday'=>'Lunes',
+        'Tuesday'=>'Martes',
+        'Wednesday'=>'Miércoles',
+        'Thursday'=>'Jueves',
+        'Friday'=>'Viernes',
+        'Saturday'=>'Sábado',
+        'Sunday'=>'Domingo'
+    ];
+
+    $meses = [
+        '01'=>'Enero',
+        '02'=>'Febrero',
+        '03'=>'Marzo',
+        '04'=>'Abril',
+        '05'=>'Mayo',
+        '06'=>'Junio',
+        '07'=>'Julio',
+        '08'=>'Agosto',
+        '09'=>'Septiembre',
+        '10'=>'Octubre',
+        '11'=>'Noviembre',
+        '12'=>'Diciembre',
+    ];
+
+    $dia_text = date('l',strtotime($date));
+    $dia = date('d',strtotime($date));
+    $mes = date('m',strtotime($date));
+    $anio = date('Y',strtotime($date));
+
+    return $dias[$dia_text].' '.$dia.' de '.$meses[$mes].' del '.$anio;    
 }
 
 ?>

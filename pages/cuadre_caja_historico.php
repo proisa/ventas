@@ -206,7 +206,7 @@ LEFT JOIN ccbdclie b ON a.cl_codigo=b.cl_codigo
         </div>
     </div>
 </div>
-
+<h3 class="text-center"><?=getDateString($fecha)?></h3>
 <div class="row">
     <div class="col-md-6">
         <div class="box box-primary">
@@ -533,7 +533,7 @@ LEFT JOIN ccbdclie b ON a.cl_codigo=b.cl_codigo
 <script>
 $("#cart-btn").hide();
 $('.date').datepicker({
-        format: 'mm/dd/yyyy',
+        format: 'dd/mm/yyyy',
 });
 
 
