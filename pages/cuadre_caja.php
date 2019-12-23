@@ -1,7 +1,22 @@
 <?php
+
 require '../inc/conexion.php';
-require '../header.php';
 require '../clases/Comando.php';
+require '../header.php';
+
+//require '../inc/conexion.php';
+//require '../header.php';
+//require '../clases/Comando.php';
+
+$caja = isset($_POST['caja']) && $_POST['caja'] !== "" && $_POST['caja'] !== "00" ? "  AND he_caja = ".$_POST['caja'] : "";
+$turno = isset($_POST['turno']) && $_POST['turno'] !== "" && $_POST['turno'] !== "0"  ? "  AND he_turno = ".$_POST['turno'] : "";
+
+// SubSelect
+$caja1 = isset($_POST['caja']) && $_POST['caja'] !== "" && $_POST['caja'] !== "00" ? "  AND a.de_caja = ".$_POST['caja'] : "";
+$turno1 = isset($_POST['turno']) && $_POST['turno'] !== "" && $_POST['turno'] !== "0"  ? "  AND a.de_turno = ".$_POST['turno'] : "";
+
+
+
 /*
     IF !comando("SELECT * FROM IVBDHETE  WHERE  he_tipfac!='' ","RESU",m.ca)
 	   MESSAGEBOX(MESSAGE())
@@ -68,9 +83,9 @@ endscan
 
 */
 
-$query = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE  WHERE  he_tipfac!=''");
-$queryDeli = Comando::recordSet($pdo,"SELECT * FROM IVBDHEDELY  WHERE  he_tipfac!=''");
-
+$query = Comando::recordSet($pdo,"SELECT * FROM IVBDHETE  WHERE  he_tipfac!='' $caja   $turno" );
+$queryDeli = Comando::recordSet($pdo,"SELECT * FROM IVBDHEDELY  WHERE  he_tipfac!='' $caja  $turno");
+//and caja='{$caja}' and turno='{$turno}
 //print_pre($queryDeli);
 //exit();
 //print_pre($query);
@@ -84,32 +99,34 @@ $nota_credito = 0;
 $ley = 0;
 $total_ventas = 0;
 
-foreach($query as $resp){
-   if($resp['HE_TIPO'] == '2' || $resp['HE_TIPO'] == '5'){
-       if($resp['HE_DESC'] > 0 && ($resp['HE_ECHEQUE']+$resp['HE_ETARJE']+$resp['he_baucher']+ $resp['he_valncre']) == 0){
-            $contado += $resp['HE_NETO'];
-       }else{
-           $contado +=  ($resp['HE_NETO']-($resp['HE_ECHEQUE']+$resp['HE_ETARJE']+$resp['he_baucher']+ $resp['he_valncre']));
-       }
+if($query){
+    foreach($query as $resp){
+    if($resp['HE_TIPO'] == '2' || $resp['HE_TIPO'] == '5'){
+        if($resp['HE_DESC'] > 0 && ($resp['HE_ECHEQUE']+$resp['HE_ETARJE']+$resp['he_baucher']+ $resp['he_valncre']) == 0){
+                $contado += $resp['HE_NETO'];
+        }else{
+            $contado +=  ($resp['HE_NETO']-($resp['HE_ECHEQUE']+$resp['HE_ETARJE']+$resp['he_baucher']+ $resp['he_valncre']));
+        }
 
-       $cheque +=  $resp['HE_ECHEQUE'];
-       $tarjeta +=  $resp['HE_ETARJE'];
-       $nota_credito +=  $resp['he_valncre'];
-       $baucher +=  $resp['he_baucher'];
+        $cheque +=  $resp['HE_ECHEQUE'];
+        $tarjeta +=  $resp['HE_ETARJE'];
+        $nota_credito +=  $resp['he_valncre'];
+        $baucher +=  $resp['he_baucher'];
 
-       $ley +=  (($resp['HE_MONTO']-$resp['HE_DESC'])*($resp['HE_LEY']/100));
+        $ley +=  (($resp['HE_MONTO']-$resp['HE_DESC'])*($resp['HE_LEY']/100));
 
-   }elseif($resp['HE_TIPO'] == '1'){
-        $credito +=  $resp['HE_NETO'];
-   }elseif($resp['HE_TIPO'] == '3'){
-        $cheque +=  $resp['HE_NETO']; 
+    }elseif($resp['HE_TIPO'] == '1'){
+            $credito +=  $resp['HE_NETO'];
+    }elseif($resp['HE_TIPO'] == '3'){
+            $cheque +=  $resp['HE_NETO']; 
+            $ley +=  ($resp['HE_NETO'] * ($resp['HE_LEY']/100));
+    }elseif($resp['HE_TIPO'] == '4'){
+        $tarjeta += $resp['HE_NETO'];
         $ley +=  ($resp['HE_NETO'] * ($resp['HE_LEY']/100));
-   }elseif($resp['HE_TIPO'] == '4'){
-    $tarjeta += $resp['HE_NETO'];
-    $ley +=  ($resp['HE_NETO'] * ($resp['HE_LEY']/100));
-   }
+    }
 
-   $total_ventas +=  $resp['HE_NETO'];
+    $total_ventas +=  $resp['HE_NETO'];
+    }
 }
 
 $contadoDL = 0;
@@ -121,59 +138,95 @@ $nota_creditoDL = 0;
 $leyDL = 0;
 $total_ventasDL = 0;
 
-foreach($queryDeli as $resp){
-    if($resp['HE_TIPO'] == '2' || $resp['HE_TIPO'] == '5'){
-        if($resp['HE_DESC'] > 0 && ($resp['HE_ECHEQUE']+$resp['HE_ETARJE']+$resp['HE_BAUCHER']+ $resp['HE_VALNCRE']) == 0){
-             $contadoDL +=  $resp['HE_NETO'];
-        }else{
-            $contadoDL +=  ($resp['HE_NETO']-($resp['HE_ECHEQUE']+$resp['HE_ETARJE']+$resp['HE_BAUCHER']+ $resp['HE_VALNCRE']));
+if ($queryDeli)
+{
+    foreach($queryDeli as $resp){
+        if($resp['HE_TIPO'] == '2' || $resp['HE_TIPO'] == '5'){
+            if($resp['HE_DESC'] > 0 && ($resp['HE_ECHEQUE']+$resp['HE_ETARJE']+$resp['HE_BAUCHER']+ $resp['HE_VALNCRE']) == 0){
+                $contadoDL +=  $resp['HE_NETO'];
+            }else{
+                $contadoDL +=  ($resp['HE_NETO']-($resp['HE_ECHEQUE']+$resp['HE_ETARJE']+$resp['HE_BAUCHER']+ $resp['HE_VALNCRE']));
+            }
+    
+            $chequeDL +=  $resp['HE_ECHEQUE'];
+            $tarjetaDL +=  $resp['HE_ETARJE'];
+            $nota_creditoDL +=  $resp['HE_VALNCRE'];
+            $baucherDL +=  $resp['HE_BAUCHER'];
+    
+            $leyDL += $leyDL + (($resp['HE_MONTO']-$resp['HE_DESC'])*($resp['HE_LEY']/100));
+    
+        }elseif($resp['HE_TIPO'] == '1'){
+            $creditoDL +=  $resp['HE_NETO'];
+        }elseif($resp['HE_TIPO'] == '3'){
+            $chequeDL +=   $resp['HE_NETO']; 
+            $leyDL +=  ($resp['HE_NETO'] * ($resp['HE_LEY']/100));
+        }elseif($resp['HE_TIPO'] == '4'){
+            $tarjetaDL += $resp['HE_NETO'];
+        $leyDL +=  ($resp['HE_NETO'] * ($resp['HE_LEY']/100));
         }
- 
-        $chequeDL +=  $resp['HE_ECHEQUE'];
-        $tarjetaDL +=  $resp['HE_ETARJE'];
-        $nota_creditoDL +=  $resp['HE_VALNCRE'];
-        $baucherDL +=  $resp['HE_BAUCHER'];
- 
-        $leyDL += $leyDL + (($resp['HE_MONTO']-$resp['HE_DESC'])*($resp['HE_LEY']/100));
- 
-    }elseif($resp['HE_TIPO'] == '1'){
-         $creditoDL +=  $resp['HE_NETO'];
-    }elseif($resp['HE_TIPO'] == '3'){
-         $chequeDL +=   $resp['HE_NETO']; 
-         $leyDL +=  ($resp['HE_NETO'] * ($resp['HE_LEY']/100));
-    }elseif($resp['HE_TIPO'] == '4'){
-         $tarjetaDL += $resp['HE_NETO'];
-     $leyDL +=  ($resp['HE_NETO'] * ($resp['HE_LEY']/100));
+    
+        $total_ventasDL +=  $resp['HE_NETO'];
     }
- 
-    $total_ventasDL +=  $resp['HE_NETO'];
- }
+}
 
 $datalle = "  SELECT sum(bb.de_cantid) as Cantidad,sum(bb.de_cantid*bb.de_precio)  as Total ,bb.de_codigo,bb.categoria,
 isnull(c.AR_DESCRI,'') as NOMBREDEPARTAMENTO FROM 
 (
-  SELECT A.AR_CODIGO,A.DE_CANTID,A.DE_PRECIO,A.DE_DESCRI,b.de_codigo,C.AR_DESCRI,ISNULL(B.MA_CODIGO,'') as CATEGORIA  FROM IVBDDETE AS A LEFT JOIN IVBDARTI as b ON A.AR_CODIGO=B.AR_CODIGO 
+  SELECT A.AR_CODIGO,A.DE_CANTID,A.DE_PRECIO,A.DE_DESCRI,b.de_codigo,C.AR_DESCRI,ISNULL(B.MA_CODIGO,'') as CATEGORIA  
+  FROM IVBDDETE AS A LEFT JOIN IVBDARTI as b ON A.AR_CODIGO=B.AR_CODIGO 
   LEFT JOIN IVBDDEPT AS C ON B.DE_CODIGO=C.DE_CODIGO 
-  WHERE A.DE_CANTID>=0 AND A.DE_TIPFAC='C' 
+  WHERE A.DE_CANTID>=0 AND A.DE_TIPFAC='C' $caja1  $turno1
   UNION ALL     
-  SELECT A.AR_CODIGO,A.DE_CANTID,A.DE_PRECIO,A.DE_DESCRI,b.de_codigo,C.AR_DESCRI,ISNULL(B.MA_CODIGO,'') as CATEGORIA  FROM IVBDDEDELY AS A LEFT JOIN IVBDARTI as b ON A.AR_CODIGO=B.AR_CODIGO 
+  SELECT A.AR_CODIGO,A.DE_CANTID,A.DE_PRECIO,A.DE_DESCRI,b.de_codigo,C.AR_DESCRI,ISNULL(B.MA_CODIGO,'') as CATEGORIA  
+  FROM IVBDDEDELY AS A LEFT JOIN IVBDARTI as b ON A.AR_CODIGO=B.AR_CODIGO 
   LEFT JOIN IVBDDEPT AS C ON B.DE_CODIGO=C.DE_CODIGO 
-  WHERE A.DE_CANTID>=0 AND A.DE_TIPFAC='C' 
+  WHERE A.DE_CANTID>=0 AND A.DE_TIPFAC='C' $caja1  $turno1
   ) AS BB 
     LEFT JOIN IVBDDEPT AS C ON bb.DE_CODIGO=C.DE_CODIGO 
     GROUP BY bb.de_codigo,bb.categoria,c.ar_descri
     Order BY bb.DE_codigo
 ";
 
-$m_abiertas_restaurant = Comando::recordSet($pdo,"SELECT COUNT(he_factura) as NMESAS,isnull(SUM(he_neto),0)  as Mneto from IVBDHETE where HE_TIPFAC=''");
-$m_abiertas_deli = Comando::recordSet($pdo,"SELECT COUNT(he_factura) AS NMESAS,isnull(SUM(he_neto),0) as Mneto from IVBDHEdely where HE_TIPFAC=''");
+
+$m_abiertas_restaurant = Comando::recordSet($pdo,"SELECT COUNT(he_factura) as NMESAS,isnull(SUM(he_neto),0)  as Mneto from IVBDHETE where HE_TIPFAC='' $caja  $turno");
+$m_abiertas_deli = Comando::recordSet($pdo,"SELECT COUNT(he_factura) AS NMESAS,isnull(SUM(he_neto),0) as Mneto from IVBDHEdely where HE_TIPFAC='' $caja  $turno");
 
 $detalleResp = Comando::recordSet($pdo,$datalle);
 
 //print_pre($detalleResp);
 
 ?>
-<h1>Cuadre de caja <small><?=getDateString(date('Ymd'))?></small></h1>
+<h1>Cuadre de caja</h1>
+
+<div class="box box-primary">
+    <div class="box-body">
+        <div class="row">
+            <form action="cuadre_caja.php" method="post">
+            <div class="col-md-2 text-center">
+                    <label for="">Caja</label>
+                    <select name="caja" id="caja" class="form-control">
+                    <option <?=selected($caja,'00')?> value="00">Todos las Cajas</option>
+                    <?php for($i=1;$i<=12;$i++):?>
+                        <option <?=selected($caja,getNumeroConCero($i))?> value="<?=getNumeroConCero($i)?>"><?=getNumeroConCero($i)?></option>
+                    <?php endfor;?>
+                    </select>
+            </div>
+            <div class="col-md-2 text-center">
+                    <label for="">Turno</label>
+                    <select name="turno" id="turno" class="form-control">
+                    <option <?=selected($caja,'0')?> value="0">Todos los Turnos</option>
+                    <?php for($i=1;$i<=12;$i++):?>
+                        <option <?=selected($turno,$i)?> value="<?=$i?>"><?=$i?></option>
+                    <?php endfor;?>
+                    </select>
+            </div>
+            <div class="col-md-2 text-center">
+                    <button class="btn btn-success" style="margin-top:25px;">Buscar  <i class="fa fa-search"> </i></button>
+            </div>
+            </form>            
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-6">
@@ -290,13 +343,15 @@ $detalleResp = Comando::recordSet($pdo,$datalle);
                             <th>Departamento</th>
                             <th>Total</th>
                         </thead>
+                       <?php if($detalleResp) { ?>
                        <?php foreach($detalleResp as $dep):?>
                         <tr>
                             <td><?=$dep['de_codigo']?></td>
                             <td><?=$dep['NOMBREDEPARTAMENTO']?></td>
                             <td>RD$ <?=number_format($dep['Total'],2)?></td>
                         </tr>
-                        <?php endforeach;?>
+                        <?php  endforeach;?>
+                        <?php }?>
                     </tbody>
                 </table>
             </div>

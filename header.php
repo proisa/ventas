@@ -222,6 +222,7 @@ if($_SESSION['login'] !== true){
               <li class="active"><a href="<?=url_base()?>/pages/resumen_ventas.php"><i class="fa fa-circle-o"></i>Resumen de ventas</a></li>
               <li><a href="<?=url_base()?>/pages/ventas_departamentos.php"><i class="fa fa-circle-o"></i>Ventas por Departamentos</a></li>
               <li><a href="<?=url_base()?>/pages/ventas_categorias.php"><i class="fa fa-circle-o"></i>Ventas por Categorias</a></li>
+              <li><a href="<?=url_base()?>/pages/Ventas_Articulo.php"><i class="fa fa-circle-o"></i>Ventas por Articulos</a></li>
               <li><a href="<?=url_base()?>/pages/reporte_comparativo.php"><i class="fa fa-circle-o"></i>Comparativo Entre Periodos</a></li>
               <li><a href="<?=url_base()?>/pages/reporte_comparativo_costos_beneficios.php"><i class="fa fa-circle-o"></i>Comparativo Costos Beneficios</a></li>
               <li><a href="<?=url_base()?>/pages/ventas_por_hora.php"><i class="fa fa-clock-o"></i>Ventas por Hora</a></li>
