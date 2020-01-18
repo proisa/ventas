@@ -7,7 +7,8 @@ $autores = [
 
 $categorias = [
     ['id'=>1,'nombre'=>'Historia'],
-    ['id'=>2,'nombre'=>'Literatura']
+    ['id'=>2,'nombre'=>'Literatura'],
+    ['id'=>3,'nombre'=>'Matematicas']
 ];
 
 ?>
