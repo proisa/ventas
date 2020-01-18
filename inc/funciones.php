@@ -51,6 +51,13 @@ function clearDate($fecha){
     return $ffecha;
 }
 
+function clearDate2($fecha){
+    $ffecha = $fecha;
+    $ffecha = explode('/',$ffecha);
+    $ffecha = $ffecha[2].$ffecha[1].$ffecha[0];
+    return $ffecha;
+}
+
 function getDateString($date){
     // Sabado 2 de Marzo del 2019
     $dias = [

@@ -5,9 +5,14 @@ require '../clases/Comando.php';
 
 
 
-$fecha1   = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('Y-m-d');
-$fecha2   = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('Y-m-d');
-$Articulo = isset($_POST['Articulo']) && $_POST['Articulo'] !== ""  ? " AND b.ar_codigo = "."'".$_POST['Articulo']."'" : "";
+$fecha1   = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('d/m/Y');
+$fecha2   = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('d/m/Y');
+$Articulo = isset($_POST['Articulo']) && $_POST['Articulo'] !== "000"  ? " AND b.ar_codigo = "."'".$_POST['Articulo']."'" : "";
+
+
+$fec1=clearDate2($fecha1);
+$fec2=clearDate2($fecha2);
+
 //if(isset($_POST['consultar'])){
 
         $query = "SELECT  a.ar_codigo
@@ -20,7 +25,7 @@ $Articulo = isset($_POST['Articulo']) && $_POST['Articulo'] !== ""  ? " AND b.ar
         FROM ivbddepe as a
         left join ivbdarti as b on a.ar_codigo=b.ar_codigo
         WHERE LEN(a.dE_TIPO)>0 and a.dE_cantid>=0 
-        and a.DE_FECHA>= '{$fecha1}'  and a.DE_FECHA<= '{$fecha2}'  $Articulo 
+        and a.DE_FECHA>= '{$fec1}'  and a.DE_FECHA<= '{$fec2}'  $Articulo 
         GROUP BY a.ar_codigo,b.de_codigo,b.ar_descri
         order by b.de_codigo,SUM(a.DE_CANTID)";
          
@@ -54,7 +59,6 @@ $Articulo = isset($_POST['Articulo']) && $_POST['Articulo'] !== ""  ? " AND b.ar
 <h1>Ventas por Articulo / Renglones</h1>
 <div class="box box-primary">
     <div class="box-header with-border">
-        <!-- <h3><span class="pull-right">Desde: <?=dateFormat($fecha1)?> - Hasta: <?=dateFormat($fecha2)?></span> </h3> -->
         <form class="form-inline" action="" method="POST">
         <div class="form-group">
             <label for="exampleInputName2">Fecha 1: </label>
@@ -66,9 +70,9 @@ $Articulo = isset($_POST['Articulo']) && $_POST['Articulo'] !== ""  ? " AND b.ar
         </div> | 
         Articulo
         <select name="Articulo" class="form-control" id="">
-            <option value="">Todos</option>
+            <option  <?=selected(isset($_POST['Articulo']) ? $_POST['Articulo'] : 000,000)?> value="000">Todos</option>
             <?php foreach($ArtRes as $Art): ?>
-                <option value="<?=$Art['ar_codigo']?>"><?=$Art['ar_descri']?></option>   
+                <option <?=selected(isset($_POST['Articulo']) ? $_POST['Articulo'] : 000,$Art['ar_codigo'])?> value="<?=$Art['ar_codigo']?>"><?=$Art['ar_descri']?></option>   
             <?php endforeach;?>
         </select>
         <button type="submit" id="consultar" class="btn btn-success">Consultar</button>
@@ -153,7 +157,7 @@ $("#cart-btn").hide();
 
 
 $('.date').datepicker({
-        format: 'yyyy-mm-dd',
+        format: 'dd/mm/yyyy',
 });
 
 
