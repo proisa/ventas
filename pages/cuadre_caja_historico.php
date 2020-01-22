@@ -5,7 +5,8 @@ require '../header.php';
 
 $fechaShow = isset($_POST['fecha']) ? $_POST['fecha'] : date('d/m/Y');
 
-$fecha = isset($_POST['fecha']) ? clearDate($_POST['fecha']) : date('Ymd');
+$fecha =clearDate($fechaShow);
+
 $caja = isset($_POST['caja']) ? $_POST['caja'] :'01';
 $turno = isset($_POST['turno']) ? $_POST['turno'] :'1';
 

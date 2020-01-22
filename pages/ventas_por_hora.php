@@ -5,7 +5,9 @@ require '../clases/Comando.php';
 
 
 $fechaShow = isset($_POST['fecha']) ? $_POST['fecha'] : date('d/m/Y');
-$fecha = isset($_POST['fecha']) ? clearDate($_POST['fecha']) : date('Ymd');
+
+$fecha=clearDate($fechaShow);
+
 
 if(isset($_POST['consultar'])){
     $query = "SELECT hE_FECHA as fecha, DATEPART(HH, HE_FECENT) AS hora_24,

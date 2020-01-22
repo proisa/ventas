@@ -5,8 +5,11 @@ require '../clases/Comando.php';
 
 
 
-$fecha1 = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('Y-m-d');
-$fecha2 = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('Y-m-d');
+$fecha1 = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('d/m/Y');
+$fecha2 = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('d/m/Y');
+
+$fec1=clearDate2($fecha1);
+$fec2=clearDate2($fecha2);
 
 //$fecha1 = '2018-01-01';
 //$fecha2 = '2018-01-31';
@@ -22,7 +25,7 @@ $fecha2 = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('Y-m-d');
 		left join ivbdarti as b on a.ar_codigo=b.ar_codigo
 		left join ivbddept as c on b.De_codigo=c.de_codigo
         left join ivbdmarc as d on b.ma_codigo=d.ma_codigo
-	WHERE LEN(a.dE_TIPO)>0 and a.dE_cantid>=0 and a.DE_FECHA>= '{$fecha1}'  and a.DE_FECHA<= '{$fecha2}'  
+	WHERE LEN(a.dE_TIPO)>0 and a.dE_cantid>=0 and a.DE_FECHA>= '{$fec1}'  and a.DE_FECHA<= '{$fec2}'  
 	GROUP BY a.ar_codigo,b.de_codigo,b.ar_descri,c.ar_descri,b.ma_codigo,d.ar_descri
     order by b.ma_codigo,b.de_codigo,SUM(a.DE_CANTID)";
 
@@ -229,7 +232,7 @@ $("#cart-btn").hide();
 
 
 $('.date').datepicker({
-        format: 'yyyy-mm-dd',
+        format: 'dd/mm/yyyy',
 });
 
 

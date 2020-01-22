@@ -8,6 +8,9 @@ require '../clases/Comando.php';
 $fecha1 = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('Y-m-d');
 $fecha2 = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('Y-m-d');
 
+
+$fec1=clearDate($fecha1);
+$fec2=clearDate($fecha2);
 if(isset($_POST['consultar'])){
 
     if($_POST['rango'] == "dia"){
@@ -24,7 +27,7 @@ if(isset($_POST['consultar'])){
         ORDER BY HE_FECHA";
     }elseif($_POST['rango'] == "mes"){
         $query = "SELECT MONTH(HE_FECHA),DATENAME(MONTH,HE_FECHA) AS fecha,YEAR(HE_FECHA) AS AÑO,SUM(HE_NETO) AS ventas from IVBDHEPE
-        WHERE  HE_FECHA>='{$fecha1}' AND HE_FECHA<='{$fecha2}'
+        WHERE  HE_FECHA>='{$fec1}' AND HE_FECHA<='{$fec2}'
         GROUP BY MONTH(HE_FECHA),DATENAME(MONTH,HE_FECHA),YEAR(HE_FECHA) 
         ORDER BY MONTH(HE_FECHA),DATENAME(MONTH,HE_FECHA)";
     }
@@ -152,7 +155,7 @@ $("#cart-btn").hide();
 
 
 $('.date').datepicker({
-        format: 'yyyy/mm/dd',
+        format: 'dd/mm/yyyy',
 });
 
 $('.year').datepicker({
