@@ -44,14 +44,14 @@ function getNumeroConCero($numero){
 
 }
 
-function clearDate($fecha){
+function clearDate2($fecha){
     $ffecha = $fecha;
     $ffecha = explode('/',$ffecha);
     $ffecha = $ffecha[2].$ffecha[1].$ffecha[0];
     return $ffecha;
 }
 
-function clearDate2($fecha){
+function clearDate($fecha){
     $ffecha = $fecha;
     $ffecha = explode('/',$ffecha);
     $ffecha = $ffecha[2].$ffecha[1].$ffecha[0];

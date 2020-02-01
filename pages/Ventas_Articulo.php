@@ -10,8 +10,8 @@ $fecha2   = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('d/m/Y');
 $Articulo = isset($_POST['Articulo']) && $_POST['Articulo'] !== "000"  ? " AND b.ar_codigo = "."'".$_POST['Articulo']."'" : "";
 
 
-$fec1=clearDate2($fecha1);
-$fec2=clearDate2($fecha2);
+$fec1=clearDate($fecha1);
+$fec2=clearDate($fecha2);
 
 //if(isset($_POST['consultar'])){
 
