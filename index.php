@@ -117,7 +117,9 @@ $hide = '';
                 </table>
                 <hr>
             <a href="#" id="menu-btn" style="padding-top:15px; padding-bottom:15px;" class="btn btn-lg btn-success btn-block menu-btn"><i class="fa fa-plus"></i> Agregar orden</a>    
+            
             <a href="#" id="imprimir" onclick="openWin('<?=$mesa?>')" style="padding-top:15px; padding-bottom:15px;" class="btn btn-primary btn-lg btn-block"> <i class="fa fa-print"></i> Imprimir </a>
+            
             </div>
             </div>   
            

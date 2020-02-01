@@ -5,6 +5,17 @@ require('../clases/Auth.php');
 require('../clases/Comando.php');
 
 $auth = new Auth($pdo);
+
+
+if(isset($_POST['config_pass'])){
+    if($auth->loginConfig($_POST['config_pass'])){
+        echo json_encode(['cod'=>'00','Login true']);
+    }
+    echo json_encode(['cod'=>'01','Login false']);
+    exit();
+}
+
+
 // Login 
 if($auth->login($_POST['usuario'],$_POST['clave'])){
   
@@ -17,6 +28,7 @@ if($auth->login($_POST['usuario'],$_POST['clave'])){
 }else{
     header('Location: ../login.php?auth=failed');
 }
+
 
 // Logout
 if(isset($_GET['logout']) && $_GET['logout'] == true){

@@ -33,6 +33,19 @@ class Auth{
         }       
     }
 
+    public function loginConfig($pass){
+        $query = $this->con->prepare("SELECT PV_CODIGO FROM PVBDCLAV WHERE PV_CODIGO = :clave AND PV_MODI = 1");
+        $query->bindParam(':clave',$pass);
+        $query->execute();
+        $data = $query->fetch(PDO::FETCH_OBJ);
+        if($query->rowCount() != 0){
+            return true;
+        }else{
+            $this->error = 'Login error';
+            return false;
+        }       
+    }
+
     public function logOut(){
         $_SESSION['login'] = false;
         session_destroy();

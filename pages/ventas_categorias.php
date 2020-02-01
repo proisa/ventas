@@ -3,17 +3,15 @@ require '../inc/conexion.php';
 require '../header.php';
 require '../clases/Comando.php';
 
-
-
 $fecha1 = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('d/m/Y');
 $fecha2 = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('d/m/Y');
 
 $fec1=clearDate2($fecha1);
 $fec2=clearDate2($fecha2);
-
 //$fecha1 = '2018-01-01';
 //$fecha2 = '2018-01-31';
-//$departamento = isset($_POST['departamento']) && $_POST['departamento'] !== ""  ? " AND b.de_codigo = ".$_POST['departamento'] : "";
+$departamento = isset($_POST['departamento']) && $_POST['departamento'] !== ""  ? " AND b.de_codigo = ".$_POST['departamento'] : "";
+$id_departamento = isset($_POST['departamento']) ? $_POST['departamento'] : "";
 //if(isset($_POST['consultar'])){
 
         $query = "SELECT  a.ar_codigo   
@@ -25,12 +23,10 @@ $fec2=clearDate2($fecha2);
 		left join ivbdarti as b on a.ar_codigo=b.ar_codigo
 		left join ivbddept as c on b.De_codigo=c.de_codigo
         left join ivbdmarc as d on b.ma_codigo=d.ma_codigo
-	WHERE LEN(a.dE_TIPO)>0 and a.dE_cantid>=0 and a.DE_FECHA>= '{$fec1}'  and a.DE_FECHA<= '{$fec2}'  
+	WHERE LEN(a.dE_TIPO)>0 and a.dE_cantid>=0 and a.DE_FECHA>= '{$fec1}'  and a.DE_FECHA<= '{$fec2}' $departamento 
 	GROUP BY a.ar_codigo,b.de_codigo,b.ar_descri,c.ar_descri,b.ma_codigo,d.ar_descri
     order by b.ma_codigo,b.de_codigo,SUM(a.DE_CANTID)";
 
-        
-         
     $resp = Comando::recordSet($pdo,$query);
     // print_pre($resp);
     // exit();
@@ -86,7 +82,7 @@ $fec2=clearDate2($fecha2);
         <select name="departamento" class="form-control" id="">
             <option value="">Todos</option>
             <?php foreach($depRes as $dep): ?>
-                <option value="<?=$dep['de_codigo']?>"><?=$dep['ar_descri']?></option>   
+                <option value="<?=$dep['de_codigo']?>" <?=selected($dep['de_codigo'],$id_departamento)?> ><?=$dep['ar_descri']?></option>   
             <?php endforeach;?>
         </select>
         <button type="submit" id="consultar" class="btn btn-success">Consultar</button>

@@ -5,8 +5,8 @@ require '../clases/Comando.php';
 
 
 
-$fecha1 = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('Y-m-d');
-$fecha2 = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('Y-m-d');
+$fecha1 = isset($_POST['fecha1']) ? $_POST['fecha1'] : date('Y/m/d');
+$fecha2 = isset($_POST['fecha2']) ? $_POST['fecha2'] : date('Y/m/d');
 
 
 $fec1=clearDate($fecha1);
@@ -22,7 +22,7 @@ if(isset($_POST['consultar'])){
         SUM(HE_TOTLEY) AS MLEY,
         SUM(HE_NETO) AS ventas
             FROM IVBDHEPE
-        WHERE HE_FECHA>='{$fecha1}' AND HE_FECHA<='{$fecha2}'
+        WHERE HE_FECHA>='{$fec1}' AND HE_FECHA<='{$fec2}'
         GROUP BY HE_FECHA
         ORDER BY HE_FECHA";
     }elseif($_POST['rango'] == "mes"){
@@ -34,8 +34,8 @@ if(isset($_POST['consultar'])){
 
     $resp = Comando::recordSet($pdo,$query);
     echo json_encode([
-        'fecha1'=>getDateString($fecha1),
-        'fecha2'=>getDateString($fecha2),
+        'fecha1'=>getDateString($fec1),
+        'fecha2'=>getDateString($fec2),
         'data'=>$resp
     ]);
     exit();

@@ -3,37 +3,31 @@ require '../inc/conexion.php';
 require '../clases/Comando.php';
 
 //print_pre(json_encode($resp));
-
-
-
-
-
-
-$hoy = date('m/d/Y');
+$hoy = date('d/m/Y');
 
 $paraMenosUnDia = new DateTime(date('Y-m-d'));
 $paraMenosUnDia->modify('-1 day');
-$menosUnDia = $paraMenosUnDia->format('m/d/Y');
+$menosUnDia = $paraMenosUnDia->format('d/m/Y');
 
 $paraMenos7dias = new DateTime(date('Y-m-d'));
 $paraMenos7dias->modify('-7 day');
-$menosSieteDias = $paraMenos7dias->format('m/d/Y');
+$menosSieteDias = $paraMenos7dias->format('d/m/Y');
 
 $paraMenos1anio = new DateTime(date('Y-m-d'));
 $paraMenos1anio->modify('-365 day');
-$menosUnAnio = $paraMenos1anio->format('m/d/Y');
+$menosUnAnio = $paraMenos1anio->format('d/m/Y');
 
 if(isset($_POST['consultar'])){
-    $fecha1Unformat = date_create_from_format('m/d/Y', $_POST['fecha1']);
+    $fecha1Unformat = date_create_from_format('d/m/Y', $_POST['fecha1']);
     $fecha1 = date_format($fecha1Unformat, 'Ymd');
 
-    $fecha2Unformat = date_create_from_format('m/d/Y', $_POST['fecha2']);
+    $fecha2Unformat = date_create_from_format('d/m/Y', $_POST['fecha2']);
     $fecha2 = date_format($fecha2Unformat, 'Ymd');
 
-    $fecha3Unformat = date_create_from_format('m/d/Y', $_POST['fecha3']);
+    $fecha3Unformat = date_create_from_format('d/m/Y', $_POST['fecha3']);
     $fecha3 = date_format($fecha3Unformat, 'Ymd');
 
-    $fecha4Unformat = date_create_from_format('m/d/Y', $_POST['fecha4']);
+    $fecha4Unformat = date_create_from_format('d/m/Y', $_POST['fecha4']);
     $fecha4 = date_format($fecha4Unformat, 'Ymd');
 
     $query = "SELECT
@@ -173,7 +167,7 @@ require '../header.php';
 ?>
 <script>
 $('.date').datepicker({
-        format: 'mm/dd/yyyy',
+        format: 'dd/mm/yyyy',
 });
 
 // function addDays(date, days) {
@@ -185,9 +179,9 @@ $('.date').datepicker({
 // }
 
 function resDays(date, days) {
-    var startdate = moment(date);
+    var startdate = moment(date,"DD/MM/YYYY");
     startdate = startdate.subtract(days, "days");
-    startdate = startdate.format("MM/DD/YYYY");
+    startdate = startdate.format("DD/MM/YYYY");
     return startdate;
 }
 

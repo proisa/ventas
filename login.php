@@ -27,16 +27,22 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <style>
+      #config_form {
+        display:none;
+      }
+    </style>
 </head>
 <body class="hold-transition login-page">
+
 <div class="login-box">
   <div class="login-logo">
     <a href="#"><b>Proisa</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
+    <div id="login_form">
     <p class="login-box-msg">Inicio de sesion</p>
-
     <form action="process/AuthProcess.php" method="post">
       <div class="form-group has-feedback">
         <input type="text" class="form-control" name='usuario' placeholder="Email">
@@ -49,7 +55,8 @@
       <div class="row">
         <!-- /.col -->
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Entrar</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Entrar <i class="fa  fa-arrow-right"></i> </button><br>
+          <button type="button" id="config" class="btn btn-default btn-block">Configuracion <i class="fa fa-gear"></i></button>
           <?php if(isset($_GET['auth']) && $_GET['auth'] == 'failed'): ?> 
           <hr>
           <div class="alert alert-danger">
@@ -63,15 +70,20 @@
         <!-- /.col -->
       </div>
     </form>
-    <hr>
-    <a href="#">Olvide mi clave</a><br>
-    <a href="#" class="text-center">Registrarme</a>
+    </div>
+    
+    <div id="config_form">
+    <div class="form-group">
+        <input type="text" id="config_pass" class="form-control" placeholder="Clave de configuracion" name='config_pass'>
+      </div>
+      <button id="config_login" class="btn btn-primary btn-block btn-flat">Entrar <i class="fa  fa-arrow-right"></i> </button><br>
+    </div>
 
+    <hr>
   </div>
   <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
-
 <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -79,13 +91,25 @@
 <!-- iCheck -->
 <script src="plugins/iCheck/icheck.min.js"></script>
 <script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' /* optional */
-    });
+
+  $("#config").click(function(){
+    alert('funca');
+    $('#login_form').hide();
+    $('#config_form').show();
   });
+
+  // $("#config_login").click(function(){
+  //   $.ajax({
+  //       url: "<?=url_base()?>/process/AuthProcess.php",
+  //       type:'post',
+  //       data: 'config_pass='+$("#config_pass").val(),
+  //       success: function(result){
+  //         alert(result.cod);
+  //       }
+  //   });
+  //   $('#cliente').empty();
+  // });
+
 </script>
 </body>
 </html>
