@@ -9,9 +9,10 @@ $auth = new Auth($pdo);
 
 if(isset($_POST['config_pass'])){
     if($auth->loginConfig($_POST['config_pass'])){
-        echo json_encode(['cod'=>'00','Login true']);
+        echo json_encode(['cod'=>'00','opt'=>$_POST['imp']]);
+        exit();
     }
-    echo json_encode(['cod'=>'01','Login false']);
+    echo json_encode(['cod'=>'01','msj'=>'Login false']);
     exit();
 }
 

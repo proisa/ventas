@@ -52,7 +52,7 @@ $hide = '';
                 $data_pedidos = Comando::recordSet($pdo,"SELECT a.*,b.ar_tipo,ISNULL(b.ar_premin,0),ISNULL(b.ar_predet,0),ISNULL(b.ar_premay,0),ISNULL(B.AR_ITBIS,' ') AS DIMPUESTO,B.AR_VALEXI FROM ivbddete a LEFT JOIN ivbdarti b 
                 ON A.AR_CODIGO=B.AR_CODIGO WHERE a.ma_codigo='{$mesa}' AND a.de_tipfac<>'C'");
 
-               // print_pre($data_pedidos);
+                //print_pre($data_pedidos);
             ?>
             <div id="pedidos">
            
@@ -116,6 +116,13 @@ $hide = '';
                     </tr>
                 </table>
                 <hr>
+                <!-- Datos para impresion -->
+                <input type="hidden" id="documento" value="<?=$data_pedidos[0]['DE_FACTURA']?>">
+                <input type="hidden" id="factura" value="<?=$data_pedidos[0]['DE_FACTURA']?>">
+                <input type="hidden" id="camarero" value="<?=$data_pedidos[0]['MO_CODIGO']?>">
+                <input type="hidden" id="mesa" value="<?=$data_pedidos[0]['MA_CODIGO']?>">
+                <!-- Tipo orden factura -->
+
             <a href="#" id="menu-btn" style="padding-top:15px; padding-bottom:15px;" class="btn btn-lg btn-success btn-block menu-btn"><i class="fa fa-plus"></i> Agregar orden</a>    
             
             <a href="#" id="imprimir" onclick="openWin('<?=$mesa?>')" style="padding-top:15px; padding-bottom:15px;" class="btn btn-primary btn-lg btn-block"> <i class="fa fa-print"></i> Imprimir </a>
@@ -188,10 +195,31 @@ $('.menu-btn').click(function(){
 
 function openWin(mesa)
   {
-    myWindow=window.open(sessionStorage.getItem('url_base')+'/print.php?mesa='+mesa,'','width=500,height=500');
-    myWindow.document.close(); //missing code
-    myWindow.focus();
-    myWindow.print(); 
+    if(localStorage.imp_local == 'si'){
+        myWindow=window.open(sessionStorage.getItem('url_base')+'/print.php?mesa='+mesa,'','width=500,height=500');
+        myWindow.document.close(); //missing code
+        myWindow.focus();
+        myWindow.print(); 
+    }else{
+        $("#imprimir").attr('disabled','disabled');
+        $("#imprimir").append('<i class="fa fa-circle-o-notch fa-spin"> </i>');
+
+        $.ajax({
+            url: "pages/guardar_impresion.php",
+            type:'post',
+            dataType: "json",
+            data: 'documento='+$("#documento").val()+'&factura='+$("#factura").val()+'&mesa='+$("#mesa").val()+'&camarero='+$("#camarero").val(),
+            success: function(result){
+                if(result.cod == '00'){
+                    window.location.href = 'pages/mesas.php?ma='+mesa;
+                }else{
+                   alert('Error imprimiendo');
+                }
+            }
+         });
+        //alert('Se enviara al archivo');
+    }
+
   }
 
 </script>

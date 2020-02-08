@@ -1,5 +1,6 @@
 <?php 
 require '../inc/conexion.php';
+require '../inc/config.php';
 require '../inc/funciones.php';
 require '../clases/Comando.php';
 
@@ -39,7 +40,7 @@ $articulos = Comando::recordSet($pdo,$query);
     ?>  
     <!-- <a href="#" class="list-group-item list-group-item-action"><?=$articulo['AR_DESCRI']?>  -  <span class="text-right">RD$<?=number_format($articulo['AR_PREDET'],2)?></span></a> -->
 
-     <button href="#" class="list-group-item list-group-item-action articulo <?=$disable?>" <?=$disable?> data-id="<?=$articulo['AR_CODIGO']?>">
+     <button href="#" class="list-group-item list-group-item-action articulo <?=$disable?>" <?=$disable?> data-id="<?=trim($articulo['AR_CODIGO'])?>">
     <div class="d-flex w-100 justify-content-between">
       <h4 class="mb-1" style="color:#337ab7; font-weight:bold;"><?=$articulo['AR_DESCRI']?> <?=$icon?> </h4>
       <!-- <small>3 days ago</small> -->
@@ -49,7 +50,7 @@ $articulos = Comando::recordSet($pdo,$query);
             <?php if(trim($articulo['AR_FOTO'])):?>
                  <img src="<?=url_base();?><?=$articulo['AR_FOTO']?>" alt="" width="80px;">
             <?php endif; ?>
-            <!-- <?=$articulo['AR_FOTO']?> -->
+          
         </div>
         <div class="col-md-6">
         <p class="text-right" style="font-size:18px;"> <span>RD$<?=number_format($articulo['AR_PREDET'],2)?></span> </p>
@@ -80,6 +81,7 @@ $articulos = Comando::recordSet($pdo,$query);
 <script>
 
 $('.articulo').click(function(){
+    //alert('funca');
     var ar_id = $(this).attr('data-id');
     var dep_id = $("#dep_id").val();
     var dep_nom = $("#dep_nombre").val();

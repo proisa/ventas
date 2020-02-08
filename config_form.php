@@ -27,11 +27,6 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <style>
-      #config_form {
-        display:none;
-      }
-    </style>
 </head>
 <body class="hold-transition login-page">
 
@@ -41,35 +36,19 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <div id="login_form">
-    <p class="login-box-msg">Inicio de sesion</p>
-    <form action="process/AuthProcess.php" method="post">
-      <div class="form-group has-feedback">
-        <input type="text" class="form-control" name='usuario' placeholder="Email">
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+    <div id="config_form">
+    <div class="form-group">
+        <label for="">Impresion local</label>
+        <select class="form-control" id="opt">
+            <option value="no">No</option>
+            <option value="si">Si</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="password" id="config_pass" class="form-control" placeholder="Clave de configuracion" name='config_pass'>
       </div>
-      <div class="form-group has-feedback">
-        <input type="password" class="form-control" name="clave" placeholder="Password">
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-      </div>
-      <div class="row">
-        <!-- /.col -->
-        <div class="col-xs-12">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Entrar <i class="fa  fa-arrow-right"></i> </button><br>
-          <a href="config_form.php" id="config" class="btn btn-default btn-block">Configuracion <i class="fa fa-gear"></i></a>
-          <?php if(isset($_GET['auth']) && $_GET['auth'] == 'failed'): ?> 
-          <hr>
-          <div class="alert alert-danger">
-              <h4>
-                  <i class="fa fa-ban"></i> Error de acceso
-              </h4>
-              Usuario o clave incorrecto
-          </div>
-            <?php endif;?>
-        </div>
-        <!-- /.col -->
-      </div>
-    </form>
+      <button type="submit" id="config_login" class="btn btn-primary btn-block btn-flat">Entrar <i class="fa  fa-arrow-right"></i> </button><br>
+      <a href="login.php" id="config" class="btn btn-default btn-block">Volver a login <i class="fa fa-lock"></i></a>
     </div>
 
     <hr>
@@ -82,13 +61,27 @@
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script>
-    alert('test');
-  $("#config").click(function(){
-    alert('funca');
-   // $('#login_form').hide();
-  //  $('#config_form').show();
-  });
+  // $("#config_login").click(function(){
+  //   alert('funca');
+  // });
 
+  $("#config_login").click(function(){
+    $.ajax({
+        url: "process/AuthProcess.php",
+        type:'post',
+        dataType: "json",
+        data: 'config_pass='+$("#config_pass").val()+'&imp='+$("#opt").val(),
+        success: function(result){
+          if(result.cod == '00'){
+              localStorage.setItem('imp_local',result.opt); 
+              alert('Configuracion guardada correctamente');
+          }else{
+            alert('Clave incorrecta');
+          }
+        }
+    });
+    $('#cliente').empty();
+  });
 
 </script>
 </body>
