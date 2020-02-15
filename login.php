@@ -45,11 +45,11 @@
     <p class="login-box-msg">Inicio de sesion</p>
     <form action="process/AuthProcess.php" method="post">
       <div class="form-group has-feedback">
-        <input type="text" class="form-control" name='usuario' placeholder="Email">
+        <input type="text" class="form-control" name='usuario' placeholder="Usuario">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" name="clave" placeholder="Password">
+        <input type="password" class="form-control" name="clave" placeholder="Clave">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
@@ -82,12 +82,6 @@
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script>
-    alert('test');
-  $("#config").click(function(){
-    alert('funca');
-   // $('#login_form').hide();
-  //  $('#config_form').show();
-  });
 
 
 </script>

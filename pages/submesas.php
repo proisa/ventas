@@ -29,6 +29,13 @@ $mesas =  Comando::recordSet($pdo,"SELECT A.*,B.* FROM IVBDHETE A INNER JOIN PVB
 <div class="box box-primary">
     <div class="box-body">
         <div class="row">
+            <div class="col-md-3">
+                    <a href="mesas.php" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver a mesas</a> 
+            </div>
+           <div class="col-md-12">
+           <hr></div>
+        </div>
+        <div class="row">   
             <?php if($mesas):?>
             <?php foreach($mesas as $mesa):?>
             <?php 

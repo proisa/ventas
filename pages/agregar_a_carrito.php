@@ -81,9 +81,9 @@ $articulo_data = Comando::recordSet($pdo,$query);
             <?php 
             $i=1;
             foreach($guarniciones as $guarnicion):?>
-            <div class="form-check" style="margin-botton:15px;">
+            <div class="form-check" style="margin-bottom:10px;">
                 <input class="form-check-input guarnicion" type="radio" data-nombre="<?=trim($guarnicion['ac_descri'])?>" name="guarnicion" id="gn<?=$i?>" value="<?=$guarnicion['ID']?>">
-                <label class="form-check-label" style="color:#337ab7;" for="gn<?=$i?>">
+                <label class="form-check-label" style="color:#337ab7; font-size:18px;" for="gn<?=$i?>">
                    <?=$guarnicion['ac_descri']?>
                 </label>
             </div>
@@ -147,8 +147,8 @@ $articulo_data = Comando::recordSet($pdo,$query);
     <?php endif;?>
     <div class="col-md-12">
     <hr>
-    <label for="nota">Nota</label>
-    <textarea name="nota" class="form-control" id="nota" cols="30" rows="4"></textarea>
+    <label for="nota" style="font-size:20px;">Nota</label>
+    <textarea name="nota" style="font-size:18px;" class="form-control" id="nota" cols="30" rows="4"></textarea>
         <hr>
         <a href="#" class="btn btn-lg btn-success btn-block" id="agregar">Agregar al carrito <i class="fa fa-shopping-cart"></i></a>
     </div> 

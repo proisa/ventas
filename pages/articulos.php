@@ -40,7 +40,7 @@ $articulos = Comando::recordSet($pdo,$query);
     ?>  
     <!-- <a href="#" class="list-group-item list-group-item-action"><?=$articulo['AR_DESCRI']?>  -  <span class="text-right">RD$<?=number_format($articulo['AR_PREDET'],2)?></span></a> -->
 
-     <button href="#" class="list-group-item list-group-item-action articulo <?=$disable?>" <?=$disable?> data-id="<?=trim($articulo['AR_CODIGO'])?>">
+     <a href="#" class="list-group-item list-group-item-action articulo <?=$disable?>" <?=$disable?> data-id="<?=trim($articulo['AR_CODIGO'])?>">
     <div class="d-flex w-100 justify-content-between">
       <h4 class="mb-1" style="color:#337ab7; font-weight:bold;"><?=$articulo['AR_DESCRI']?> <?=$icon?> </h4>
       <!-- <small>3 days ago</small> -->
@@ -57,7 +57,7 @@ $articulos = Comando::recordSet($pdo,$query);
         </div>
     </div>
    
-    </button>
+    </a>
 
 
     <?php

@@ -64,5 +64,18 @@
     margin-top:0;
 }
 
+#main-content .alert-success {
+    padding:12px !important;
+}
+
+.btn-custom {
+    background: #222D32;
+    color:#fff;
+}
+
+a.btn-custom:hover {
+    color:yellow;
+}
+
 
 

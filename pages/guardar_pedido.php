@@ -3,6 +3,7 @@ date_default_timezone_set('America/Santo_Domingo');
 ini_set('display_errors',0);
 require '../inc/conexion.php';
 require '../inc/funciones.php';
+require '../inc/config.php';
 require '../clases/Comando.php';
 // echo '<pre>';
 //   echo 'Header <br>';
@@ -222,6 +223,7 @@ $pdo->commit();
 // [TIPO_COCINA] [varchar](1) NOT NULL,
 // [TIPO_AREA] [int] NOT NULL,
 // [CAMARERO] [varchar](5) NOT NULL,
+
 
 ?>
 <script>

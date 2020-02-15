@@ -24,6 +24,10 @@ if(isset($_GET) && !empty($_GET['ma'])){
 
         $letra = getNumeroConCero($resSelect['LETRA']-1);
         
+        if($letra == '00'){
+            $letra = "";
+        }
+
         $selecLetra = "SELECT LE_NOMBRE FROM PVBDLETRA WHERE LE_CODIGO = '{$letra}'";
         $resLetra = Comando::recordSet($pdo,$selecLetra)[0];
 
@@ -31,7 +35,7 @@ if(isset($_GET) && !empty($_GET['ma'])){
         Comando::noRecordSet($pdo,$queryUp);
         $mesa = $mesa.$resLetra['LE_NOMBRE'];
 
-        $query = "UPDATE PVBDMESA SET MO_CODIGO='',MA_OCUPA='' WHERE MA_CODIGO='{$mesa}'";
+        $query = "UPDATE PVBDMESA SET MA_OCUPA='' WHERE MA_CODIGO='{$mesa}'";
         Comando::noRecordSet($pdo,$query);
 
     }
