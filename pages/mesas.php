@@ -47,7 +47,24 @@ if(isset($_GET) && !empty($_GET['ma'])){
 // echo is_numeric('10');
 // echo is_numeric('A10');
 
-$mesas =  Comando::recordSet($pdo,"SELECT TOP 25 * FROM PVBDMESA ORDER BY MA_ID");
+$formato = Comando::recordSet($pdo,"SELECT formato78 FROM fabdproc");
+
+
+if($formato[0]['formato78'] == 4){
+$camarero = $_SESSION['mo_codigo'];
+
+$camarero_data = Comando::recordSet($pdo,"SELECT MO_DESDE,MO_HASTA FROM PVBDMOZO WHERE MO_CODIGO = {$camarero}");
+
+$desde = $camarero_data[0]['MO_DESDE'];
+$hasta = $camarero_data[0]['MO_HASTA'];
+
+    $mesas =  Comando::recordSet($pdo,"SELECT * FROM PVBDMESA where ma_id>={$desde}+1 and ma_id<={$hasta}+1 ORDER BY MA_ID");
+
+}else{
+
+    $mesas =  Comando::recordSet($pdo,"SELECT TOP 25 * FROM PVBDMESA ORDER BY MA_ID");
+
+}
 //print_pre($mesas);
 ?>
 <div class="box box-primary">

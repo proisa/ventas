@@ -12,6 +12,7 @@
   </footer>
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark" id="carrito">
+    <h3 class="text-center" style="color:yellow">Mesa  : <span id="mesa_cart"></span></h3>
     <table class="table" style="color:#fff">
     <thead>
       <th width="20%">Cant.</th>
@@ -127,6 +128,7 @@ function openFullscreen() {
     $('#itbis').empty();
     $('#ley').empty();
     $('#total_pagar').empty();
+    $('#mesa_cart').empty();
 
     var data = JSON.parse(sessionStorage.getItem('item'));
     var subtotal = 0;
@@ -199,6 +201,7 @@ function openFullscreen() {
     header_data.ley = parseFloat(ley.toFixed(2)),
     header_data.total = parseFloat(total_pagar.toFixed(2)),
     header_data.cliente = $('#cliente').val();
+    $('#mesa_cart').append(header_data.mesa);
  
     sessionStorage.setItem('header',JSON.stringify(header_data));
 
@@ -224,6 +227,7 @@ function openFullscreen() {
     sessionStorage.removeItem('item');
     $("#crear_pedido").attr('disabled',true);
     $('#cliente').empty();
+    $('#mesa_cart').empty();
     fillCart();
   }
 
