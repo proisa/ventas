@@ -93,4 +93,12 @@ function getDateString($date){
     return $dias[$dia_text].' '.$dia.' de '.$meses[$mes].' del '.$anio;    
 }
 
+function redirect($uri = '')
+	{
+        echo '<script>';
+            echo "window.location.href = ' ".url_base().'/'.$uri." '; ";
+        echo '</script>';
+        exit();
+	}
+
 ?>

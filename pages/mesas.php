@@ -41,34 +41,53 @@ if(isset($_GET) && !empty($_GET['ma'])){
     }
 
     $pdo->commit();
+
+    redirect('pages/areas_mesas.php');
 }
 
-// echo is_numeric(10);
-// echo is_numeric('10');
-// echo is_numeric('A10');
+$area_cod = 0;
 
-$formato = Comando::recordSet($pdo,"SELECT formato78 FROM fabdproc");
+if(isset($_GET['area_cod'])){
+    $area_cod = $_GET['area_cod'];
+    $mesas = Comando::recordSet($pdo,"SELECT a.*,b.MA_PAGO,b.MO_CODIGO,b.LETRA,b.HE_NOMCLI,b.MA_CODIGO 
+                                    FROM PVBDMESAXAREA as a INNER JOIN PVBDMESA as b
+                                    ON a.MA_CODIGO = b.MA_CODIGO 
+                                    WHERE a.are_codigo = {$area_cod}");
 
-
-if($formato[0]['formato78'] == 4){
-$camarero = $_SESSION['mo_codigo'];
-
-$camarero_data = Comando::recordSet($pdo,"SELECT MO_DESDE,MO_HASTA FROM PVBDMOZO WHERE MO_CODIGO = {$camarero}");
-
-$desde = $camarero_data[0]['MO_DESDE'];
-$hasta = $camarero_data[0]['MO_HASTA'];
-
-    $mesas =  Comando::recordSet($pdo,"SELECT * FROM PVBDMESA where ma_id>={$desde}+1 and ma_id<={$hasta}+1 ORDER BY MA_ID");
 
 }else{
+    $formato = Comando::recordSet($pdo,"SELECT formato78 FROM fabdproc");
 
-    $mesas =  Comando::recordSet($pdo,"SELECT TOP 25 * FROM PVBDMESA ORDER BY MA_ID");
+    if($formato[0]['formato78'] == 4){
+    $camarero = $_SESSION['mo_codigo'];
 
+    $camarero_data = Comando::recordSet($pdo,"SELECT MO_DESDE,MO_HASTA FROM PVBDMOZO WHERE MO_CODIGO = {$camarero}");
+
+        $desde = $camarero_data[0]['MO_DESDE'];
+        $hasta = $camarero_data[0]['MO_HASTA'];
+
+        $mesas =  Comando::recordSet($pdo,"SELECT * FROM PVBDMESA where ma_id>={$desde}+1 and ma_id<={$hasta}+1 ORDER BY MA_ID");
+    }else{
+        $mesas =  Comando::recordSet($pdo,"SELECT TOP 25 * FROM PVBDMESA ORDER BY MA_ID");
+    }
 }
+
+
+
+
+
 //print_pre($mesas);
 ?>
 <div class="box box-primary">
     <div class="box-body">
+        <div class="row">
+        <?php if($area_cod != 0):?>
+        <div class="col-md-3">
+            <a href="areas_mesas.php"  class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver atras</a> 
+            <p></p>
+        </div>
+        <?php endif;?>
+        </div>
         <div class="row">
             <?php foreach($mesas as $mesa):?>
             <?php 

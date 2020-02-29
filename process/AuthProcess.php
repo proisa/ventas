@@ -21,7 +21,7 @@ if(isset($_POST['config_pass'])){
 if($auth->login($_POST['usuario'],$_POST['clave'])){
   
     if($auth->nivel == 'C'){
-        header('Location: ../pages/mesas.php');
+        header('Location: ../pages/areas_mesas.php');
     }else{
         header('Location: ../pages/resumen_ventas.php');
     }

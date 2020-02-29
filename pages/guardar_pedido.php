@@ -224,9 +224,8 @@ $pdo->commit();
 // [TIPO_AREA] [int] NOT NULL,
 // [CAMARERO] [varchar](5) NOT NULL,
 
+redirect('pages/areas_mesas.php');
 
 ?>
-<script>
- window.location.href = 'pages/mesas.php';
-</script>
+
 
