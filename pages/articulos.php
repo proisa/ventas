@@ -9,7 +9,7 @@ $nombre = $_GET['dep_nombre'];
 
 //print_pre($_GET);
 
-$query = "SELECT A.AR_CODIGO,A.AR_DESCRI,A.AR_FOTO,A.AR_DESCOR,A.AR_PREDET,AR_SELECT FROM IVBDARTI A
+$query = "SELECT A.AR_CODIGO,A.AR_DESCRI,A.AR_FOTO,A.AR_DESCOR,A.AR_PREDET,AR_SELECT,AR_DETALLE FROM IVBDARTI A
 WHERE A.DE_CODIGO='{$departamento}' AND A.AR_control='S' and a.ar_activado=' ' 
 ORDER BY A.ar_cosfob asc";
 $articulos = Comando::recordSet($pdo,$query);
@@ -38,12 +38,10 @@ $articulos = Comando::recordSet($pdo,$query);
             $icon = ''; 
         }
     ?>  
-    <!-- <a href="#" class="list-group-item list-group-item-action"><?=$articulo['AR_DESCRI']?>  -  <span class="text-right">RD$<?=number_format($articulo['AR_PREDET'],2)?></span></a> -->
-
      <a href="#" class="list-group-item list-group-item-action articulo <?=$disable?>" <?=$disable?> data-id="<?=trim($articulo['AR_CODIGO'])?>">
     <div class="d-flex w-100 justify-content-between">
-      <h4 class="mb-1" style="color:#337ab7; font-weight:bold;"><?=$articulo['AR_DESCOR']?> <?=$icon?> </h4>
-      <p style="font-size:16px;"><?=$articulo['AR_DESCRI']?></p>
+      <h4 class="mb-1" style="color:#337ab7; font-weight:bold;"><?=$articulo['AR_DESCRI']?> <?=$icon?> </h4>
+      <p style="font-size:16px;"><?=$articulo['AR_DETALLE']?></p>
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -52,7 +50,7 @@ $articulos = Comando::recordSet($pdo,$query);
             <?php endif; ?>
         </div>
         <div class="col-md-6">
-        <p class="text-right" style="font-size:24px;"> <span style="background:#000;color:yellow;padding:3px;">RD$ <?=number_format($articulo['AR_PREDET'],2)?></span> </p>
+        <p class="text-right" style="font-size:24px;"> <span>RD$ <?=number_format($articulo['AR_PREDET'],2)?></span> </p>
         </div>
     </div>
     </a>

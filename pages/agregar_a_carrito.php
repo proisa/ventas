@@ -5,7 +5,7 @@ require '../clases/Comando.php';
 
 $articulo_id = $_GET['articulo_id'];
 
-$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_bar,ar_bar2,ar_postre,ar_caja,ar_cocina,ar_tipococ,ar_tipoarea,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente 
+$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_bar,ar_bar2,ar_postre,ar_caja,ar_cocina,ar_tipococ,ar_tipoarea,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente, ar_detalle 
 FROM ivbdarti 
 WHERE 
 AR_CODIGO='{$articulo_id}' AND
