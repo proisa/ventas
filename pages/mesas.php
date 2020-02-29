@@ -82,10 +82,15 @@ if(isset($_GET['area_cod'])){
     <div class="box-body">
         <div class="row">
         <?php if($area_cod != 0):?>
-        <div class="col-md-3">
-            <a href="areas_mesas.php"  class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver atras</a> 
-            <p></p>
-        </div>
+            <div class="col-md-3">
+                <a href="areas_mesas.php"  class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver atras</a> 
+            </div>
+            <div class="col-md-3 ">
+            <div class="alert alert-success text-center">
+            <?=$_GET['area_nom']?> 
+            </div> 
+            <div class="col-md-12"></div>               
+            </div>
         <?php endif;?>
         </div>
         <div class="row">

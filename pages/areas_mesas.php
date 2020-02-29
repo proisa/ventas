@@ -18,7 +18,7 @@ if(!$areas){
         </div>
             <?php foreach($areas as $area):?>
             <div class="col-md-3">
-            <a href="mesas.php?area_cod=<?=$area['are_codigo']?>">
+            <a href="mesas.php?area_cod=<?=$area['are_codigo']?>&area_nom=<?=$area['are_descri']?>">
                 <div class="c_box text-center" style="border-right:5px solid #3c8dbc;border-bottom:5px solid #3c8dbc;">
                      <h2 style="padding-top:40px;font-weight:bold;"><?=$area['are_descri']?></h2>
                 </div>

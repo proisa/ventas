@@ -42,23 +42,20 @@ $articulos = Comando::recordSet($pdo,$query);
 
      <a href="#" class="list-group-item list-group-item-action articulo <?=$disable?>" <?=$disable?> data-id="<?=trim($articulo['AR_CODIGO'])?>">
     <div class="d-flex w-100 justify-content-between">
-      <h4 class="mb-1" style="color:#337ab7; font-weight:bold;"><?=$articulo['AR_DESCRI']?> <?=$icon?> </h4>
-      <!-- <small>3 days ago</small> -->
+      <h4 class="mb-1" style="color:#337ab7; font-weight:bold;"><?=$articulo['AR_DESCOR']?> <?=$icon?> </h4>
+      <p style="font-size:16px;"><?=$articulo['AR_DESCRI']?></p>
     </div>
     <div class="row">
         <div class="col-md-6">
             <?php if(trim($articulo['AR_FOTO'])):?>
                  <img src="<?=url_base();?><?=$articulo['AR_FOTO']?>" alt="" width="80px;">
             <?php endif; ?>
-          
         </div>
         <div class="col-md-6">
-        <p class="text-right" style="font-size:18px;"> <span>RD$<?=number_format($articulo['AR_PREDET'],2)?></span> </p>
+        <p class="text-right" style="font-size:24px;"> <span style="background:#000;color:yellow;padding:3px;">RD$ <?=number_format($articulo['AR_PREDET'],2)?></span> </p>
         </div>
     </div>
-   
     </a>
-
 
     <?php
         endforeach;
