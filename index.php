@@ -41,12 +41,9 @@ $hide = '';
         <!-- <div class="row">
            <div class="col-md-3">
            <a href="#" id="menu-btn" class="btn btn-lg btn-custom btn-block menu-btn" style="display:none"> <i class="fa fa-arrow-left"></i> Menu</a> 
-          
            </div>
         </div>    -->
         <div class="row">
-
-       
             <?php if($data): 
                 $hide = "style='display:none'";
                 $data_pedidos = Comando::recordSet($pdo,"SELECT a.*,b.ar_tipo,ISNULL(b.ar_premin,0),ISNULL(b.ar_predet,0),ISNULL(b.ar_premay,0),ISNULL(B.AR_ITBIS,' ') AS DIMPUESTO,B.AR_VALEXI FROM ivbddete a LEFT JOIN ivbdarti b 
@@ -62,8 +59,6 @@ $hide = '';
                
             <div class="col-md-12">
             <hr>
-            
-           
             <table class="table">
                     <thead>
                         <th>Cant</th>
@@ -141,15 +136,29 @@ $hide = '';
                     Areas
                     </div>                
                 </div>
+                <div class="col-md-12"></div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" id="busqueda" class="form-control  input-lg" placeholder="Escriba aqui">
+                        <span class="input-group-btn">
+                            <button class="btn  btn-lg btn-success" id="buscar" type="button"><i class="fa fa-search"></i> Buscar </button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-default btn-block btn-lg" id="limpiar_busqueda"><i class="fa fa-trash"></i> Limpiar busqueda</button>
+                </div>
                 <div class="col-md-12">
                     <hr>
                 </div>
-                <?php foreach($areas as $area):?>
-                    
-                    <div class="col-md-3">
-                        <a href="#" class="btn btn-custom btn-lg area btn-block" data-id="<?=trim($area['are_codigo'])?>" data-nombre="<?=$area['are_descri']?>" style="margin-bottom:8px !important;"><?=$area['are_descri']?></a>        
-                    </div>
-                <?php endforeach;?>
+                <div class="areas-cont">
+                    <?php foreach($areas as $area):?>
+                        <div class="col-md-3">
+                            <a href="#" class="btn btn-custom btn-lg area btn-block" data-id="<?=trim($area['are_codigo'])?>" data-nombre="<?=$area['are_descri']?>" style="margin-bottom:8px !important;"><?=$area['are_descri']?></a>        
+                        </div>
+                    <?php endforeach;?>              
+                </div>
+
 
             </div>
 
@@ -163,10 +172,8 @@ $hide = '';
     </div>
 
 </div>
-
 <?php 
-
-require 'footer.php';
+    require 'footer.php';
 ?>
 
 <script>
@@ -190,6 +197,24 @@ $('.menu-btn').click(function(){
     $(this).fadeOut();
     $(".articulos_container").empty();
     $("#pedidos").empty();
+});
+
+$("#buscar").click(function(){
+    var articulo = $("#busqueda").val();
+    $(".articulos_container").empty();
+    $(".areas-cont").hide();
+    $.ajax({
+        url: "pages/articulos.php?buscar="+articulo,
+        success: function(result){
+            $(".articulos_container").html(result);
+        }
+    });
+});
+
+$("#limpiar_busqueda").click(function(){
+    $(".articulos_container").empty();
+    $(".areas-cont").show();
+    $("#busqueda").val("");
 });
 
 
@@ -219,7 +244,6 @@ function openWin(mesa)
          });
         //alert('Se enviara al archivo');
     }
-
   }
 
 </script>

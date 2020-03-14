@@ -4,31 +4,45 @@ require '../inc/config.php';
 require '../inc/funciones.php';
 require '../clases/Comando.php';
 
-$departamento = $_GET['dep_id'];
-$nombre = $_GET['dep_nombre'];
+$id_departamento = isset($_GET['dep_id']) ? $_GET['dep_id'] : 0;
+$nombre_departamento = isset($_GET['dep_nombre']) ? $_GET['dep_nombre'] : 0;
+$area_id = isset($_GET['area_id']) ? $_GET['area_id'] : 0;
+$area_nombre = isset($_GET['area_nombre']) ? $_GET['area_nombre'] : 0;
 
+$busqueda = isset($_GET['buscar']) ? true : false;
 //print_pre($_GET);
 
 $query = "SELECT A.AR_CODIGO,A.AR_DESCRI,A.AR_FOTO,A.AR_DESCOR,A.AR_PREDET,AR_SELECT,AR_DETALLE FROM IVBDARTI A
-WHERE A.DE_CODIGO='{$departamento}' AND A.AR_control='S' and a.ar_activado=' ' 
+WHERE A.DE_CODIGO='{$id_departamento}' AND A.AR_control='S' and a.ar_activado=' ' 
 ORDER BY A.ar_cosfob asc";
+
+if($busqueda){
+    $nombre_articulo = $_GET['buscar'];
+    $query = "SELECT A.AR_CODIGO,A.AR_DESCRI,A.AR_FOTO,A.AR_DESCOR,A.AR_PREDET,AR_SELECT,AR_DETALLE FROM IVBDARTI A
+    WHERE A.AR_DESCRI LIKE '%{$nombre_articulo}%' AND A.AR_control='S' AND a.ar_activado=' ' 
+    ORDER BY A.ar_cosfob asc";
+}
+
 $articulos = Comando::recordSet($pdo,$query);
 //print_pre($articulos);
 ?>
+
+<?php if(!$busqueda): ?>
 <div class="row">
-<div class="col-md-3">
-    <a href="#" id="back-current-area" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Departamentos</a> 
+    <div class="col-md-3">
+        <a href="#" id="back-current-area" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Departamentos</a> 
+    </div>
+    <div class="col-md-3 ">
+        <div class="alert alert-success text-center">
+        <?=$nombre_departamento?> 
+        </div>                
+    </div>
 </div>
-<div class="col-md-3 ">
-    <div class="alert alert-success text-center">
-    <?=$nombre?> 
-    </div>                
-</div>
-</div>
+<?php endif;?>
+
 <div class="list-group">
     <?php
     if($articulos):
-         
         foreach($articulos as $articulo): 
         if($articulo['AR_SELECT'] == 'S'){
             $disable = 'disabled';
@@ -67,10 +81,11 @@ $articulos = Comando::recordSet($pdo,$query);
     <?php endif;?>
 </div>
 
-<input type="hidden" id="area_id" value="<?=$_GET['area_id']?>">
-<input type="hidden" id="area_nombre" value="<?=$_GET['area_nombre']?>">
-<input type="hidden" id="dep_id" value="<?=$_GET['dep_id']?>">
-<input type="hidden" id="dep_nombre" value="<?=$_GET['dep_nombre']?>">
+<input type="hidden" id="area_id" value="<?=$area_id?>">
+<input type="hidden" id="area_nombre" value="<?=$area_nombre?>">
+<input type="hidden" id="dep_id" value="<?=$id_departamento?>">
+<input type="hidden" id="dep_nombre" value="<?=$nombre_departamento?>">
+<input type="hidden" id="busqueda" value="<?=$busqueda?>">
 
 
 <script>
@@ -82,8 +97,9 @@ $('.articulo').click(function(){
     var dep_nom = $("#dep_nombre").val();
     var area_id = $("#area_id").val();
     var area_nom = $("#area_nombre").val();
+    var busqueda = $("#busqueda").val();
     $.ajax({
-        url: "pages/agregar_a_carrito.php?articulo_id="+ar_id+"&dep_nombre="+dep_nom+"&dep_id="+dep_id+"&area_id="+area_id+"&area_nombre="+area_nom,
+        url: "pages/agregar_a_carrito.php?articulo_id="+ar_id+"&dep_nombre="+dep_nom+"&dep_id="+dep_id+"&area_id="+area_id+"&area_nombre="+area_nom+"&busqueda="+busqueda,
         success: function(result){
             $(".articulos_container").html(result);
         }

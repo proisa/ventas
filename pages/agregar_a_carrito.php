@@ -4,8 +4,10 @@ require '../inc/funciones.php';
 require '../clases/Comando.php';
 
 $articulo_id = $_GET['articulo_id'];
+$busqueda = (isset($_GET['busqueda']) && $_GET['busqueda'] !='' ) ? true : false;
 
-$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_bar,ar_bar2,ar_postre,ar_caja,ar_cocina,ar_tipococ,ar_tipoarea,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente, ar_detalle 
+
+$query = "SELECT ar_codigo,ar_descri,AR_DESCOR,ar_predet,AR_COCINA,ar_bar,ar_bar2,ar_postre,ar_caja,ar_cocina,ar_tipococ,ar_tipoarea,ar_acompa as guarnicion,ar_tipguar as tipo_guarnicion,AR_TIPOCOC,AR_BAR,AR_CAJA,AR_POSTRE,AR_TERMINO,AR_INGRE as ingrediente 
 FROM ivbdarti 
 WHERE 
 AR_CODIGO='{$articulo_id}' AND
@@ -18,6 +20,7 @@ $articulo_data = Comando::recordSet($pdo,$query);
 //print_pre($_GET);
 ?>
 <div class="row">
+    <?php if(!$busqueda): ?>
     <div class="col-md-3">
         <a href="#" id="back-articulos" class="btn btn-lg btn-custom btn-block menu-btn"> <i class="fa fa-arrow-left"></i> Volver atras</a> 
     </div>
@@ -26,6 +29,8 @@ $articulo_data = Comando::recordSet($pdo,$query);
         <?=$_GET['dep_nombre']?> 
         </div>                
     </div>
+    <?php endif;?>
+
     <div class="col-md-12">
         <hr>
         <h3 style="color:#337ab7;"><?=$articulo_data[0]['ar_descri']?></h3>
@@ -43,6 +48,7 @@ $articulo_data = Comando::recordSet($pdo,$query);
         <input type="hidden" id="ar_cocina" value="<?=$articulo_data[0]['ar_cocina']?>">
         <input type="hidden" id="ar_tipococ" value="<?=$articulo_data[0]['ar_tipococ']?>">
         <input type="hidden" id="ar_tipoarea" value="<?=$articulo_data[0]['ar_tipoarea']?>">
+        <input type="hidden" id="busqueda" value="<?=$busqueda?>">
         <hr>
     </div>
     <div class="col-md-12">
@@ -64,10 +70,7 @@ $articulo_data = Comando::recordSet($pdo,$query);
                         <button class="btn btn-default" id="mas" type="button">+</button>
                     </span>
                 </div><!-- /input-group -->
-
             </div>
-
-
         </div>
         <hr>
     </div>
@@ -117,8 +120,6 @@ $articulo_data = Comando::recordSet($pdo,$query);
             endforeach;?>
             <?php endif;?>
         </div>
-
-
 
         <?php endif;?>
         <?php if($articulo_data[0]['AR_TERMINO'] == 1): 
@@ -191,28 +192,29 @@ $('#agregar').click(function(){
     console.log(JSON.parse(sessionStorage.getItem('item')));
 
     $("#cliente").val($("#cliente_nombre").attr('data-nombre'));
-    // var ar_id = $(this).attr('data-id');
-    // $.ajax({
-    //     url: "pages/agregar_a_carrito.php?articulo_id="+ar_id,
-    //     success: function(result){
-    //         $("#articulos_container").html(result);
-    //     }
-    // });
-    // $("#menu").fadeOut();
-    // $('#menu-btn').fadeIn();
+
     fillCart();
     // Back
-    var area_id = $("#area_id").val();
-    var area_nom = $("#area_nombre").val();
-    $.ajax({
-        url: "pages/departamentos.php?area_id="+area_id+"&area_nombre="+area_nom,
-        success: function(result){
-            $(".menu_dep").fadeIn();
-            $(".menu_dep").html(result);
-        }
-    });
-    $(".articulos_container").empty();     
 
+    var busqueda = $('#busqueda').val();
+
+    if(!busqueda){
+        var area_id = $("#area_id").val();
+        var area_nom = $("#area_nombre").val();
+        $.ajax({
+            url: "pages/departamentos.php?area_id="+area_id+"&area_nombre="+area_nom,
+            success: function(result){
+                $(".menu_dep").fadeIn();
+                $(".menu_dep").html(result);
+            }
+        });
+    }else{
+        $(".menu").show();
+        $(".areas-cont").show();
+        $("#busqueda").val("");
+    }
+
+    $(".articulos_container").empty();     
     $("#menu-btn").click();
 });
 

@@ -2,7 +2,14 @@
 
 function url_base(){
     //return 'http://localhost/ventas';
-    return 'http://10.0.10.89/ventas';
+    return 'http://10.0.10.36/ventas';
+}
+
+function getData(){
+    return [
+        'name'=>'Proisa SRL',
+        'logo'=>'img/logo.jpg'
+    ];
 }
 
 function getConfig($pdo){

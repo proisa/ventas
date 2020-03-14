@@ -17,26 +17,28 @@ if($_SESSION['login'] !== true){
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Proisa | Ventas</title>
 
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="no">
+  <meta name="apple-mobile-web-app-capable" content="no">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Tokens">
+  <meta name="apple-mobile-web-app-title" content="Proisa">
   <link rel="apple-touch-startup-image" href="img/icon/apple-touch-icon-180x180.png">
-  <link rel="shortcut icon" href="img/icon/favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="img/icon/apple-touch-icon-180x180.png" />
-  <link rel="apple-touch-icon" sizes="57x57" href="img/icon/apple-touch-icon-57x57.png" />
-  <link rel="apple-touch-icon" sizes="72x72" href="img/icon/apple-touch-icon-72x72.png" />
-  <link rel="apple-touch-icon" sizes="76x76" href="img/icon/apple-touch-icon-76x76.png" />
-  <link rel="apple-touch-icon" sizes="114x114" href="img/icon/apple-touch-icon-114x114.png" />
-  <link rel="apple-touch-icon" sizes="120x120" href="img/icon/apple-touch-icon-120x120.png" />
-  <link rel="apple-touch-icon" sizes="144x144" href="img/icon/apple-touch-icon-144x144.png" />
-  <link rel="apple-touch-icon" sizes="152x152" href="img/icon/apple-touch-icon-152x152.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="img/icon/apple-touch-icon-180x180.png" />
+
+  <link rel="shortcut icon" href="<?=url_base()?>/img/icon/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="<?=url_base()?>/img/icon/apple-touch-icon-180x180.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="<?=url_base()?>/img/icon/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="<?=url_base()?>/img/icon/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="<?=url_base()?>/img/icon/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="<?=url_base()?>/img/icon/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="<?=url_base()?>/img/icon/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="<?=url_base()?>/img/icon/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="<?=url_base()?>/img/icon/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<?=url_base()?>/img/icon/apple-touch-icon-180x180.png" />
+
   <link rel="apple-touch-icon-precomposed" sizes="128x128" href="niceicon.png">
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" sizes="192x192" href="img/icon/apple-touch-icon-180x180.png">
-  <link rel="icon" sizes="128x128" href="img/con/apple-touch-icon-120x120.png">
+  <link rel="manifest" href="<?=url_base()?>/manifest.json">
+  <link rel="icon" sizes="192x192" href="<?=url_base()?>/img/icon/apple-touch-icon-180x180.png">
+  <link rel="icon" sizes="128x128" href="<?=url_base()?>/img/con/apple-touch-icon-120x120.png">
 
 
   <!-- Tell the browser to be responsive to screen width -->
@@ -71,6 +73,20 @@ if($_SESSION['login'] !== true){
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
+<script>
+  var eventHandler = function (event) {
+    // Only run for iOS full screen apps
+    if (('standalone' in window.navigator) && window.navigator.standalone) {
+        // Only run if link is an anchor and points to the current page
+        if ( event.target.tagName.toLowerCase() !== 'a' || event.target.hostname !== window.location.hostname || event.target.pathname !== window.location.pathname || !/#/.test(event.target.href) ) return;
+
+        // Open link in same tab
+        event.preventDefault();
+        window.location = event.target.href;
+    }
+}
+window.addEventListener('click', eventHandler, false);
+</script>
   
 
   <!-- Google Font -->
@@ -118,9 +134,9 @@ if($_SESSION['login'] !== true){
     <!-- Logo -->
     <a href="#" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>P</b></span>
+      <span class="logo-mini"><b><?=getData()['name']?></b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Proisa</span>
+      <span class="logo-lg"><b><?=getData()['name']?></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">

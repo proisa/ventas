@@ -1,0 +1,9 @@
+{
+    "name": "Proisa App",
+    "short_name": "ProisaApp",
+    "display": "standalone",
+    "icons": [{
+       "src": "img/icon/apple-touch-icon-180x180.png",
+       "sizes": "180x180"}
+    ]
+ }
